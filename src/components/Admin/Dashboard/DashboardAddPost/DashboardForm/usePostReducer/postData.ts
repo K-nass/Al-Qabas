@@ -38,7 +38,7 @@ export interface ArticleInitialStateInterface extends ShardedInitialStateInterfa
   imageUrl: string;
   imageDescription: string[] | null;
   additionalImageUrls: string[] | null;
-  fileUrls: string[] | null;
+  fileUrls: string[] | null | string;
 }
 export const articleInitialState: ArticleInitialStateInterface = {
   ...shardedInitialState,
@@ -49,7 +49,7 @@ export const articleInitialState: ArticleInitialStateInterface = {
   imageUrl: "",
   imageDescription: null,
   additionalImageUrls: [""],
-  fileUrls: [""],
+  fileUrls: null,
 };
 
 interface AudioInitialStateInterface {

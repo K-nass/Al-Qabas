@@ -1,13 +1,10 @@
 import { useState, type ChangeEvent } from "react";
-import type { ArticleInitialStateInterface } from "./usePostReducer/postData";
 import FileModal from "./FileModal";
 
 interface FileUploadProps {
-  state: ArticleInitialStateInterface,
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void,
-
 }
-export default function FileUpload({ state, handleChange }: FileUploadProps) {
+export default function FileUpload({  handleChange }: FileUploadProps) {
   const [fileName, setFileName] = useState<string | null>()
   const [open, setOpen] = useState<boolean>(false)
   return (
@@ -22,12 +19,12 @@ export default function FileUpload({ state, handleChange }: FileUploadProps) {
           Select File
         </button>
       </label>
-      {open && <FileModal onClose={() => setOpen(false)} header = "files"/>}
-      {/* {fileName && (
+      {open && <FileModal onClose={() => setOpen(false)} header="files" handleChange={handleChange} />}
+      {fileName && (
         <p className="text-xs text-gray-700 mt-2">
           Selected file: <span className="font-medium">{fileName}</span>
         </p>
-      )} */}
+      )}
     </div>
   );
 }

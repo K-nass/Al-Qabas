@@ -26,7 +26,7 @@ export default function ImageUpload({ state, handleChange }: ImageUploadProps) {
           Select Image
         </button>
       </div>
-      {open && <FileModal onClose={() => setOpen(false)} header="images"/>}
+      {open && <FileModal onClose={() => setOpen(false)} header="images" handleChange={handleChange} />}
       <p className="text-center text-sm text-slate-500">or Add Image Url</p>
       <input
         className="w-full text-sm bg-slate-50  border-slate-300  rounded focus:ring-primary focus:border-primary p-2"

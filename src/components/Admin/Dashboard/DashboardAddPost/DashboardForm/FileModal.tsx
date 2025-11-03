@@ -1,10 +1,25 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
+interface FileModalProps {
+    onClose: () => void;
+    header: "images" | "additional images" | "files";
+    handleChange: (
+        e:
+            | ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+            | {
+                target: {
+                    name: string;
+                    value: any;
+                    type: string;
+                };
+            }
+    ) => void;
+}
 
-export default function FileModal({ onClose, header }: { onClose: () => void,header:string }) {
+export default function FileModal({ onClose, header, handleChange }: FileModalProps) {
     const [selected, setSelected] = useState<number | null>(null);
-    const [fileName, setFileName] = useState<string>("");
+    const [fileName] = useState<string>("");
 
     const images = [
         "https://picsum.photos/id/1018/400/300",
@@ -65,17 +80,29 @@ export default function FileModal({ onClose, header }: { onClose: () => void,hea
                             </svg>
                         </div>
                         <p className="text-gray-600 text-sm">Drag and drop files here or</p>
-                        <label className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer">
-                            Browse Files
-                            <input
-                                type="file"
-                                className="hidden"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) setFileName(file.name);
-                                }}
-                            />
-                        </label>
+                        <input
+                            type="file"
+                            multiple={header !== "images"} // only allow 1 for main image
+                            className="text-center text-sm px-3 py-2 bg-[#605CA8] text-white rounded hover:bg-indigo-700 cursor-pointer"
+                            onChange={(e) => {
+                                const files = e.target.files;
+                                if (!files || files.length === 0) return;
+
+                                const urls = Array.from(files).map((file) => URL.createObjectURL(file));
+
+                                let fieldName = "fileUrls";
+                                if (header === "images") fieldName = "imageUrl";
+                                else if (header === "additional images") fieldName = "additionalImageUrls";
+
+                                handleChange({
+                                    target: {
+                                        name: fieldName,
+                                        value: header === "images" ? urls[0] : urls,
+                                        type: "text",
+                                    },
+                                } as any);
+                            }}
+                        />
 
                         {fileName && (
                             <p className="text-xs text-gray-700 mt-2">

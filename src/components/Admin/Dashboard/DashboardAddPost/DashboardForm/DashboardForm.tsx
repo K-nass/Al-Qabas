@@ -101,8 +101,8 @@ export default function DashboardForm() {
         <div className="w-full lg:w-80 shrink space-y-6">
           {/* right column */}
           <ImageUpload state={state} handleChange={handleChange} />
-          <AdditionalImages state={state} handleChange={handleChange} />
-          <FileUpload state={state} handleChange={handleChange} />
+          <AdditionalImages handleChange={handleChange} />
+          <FileUpload handleChange={handleChange} />
           <CategorySelect handleChange={handleChange} categories={categories?.data ??[]} isLoading={isLoadingCategories} />
           <PublishSection mutation={mutation} />
         </div>
