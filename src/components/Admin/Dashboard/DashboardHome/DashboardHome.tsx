@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import DataTableSection from "./DataTableSection/DataTableSection";
 import StatsCard from "./StatsCard/StatsCard";
-import axios from "axios";
+import { apiClient } from "@/api/client";
 import LatestUsersSection from "./LatestUsersSection/LatestUsersSection";
 
 export interface CommentInterface {
@@ -19,11 +19,11 @@ export interface MessageInterface {
 }
 export default function DashboardHome() {
   function fetchPendingComments() {
-    return axios.get("http://localhost:5000/comments");
+    return apiClient.get("/comments");
   }
 
   function fetchLatestContactMessages() {
-    return axios.get("http://localhost:5000/messages");
+    return apiClient.get("/messages");
   }
   
   const { data: pendingComments, isLoading: loadingComments, isError: isErrorPendingComments, error: pendingCommentsError } = useQuery({

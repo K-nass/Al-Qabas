@@ -17,6 +17,7 @@ import ApiNotification from "../../../../Common/ApiNotification";
 import { usePostReducer } from "./usePostReducer/usePostReducer";
 import type { ArticleInitialStateInterface, GalleryInitialStateInterface, SortedListInitialStateInterface } from "./usePostReducer/postData";
 import { postConfig } from "./usePostReducer/postConfig";
+import { useCategories } from "@/hooks/useCategories";
 const apiUrl = import.meta.env.VITE_API_URL;
 interface TagResponse {
   data: {
@@ -38,7 +39,6 @@ export default function DashboardForm() {
     }
   }, [type, navigate]);
 
-  console.log(state);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -72,7 +72,7 @@ export default function DashboardForm() {
     }
 
     dispatch({ type: "set-field", field: name, payload });
-    
+
     // Clear error for this field when user starts typing
     if (fieldErrors[name]) {
       setFieldErrors(prev => {
@@ -110,23 +110,23 @@ export default function DashboardForm() {
 
   function validateStateBeforeSubmit(s: ArticleInitialStateInterface | GalleryInitialStateInterface | SortedListInitialStateInterface) {
     const errors: Record<string, string> = {};
-    
+
     // Required fields
     if (!s.title?.trim()) errors.title = "Title is required";
     if (!s.categoryId) errors.categoryId = "Category is required";
-    
+
     // Image validations
     if (!s.imageUrl || !isValidUrl(s.imageUrl)) {
       errors.imageUrl = "Main image URL is required and must be a valid http(s) URL";
     }
-    
+
     // Article-specific validations
     if ('content' in s && type === "article") {
       const articleState = s as ArticleInitialStateInterface;
       if (!articleState.content || articleState.content.trim().length < 50) {
         errors.content = "Content must be at least 50 characters";
       }
-      
+
       // Additional Images validation
       if (articleState.additionalImageUrls?.length) {
         const invalidAdditionalImages = articleState.additionalImageUrls.filter(url => !isValidUrl(url));
@@ -134,7 +134,7 @@ export default function DashboardForm() {
           errors.additionalImageUrls = "All additional image URLs must be valid http(s) URLs";
         }
       }
-      
+
       // File URLs validation
       if (articleState.fileUrls?.length) {
         const fileUrlsArray = Array.isArray(articleState.fileUrls) ? articleState.fileUrls : [articleState.fileUrls];
@@ -144,7 +144,7 @@ export default function DashboardForm() {
         }
       }
     }
-    
+
     // Gallery-specific validations
     if ('items' in s && type === "gallery") {
       const galleryState = s as GalleryInitialStateInterface;
@@ -161,7 +161,7 @@ export default function DashboardForm() {
         });
       }
     }
-    
+
     // Sorted-list-specific validations
     if ('items' in s && type === "sorted-list") {
       const sortedListState = s as SortedListInitialStateInterface;
@@ -178,7 +178,7 @@ export default function DashboardForm() {
         });
       }
     }
-    
+
     // Optional URL validation
     if (s.optionalURL && !isValidUrl(s.optionalURL)) {
       errors.optionalURL = "Optional URL must be a valid http(s) URL";
@@ -204,27 +204,18 @@ export default function DashboardForm() {
     queryFn: fetchTags,
   })
 
-  async function fetchCategories() {
-    return await axios.get(`${apiUrl}/categories`)
-  }
+  const { data: categories, isLoading: isLoadingCategories } = useCategories();
 
-  const { data: categories, isLoading: isLoadingCategories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: fetchCategories
-  })
-
-  // mutation accepts payload and uses payload.categoryId for the route
   const mutation = useMutation({
-    // use state from closure so callers can call mutate() without args
     mutationFn: async () => {
       const payload = state as ArticleInitialStateInterface | GalleryInitialStateInterface | SortedListInitialStateInterface;
       const categoryId = payload.categoryId;
       if (!categoryId) throw new Error("categoryId missing");
       if (!type) throw new Error("Post type is required");
-      
+
       const config = postConfig[type as keyof typeof postConfig];
       if (!config) throw new Error(`Unknown post type: ${type}`);
-      
+
       const endpoint = config.endpoint;
       const response = await axios.post(`${apiUrl}/posts/categories/${categoryId}/${endpoint}`, payload);
       return response.data;
@@ -284,7 +275,7 @@ export default function DashboardForm() {
         <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
           <div className="grow space-y-4 md:space-y-6">
             {/* left column */}
-            <PostDetailsForm type = {type} state={state} handleChange={handleChange} tags={tags?.data.items ?? []} isLoading={isLoadingTags} fieldErrors={fieldErrors} />
+            <PostDetailsForm type={type} state={state} handleChange={handleChange} tags={tags?.data.items ?? []} isLoading={isLoadingTags} fieldErrors={fieldErrors} />
             {type === "gallery" ? (
               <GalleryItems state={state as GalleryInitialStateInterface} handleChange={handleChange} errors={fieldErrors} />
             ) : type === "sorted-list" ? (

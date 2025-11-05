@@ -1,4 +1,4 @@
-import axios from "axios";
+import { apiClient } from "@/api/client";
 import DataTableHeader from "../DataTableSection/DataTableHeader";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../../../../Loader/Loader";
@@ -13,7 +13,7 @@ export interface UserInterface {
 export default function LatestUsersSection() {
 
   async function fetchLatestUsers(): Promise<UserInterface[]> {
-    const res = await axios.get("http://localhost:5000/recentUsers");
+    const res = await apiClient.get("/recentUsers");
     return res.data;
   }
 

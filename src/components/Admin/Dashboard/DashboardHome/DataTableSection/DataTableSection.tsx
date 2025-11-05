@@ -29,8 +29,8 @@ export default function DataTableSection({
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-[#717478]">
-              {cols.map((col) => (
-                <th className="py-2 px-3 font-medium">{col}</th>
+              {cols.map((col, index) => (
+                <th key={index} className="py-2 px-3 font-medium">{col}</th>
               ))}
             </tr>
           </thead>

@@ -5,6 +5,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardHome from "./components/Admin/Dashboard/DashboardHome/DashboardHome";
 import DashboardAddPost from "./components/Admin/Dashboard/DashboardAddPost/DashboardAddPost";
 import DashboardForm from "./components/Admin/Dashboard/DashboardAddPost/DashboardForm/DashboardForm";
+import DashboardPosts from "./components/Admin/Dashboard/DashboardPosts/DashboardPosts";
 
 export const routes = createBrowserRouter([
   {
@@ -22,6 +23,12 @@ export const routes = createBrowserRouter([
       },
       { path: "post-format", element: <DashboardAddPost /> },
       { path: "add-post", element: <DashboardForm /> },
+      {
+        path: "posts", element: <DashboardPosts />, children: [{
+          path: "all", element: <DashboardPosts />
+        }
+        ]
+      }
     ],
   },
 ]);

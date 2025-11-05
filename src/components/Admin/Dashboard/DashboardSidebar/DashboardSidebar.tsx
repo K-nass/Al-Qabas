@@ -205,7 +205,7 @@ export default function DashboardSidebar() {
                   )}
                 </div>
                 {item.children && isExpanded && (
-                  <ul className="flex flex-col gap-1.5 md:gap-2.5 mt-1 md:mt-2 md:ms-5">
+                  <ul className="flex flex-col gap-1.5 md:gap-2.5 mt-1 md:mt-5 md:ms-5">
                     {item.children.map((child) => (
                       <div key={child.id} className="rounded-lg transition p-1 md:p-1.5">
                         <DashboardSidebarItem item={child} />
