@@ -96,9 +96,9 @@ export interface ContentType {
 
 export default function DashboardAddPost() {
   return (
-    <div className="flex-1 overflow-y-auto p-8">
+    <div className="flex-1 overflow-y-auto p-8 bg-[var(--bg-primary)]">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-slate-800 ">
+        <h2 className="text-xl font-semibold text-[var(--text-primary)]">
           Choose a Post Format
         </h2>
         <button className="flex items-center gap-2 text-sm bg-primary text-white font-semibold px-4 py-2 rounded-md hover:opacity-90 transition-opacity">

@@ -136,7 +136,7 @@ export default function DashboardForm() {
       )}
 
       <form
-        className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6"
+        className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-[var(--bg-primary)]"
         onSubmit={(e) => {
           e.preventDefault()
           mutation.mutate();

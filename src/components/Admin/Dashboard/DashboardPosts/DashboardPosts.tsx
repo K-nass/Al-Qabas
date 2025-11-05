@@ -36,11 +36,11 @@ export default function DashboardPosts({ label }: { label?: string }) {
     }, [pageNumber]);
 
     return (
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden bg-[var(--bg-primary)]">
             <div className="flex-1 overflow-y-auto p-6">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-semibold text-gray-800">{label}</h2>
+                    <h2 className="text-2xl font-semibold text-[var(--text-primary)]">{label}</h2>
                     <button
                         type="button"
                         className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold bg-[#13967B] hover:bg-[#0e7a64] text-white rounded-lg shadow-md transition-all"
@@ -50,15 +50,15 @@ export default function DashboardPosts({ label }: { label?: string }) {
                 </div>
 
                 {/* Filters */}
-                <form className="bg-white p-5 rounded-lg shadow-sm mb-6 border border-gray-100">
+                <form className="bg-[var(--bg-secondary)] p-5 rounded-lg shadow-sm mb-6 border border-[var(--border)]">
                     <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-4">
                         {/* Page size */}
                         <div>
-                            <label className="text-sm font-medium text-gray-700">Show</label>
+                            <label className="text-sm font-medium text-[var(--text-primary)]">Show</label>
                             <select
                                 value={pageSize}
                                 onChange={(e) => setPageSize(Number(e.target.value))}
-                                className="mt-1 block w-full rounded-md border-gray-300 focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-gray-900"
+                                className="mt-1 block w-full rounded-md border-[var(--border)] focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-[var(--text-primary)] bg-[var(--bg-primary)]"
                             >
                                 {[15, 30, 60, 90].map((num) => (
                                     <option key={num} value={num}>
@@ -70,10 +70,10 @@ export default function DashboardPosts({ label }: { label?: string }) {
 
                         {/* Language */}
                         <div>
-                            <label className="text-sm font-medium text-gray-700">Language</label>
+                            <label className="text-sm font-medium text-[var(--text-primary)]">Language</label>
                             <select
                                 onChange={(e) => setLanguage(e.target.value)}
-                                className="mt-1 block w-full rounded-md border-gray-300 focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-gray-900"
+                                className="mt-1 block w-full rounded-md border-[var(--border)] focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-[var(--text-primary)] bg-[var(--bg-primary)]"
                             >
                                 <option value="all">All</option>
                                 <option value="English">English</option>
@@ -83,8 +83,8 @@ export default function DashboardPosts({ label }: { label?: string }) {
 
                         {/* Post Type */}
                         <div>
-                            <label className="text-sm font-medium text-gray-700">Post Type</label>
-                            <select className="mt-1 block w-full rounded-md border-gray-300 focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-gray-900">
+                            <label className="text-sm font-medium text-[var(--text-primary)]">Post Type</label>
+                            <select className="mt-1 block w-full rounded-md border-[var(--border)] focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-[var(--text-primary)] bg-[var(--bg-primary)]">
                                 <option>All</option>
                                 <option>Article</option>
                                 <option>Video</option>
@@ -93,11 +93,11 @@ export default function DashboardPosts({ label }: { label?: string }) {
 
                         {/* Category */}
                         <div>
-                            <label className="text-sm font-medium text-gray-700">Category</label>
+                            <label className="text-sm font-medium text-[var(--text-primary)]">Category</label>
                             <select
                                 value={category ?? ""}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className="mt-1 block w-full rounded-md border-gray-300 focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-gray-900"
+                                className="mt-1 block w-full rounded-md border-[var(--border)] focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-[var(--text-primary)] bg-[var(--bg-primary)]"
                             >
                                 <option value="all">All</option>
                                 {categories?.data.map((option) => (
@@ -110,16 +110,16 @@ export default function DashboardPosts({ label }: { label?: string }) {
 
                         {/* Subcategory */}
                         <div>
-                            <label className="text-sm font-medium text-gray-700">Subcategory</label>
-                            <select className="mt-1 block w-full rounded-md border-gray-300 focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-gray-900">
+                            <label className="text-sm font-medium text-[var(--text-primary)]">Subcategory</label>
+                            <select className="mt-1 block w-full rounded-md border-[var(--border)] focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-[var(--text-primary)] bg-[var(--bg-primary)]">
                                 <option>All</option>
                             </select>
                         </div>
 
                         {/* User */}
                         <div>
-                            <label className="text-sm font-medium text-gray-700">User</label>
-                            <select className="mt-1 block w-full rounded-md border-gray-300 focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-gray-900">
+                            <label className="text-sm font-medium text-[var(--text-primary)]">User</label>
+                            <select className="mt-1 block w-full rounded-md border-[var(--border)] focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-[var(--text-primary)] bg-[var(--bg-primary)]">
                                 <option>Select</option>
                             </select>
                         </div>
@@ -131,7 +131,7 @@ export default function DashboardPosts({ label }: { label?: string }) {
                                 placeholder="Search"
                                 value={searchPhrase ?? ""}
                                 onChange={(e) => setSearchPhrase(e.target.value)}
-                                className="grow mt-1 block p-2 border-gray-300 rounded-md focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm"
+                                className="grow mt-1 block p-2 border-[var(--border)] rounded-md focus:ring-[#13967B] focus:border-[#13967B] sm:text-sm text-[var(--text-primary)] bg-[var(--bg-primary)]"
                                 type="text"
                             />
                         </div>
@@ -139,10 +139,10 @@ export default function DashboardPosts({ label }: { label?: string }) {
                 </form>
 
                 {/* Table */}
-                <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
+                <div className="bg-[var(--bg-secondary)] rounded-lg shadow-md border border-[var(--border)] overflow-hidden">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm text-left text-gray-600 border-collapse">
-                            <thead className="text-xs uppercase text-gray-700 bg-gray-100 sticky top-0 z-10">
+                        <table className="w-full text-sm text-left text-[var(--text-secondary)] border-collapse">
+                            <thead className="text-xs uppercase text-[var(--text-primary)] bg-[var(--bg-primary)] sticky top-0 z-10">
                                 <tr>
                                     <th className="p-4"><input type="checkbox" className="rounded border-gray-300 text-[#13967B]" /></th>
                                     <th className="px-6 py-3">Id</th>
@@ -182,28 +182,28 @@ export default function DashboardPosts({ label }: { label?: string }) {
                                         {posts?.data.items.map((item) => (
                                             <tr
                                                 key={item.id}
-                                                className="border-b hover:bg-gray-50 transition-colors"
+                                                className="border-b border-[var(--border)] hover:bg-[var(--bg-primary)] transition-colors"
                                             >
-                                                <td className="p-4"><input type="checkbox" className="rounded border-gray-300 text-[#13967B]" /></td>
-                                                <td className="px-6 py-4 text-gray-700">{item.id}</td>
+                                                <td className="p-4"><input type="checkbox" className="rounded border-[var(--border)] text-[#13967B]" /></td>
+                                                <td className="px-6 py-4 text-[var(--text-primary)]">{item.id}</td>
                                                 <td className="px-6 py-4 flex items-center space-x-3">
                                                     <img
                                                         src={item.image}
                                                         alt={item.imageDescription}
                                                         className="w-24 h-16 object-cover rounded-md shadow-sm"
                                                     />
-                                                    <span className="font-medium text-gray-900">{item.title}</span>
+                                                    <span className="font-medium text-[var(--text-primary)]">{item.title}</span>
                                                 </td>
-                                                <td className="px-6 py-4">{item.language}</td>
-                                                <td className="px-6 py-4">Article</td>
+                                                <td className="px-6 py-4 text-[var(--text-primary)]">{item.language}</td>
+                                                <td className="px-6 py-4 text-[var(--text-primary)]">Article</td>
                                                 <td className="px-6 py-4">
                                                     <span className="px-2 py-1 text-xs font-medium text-white bg-[#13967B] rounded-full">
                                                         {item.categoryName}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4">{item.authorName}</td>
-                                                <td className="px-6 py-4">{item.viewsCount}</td>
-                                                <td className="px-6 py-4">
+                                                <td className="px-6 py-4 text-[var(--text-primary)]">{item.authorName}</td>
+                                                <td className="px-6 py-4 text-[var(--text-primary)]">{item.viewsCount}</td>
+                                                <td className="px-6 py-4 text-[var(--text-primary)]">
                                                     {new Date(item.updatedAt).toLocaleDateString("en-US", {
                                                         year: "numeric",
                                                         month: "long",
@@ -225,7 +225,7 @@ export default function DashboardPosts({ label }: { label?: string }) {
 
                     {/* Pagination */}
                     {posts?.data && posts.data.totalPages > 1 && (
-                        <div className="flex justify-center items-center space-x-2 py-4 bg-gray-50 cursor-pointer">
+                        <div className="flex justify-center items-center space-x-2 py-4 bg-[var(--bg-primary)] cursor-pointer">
                             <button
                                 onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
                                 disabled={pageNumber === 1}

@@ -46,20 +46,19 @@ interface ContentEditorProps {
 
 export default function ContentEditor({ state, handleChange, errors = {} }: ContentEditorProps) {
   return (
-    <div className="border border-gray-200 rounded-md overflow-hidden" data-error-field={errors.content ? true : undefined}>
-      <div className="p-2 border-b border-gray-200 flex flex-wrap items-center gap-1">
+    <div className="border border-[var(--border)] rounded-md overflow-hidden bg-[var(--bg-secondary)]" data-error-field={errors.content ? true : undefined}>
+      <div className="p-2 border-b border-[var(--border)] flex flex-wrap items-center gap-1">
         {icons.map((icon, idx) => (
           <ToolBarItem key={idx} icon={icon} />
         ))}
 
-        <div className="w-px h-6 bg-gray-200 mx-1" />
+        <div className="w-px h-6 bg-[var(--border)] mx-1" />
       </div>
 
       <div className="p-4">
         <textarea
-          className={`w-full h-96 focus:ring-0 resize-none p-0 border-0 ${
-            errors.content ? 'bg-red-50' : ''
-          }`}
+          className={`w-full h-96 focus:ring-0 resize-none p-0 border-0 text-[var(--text-primary)] ${errors.content ? 'bg-red-50' : 'bg-[var(--bg-primary)]'
+            }`}
           placeholder="Start writing your content here..."
           name="content"
           value={state.content}
@@ -75,7 +74,7 @@ export default function ContentEditor({ state, handleChange, errors = {} }: Cont
 
 function ToolBarItem({ icon }: { icon: IconDefinition }) {
   return (
-    <button className="p-2 rounded hover:bg-gray-100  text-gray-600 ">
+    <button type="button" className="p-2 rounded hover:bg-[var(--bg-primary)] text-[var(--text-secondary)] cursor-pointer">
       <span className="material-symbols-outlined text-xl">
         <FontAwesomeIcon icon={icon} />
       </span>

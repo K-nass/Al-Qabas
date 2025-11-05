@@ -27,15 +27,15 @@ interface Props {
 
 export default memo(function CategorySelect({ categories = [], isLoading, handleChange, value, errors = {} }: Props) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 space-y-3" data-error-field={errors.categoryId ? true : undefined}>
-      <label className="block text-sm font-medium mb-1" htmlFor="categoryId">Category</label>
+    <div className="bg-[var(--bg-secondary)] p-4 rounded-lg shadow-sm border border-[var(--border)] space-y-3 text-[var(--text-primary)]" data-error-field={errors.categoryId ? true : undefined}>
+      <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]" htmlFor="categoryId">Category</label>
       <select
         id="categoryId"
         name="categoryId"
         value={value ?? ""}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleChange(e)}
-        className={`w-full bg-slate-50 border rounded p-2 ${
-          errors.categoryId ? 'border-red-500' : 'border-slate-300'
+        className={`w-full bg-[var(--bg-primary)] border rounded p-2 text-[var(--text-primary)] ${
+          errors.categoryId ? 'border-red-500' : 'border-[var(--border)]'
         }`}
         disabled={isLoading}
       >

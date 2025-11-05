@@ -6,7 +6,7 @@ interface PublishSectionProps {
 
 export default function PublishSection({ mutation }: PublishSectionProps) {
   return (
-    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-slate-200 space-y-3 sm:space-y-4">
+    <div className="bg-[var(--bg-secondary)] p-3 sm:p-4 rounded-lg shadow-sm border border-[var(--border)] space-y-3 sm:space-y-4 text-[var(--text-primary)]">
       <h3 className="text-sm sm:text-base font-semibold">Publish</h3>
       <label className="flex items-center">
         <input

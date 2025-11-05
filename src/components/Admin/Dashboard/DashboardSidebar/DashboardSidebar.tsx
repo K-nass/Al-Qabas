@@ -26,6 +26,7 @@ import DashboardProfileCard from "./DashboardProfileCard/DashboardProfileCard";
 import DashboardSidebarItem from "./DashboardSidebarItem/DashboardSidebarItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import ThemeToggle from "../../../ui/ThemeToggle";
 
 export interface SidebarItemInterface {
   id: number;
@@ -131,7 +132,7 @@ export default function DashboardSidebar() {
           fixed md:static
           inset-y-0 left-0
           w-20 md:w-64
-          p-3 md:p-5 bg-[#222E33] text-slate-300
+          p-3 md:p-5 bg-[var(--bg-secondary)] text-[var(--text-primary)]
           flex flex-col
           transform transition-transform duration-300 ease-in-out
           z-40
@@ -140,17 +141,20 @@ export default function DashboardSidebar() {
       >
         <div className="flex items-center justify-center md:justify-between mb-4 md:mb-6">
           <div className="md:flex md:items-center">
-            <span className="text-white text-lg md:text-xl font-bold">A</span>
-            <h1 className="hidden md:block text-xl text-white ml-2"><span className="font-bold">Admin</span> Panel</h1>
+            <span className="text-[var(--text-primary)] text-lg md:text-xl font-bold">A</span>
+            <h1 className="hidden md:block text-xl text-[var(--text-primary)] ml-2"><span className="font-bold">Admin</span> Panel</h1>
           </div>
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="md:hidden text-white hover:text-gray-300"
-            aria-label="Close menu"
-          >
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="md:hidden text-[var(--text-primary)] hover:text-gray-300"
+              aria-label="Close menu"
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          </div>
         </div>
         <div className="md:block hidden">
           <DashboardProfileCard />
@@ -159,7 +163,7 @@ export default function DashboardSidebar() {
           {sidebarItems.map((item) => {
             const isExpanded = expandedItems.has(item.id);
             return (
-              <div key={item.id} className="p-1.5 md:p-2 rounded-xl">
+              <div key={item.id} className="p-1.5 md:p-2 rounded-xl hover:bg-[var(--bg-primary)] transition-colors">
                 <div className="flex items-center justify-center md:justify-between relative">
                   <DashboardSidebarItem
                     item={item}
@@ -171,7 +175,7 @@ export default function DashboardSidebar() {
                     <button
                       type="button"
                       onClick={() => toggleItem(item.id)}
-                      className="hidden md:block text-gray-400 hover:text-gray-100 cursor-pointer ml-auto"
+                      className="hidden md:block text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer ml-auto"
                     >
                       <FontAwesomeIcon
                         icon={isExpanded ? faChevronUp : faChevronDown}
@@ -183,7 +187,7 @@ export default function DashboardSidebar() {
                 {item.children && isExpanded && (
                   <ul className="flex flex-col gap-1.5 md:gap-2.5 mt-1 md:mt-5 md:ms-5">
                     {item.children.map((child) => (
-                      <div key={child.id} className="rounded-lg transition p-1 md:p-1.5">
+                      <div key={child.id} className="rounded-lg transition p-1 md:p-1.5 hover:bg-[var(--bg-primary)]">
                         <DashboardSidebarItem item={child} />
                       </div>
                     ))}

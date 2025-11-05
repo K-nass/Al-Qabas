@@ -10,7 +10,7 @@ import type { ApiValidationError } from './types';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export interface TagInterface {
-  id: string; 
+  id: string;
   language: string;
   name: string;
   postsCount: number;
@@ -26,9 +26,9 @@ interface PostDetailsForm {
 }
 
 
-export default function PostDetailsForm({ 
-  state, 
-  handleChange, 
+export default function PostDetailsForm({
+  state,
+  handleChange,
   tags,
   errors,
   fieldErrors = {},
@@ -113,21 +113,20 @@ export default function PostDetailsForm({
   };
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-slate-200">
-      <h3 className="text-base sm:text-lg font-semibold border-b border-slate-200 pb-3 sm:pb-4 mb-4 sm:mb-6">
+    <div className="bg-[var(--bg-secondary)] p-4 sm:p-6 rounded-lg shadow-sm border border-[var(--border)]">
+      <h3 className="text-base sm:text-lg font-semibold border-b border-[var(--border)] pb-3 sm:pb-4 mb-4 sm:mb-6 text-[var(--text-primary)]">
         Post Details
       </h3>
 
       <div className="space-y-4 sm:space-y-6">
         {/* title */}
         <div data-error-field={fieldErrors.title ? true : undefined}>
-          <label className="block text-sm font-medium mb-1" htmlFor="title">
+          <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]" htmlFor="title">
             Title
           </label>
           <input
-            className={`w-full bg-slate-50 border rounded focus:ring-primary focus:border-primary p-2 ${
-              fieldErrors.title ? 'border-red-500' : 'border-slate-300'
-            }`}
+            className={`w-full bg-[var(--bg-primary)] border rounded focus:ring-primary focus:border-primary p-2 text-[var(--text-primary)] ${fieldErrors.title ? 'border-red-500' : 'border-[var(--border)]'
+              }`}
             type="text"
             id="title"
             name="title"
@@ -142,14 +141,14 @@ export default function PostDetailsForm({
 
         {/* slug */}
         <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="slug">
+          <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]" htmlFor="slug">
             Slug
           </label>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+          <p className="text-xs text-[var(--text-secondary)] mb-2">
             If you leave it blank, it will be generated automatically.
           </p>
           <input
-            className="w-full bg-slate-50  border-slate-300  rounded focus:ring-primary focus:border-primary p-2"
+            className="w-full bg-[var(--bg-primary)] border-[var(--border)] rounded focus:ring-primary focus:border-primary p-2 text-[var(--text-primary)]"
             type="text"
             id="slug"
             name="slug"
@@ -161,11 +160,11 @@ export default function PostDetailsForm({
 
         {/* Meta Tag */}
         <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="summary">
+          <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]" htmlFor="summary">
             Summary &amp; Description (Meta Tag)
           </label>
           <textarea
-            className="w-full bg-slate-50  border-slate-300  rounded focus:ring-primary focus:border-primary"
+            className="w-full bg-[var(--bg-primary)] border-[var(--border)] rounded focus:ring-primary focus:border-primary text-[var(--text-primary)] p-2"
             id="summary"
             name="metaDescription"
             placeholder="Summary &amp; Description (Meta Tag)"
@@ -176,11 +175,11 @@ export default function PostDetailsForm({
 
         {/* metaKeywords */}
         <div>
-          <label className="block text-sm font-medium mb-1" htmlFor="keywords">
+          <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]" htmlFor="keywords">
             Keywords (Meta Tag)
           </label>
           <input
-            className="w-full bg-slate-50  border-slate-300  rounded focus:ring-primary focus:border-primary p-2"
+            className="w-full bg-[var(--bg-primary)] border-[var(--border)] rounded focus:ring-primary focus:border-primary p-2 text-[var(--text-primary)]"
             type="text"
             id="keywords"
             name="metaKeywords"
@@ -192,7 +191,7 @@ export default function PostDetailsForm({
 
         {/* {Visibility} */}
         <div>
-          <label className="block text-sm font-medium mb-2">Visibility</label>
+          <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">Visibility</label>
           <div className="flex items-center space-x-4 sm:space-x-6">
             <label className="flex items-center" htmlFor="visibility-true">
               <input
@@ -204,7 +203,7 @@ export default function PostDetailsForm({
                 checked={state.visibility === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Show</span>
+              <span className="ml-2 text-[var(--text-primary)]">Show</span>
             </label>
             <label className="flex items-center" htmlFor="visibility-false">
               <input
@@ -216,7 +215,7 @@ export default function PostDetailsForm({
                 checked={state.visibility === false}
                 onChange={handleChange}
               />
-              <span className="ml-2">Hide</span>
+              <span className="ml-2 text-[var(--text-primary)]">Hide</span>
             </label>
           </div>
         </div>
@@ -232,7 +231,7 @@ export default function PostDetailsForm({
                 checked={(state as ArticleInitialStateInterface).addToSlider === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Add to Slider</span>
+              <span className="ml-2 text-[var(--text-primary)]">Add to Slider</span>
             </label>
           )}
           {/* Add to Featured */}
@@ -245,7 +244,7 @@ export default function PostDetailsForm({
                 checked={(state as ArticleInitialStateInterface).addToFeatured === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Add to Featured</span>
+              <span className="ml-2 text-[var(--text-primary)]">Add to Featured</span>
             </label>
           )}
           {/* Add to Breaking */}
@@ -258,7 +257,7 @@ export default function PostDetailsForm({
                 checked={(state as ArticleInitialStateInterface).addToBreaking === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Add to Breaking</span>
+              <span className="ml-2 text-[var(--text-primary)]">Add to Breaking</span>
             </label>
           )}
           {/* Add to Recommended */}
@@ -270,7 +269,7 @@ export default function PostDetailsForm({
               checked={state.addToRecommended === true}
               onChange={handleChange}
             />
-            <span className="ml-2">Add to Recommended</span>
+            <span className="ml-2 text-[var(--text-primary)]">Add to Recommended</span>
           </label>
           {/* Show Only to Registered Users */}
           <label className="flex items-center">
@@ -281,7 +280,7 @@ export default function PostDetailsForm({
               checked={state.showOnlyToRegisteredUsers === true}
               onChange={handleChange}
             />
-            <span className="ml-2">Show Only to Registered Users</span>
+            <span className="ml-2 text-[var(--text-primary)]">Show Only to Registered Users</span>
           </label>
 
           {/* Show Item Numbers in Post Details Page */}
@@ -294,7 +293,7 @@ export default function PostDetailsForm({
                 checked={(state as GalleryInitialStateInterface).showItemNumbersInPostDetailsPage === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Show Item Numbers in Post Details Page</span>
+              <span className="ml-2 text-[var(--text-primary)]">Show Item Numbers in Post Details Page</span>
             </label>
           )}
           {/* Show Numbers (for sorted-list) */}
@@ -307,19 +306,18 @@ export default function PostDetailsForm({
                 checked={(state as SortedListInitialStateInterface).showNumbers === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Show Numbers</span>
+              <span className="ml-2 text-[var(--text-primary)]">Show Numbers</span>
             </label>
           )}
         </div>
-        
+
         <div data-error-field={fieldErrors.tagIds ? true : undefined}>
-          <label className="block text-sm font-medium mb-1" htmlFor="tags">
+          <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]" htmlFor="tags">
             Tags
           </label>
 
-          <div className={`flex flex-wrap items-center gap-2 border p-2 sm:p-3 rounded bg-slate-50 ${
-            fieldErrors.tagIds ? 'border-red-500' : ''
-          }`}>
+          <div className={`flex flex-wrap items-center gap-2 border p-2 sm:p-3 rounded bg-[var(--bg-primary)] text-[var(--text-primary)] ${fieldErrors.tagIds ? 'border-red-500' : 'border-[var(--border)]'
+            }`}>
             {selectedTags.map((tag) => (
               <span
                 key={tag.id}
@@ -350,7 +348,7 @@ export default function PostDetailsForm({
                 key={tag.id}
                 className={`px-2 sm:px-3 py-1.5 sm:p-2 text-sm sm:text-base rounded font-semibold cursor-pointer ${selectedTags.find((t) => t.id === tag.id)
                   ? "bg-green-500 text-white"
-                  : "bg-gray-300 text-black hover:bg-gray-400"
+                  : "bg-[var(--bg-primary)] text-[var(--text-primary)] hover:bg-[var(--border)]"
                   }`}
                 onClick={(e) => {
                   e.preventDefault();
@@ -368,13 +366,12 @@ export default function PostDetailsForm({
 
         {/* Optional URL */}
         <div data-error-field={fieldErrors.optionalURL ? true : undefined}>
-          <label className="block text-sm font-medium mb-1" htmlFor="optional-url">
+          <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]" htmlFor="optional-url">
             Optional URL
           </label>
           <input
-            className={`w-full bg-slate-50 border ${
-              fieldErrors.optionalURL || errors?.OptionalURL ? 'border-red-500' : 'border-slate-300'
-            } rounded focus:ring-primary focus:border-primary p-2`}
+            className={`w-full bg-[var(--bg-primary)] border ${fieldErrors.optionalURL || errors?.OptionalURL ? 'border-red-500' : 'border-[var(--border)]'
+              } rounded focus:ring-primary focus:border-primary p-2 text-[var(--text-primary)]`}
             id="optional-url"
             name="optionalURL"
             placeholder="Enter URL (http:// will be added if missing)"
