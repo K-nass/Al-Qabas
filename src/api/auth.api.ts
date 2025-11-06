@@ -21,6 +21,16 @@ export interface LogoutRequest {
   refreshToken: string;
 }
 
+export interface UserProfile {
+  id: string;
+  userName: string;
+  email: string;
+  avatarImageUrl: string | null;
+  slug: string;
+  aboutMe: string;
+  socialAccounts: Record<string, string>;
+}
+
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
@@ -50,6 +60,11 @@ export const authApi = {
 
   logout: async (data: LogoutRequest) => {
     const response = await apiClient.post('/auth/logout', data);
+    return response.data;
+  },
+
+  getUserProfile: async () => {
+    const response = await apiClient.get<UserProfile>('/users/profile');
     return response.data;
   },
 };
