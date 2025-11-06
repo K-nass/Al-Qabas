@@ -18,6 +18,7 @@ import {
   faChevronDown,
   faChevronUp,
   faXmark,
+  faSignOutAlt,
   type IconDefinition,
   faFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +27,7 @@ import DashboardProfileCard from "./DashboardProfileCard/DashboardProfileCard";
 import DashboardSidebarItem from "./DashboardSidebarItem/DashboardSidebarItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { useLogout } from "@/hooks/useLogout";
 
 export interface SidebarItemInterface {
   id: number;
@@ -100,6 +102,7 @@ const sidebarItems: SidebarItemInterface[] = [
 export default function DashboardSidebar() {
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { logout, isLoading } = useLogout();
   
   const toggleItem = (itemId: number) => {
     setExpandedItems(prev => {
@@ -140,7 +143,6 @@ export default function DashboardSidebar() {
       >
         <div className="flex items-center justify-center md:justify-between mb-4 md:mb-6">
           <div className="md:flex md:items-center">
-            <span className="text-white text-lg md:text-xl font-bold">A</span>
             <h1 className="hidden md:block text-xl text-white ml-2"><span className="font-bold">Admin</span> Panel</h1>
           </div>
           <button
@@ -193,6 +195,21 @@ export default function DashboardSidebar() {
             );
           })}
         </ul>
+        
+        {/* Logout Button */}
+        <div className="mt-4 border-t border-gray-600 pt-4">
+          <button
+            type="button"
+            onClick={() => logout()}
+            disabled={isLoading}
+            className="w-full flex items-center justify-center md:justify-start gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className="text-lg" />
+            <span className="hidden md:inline font-medium">
+              {isLoading ? 'Logging out...' : 'Logout'}
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Overlay */}

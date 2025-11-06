@@ -3,8 +3,10 @@ import { useCategories } from "@/hooks/useCategories";
 import { useFetchPosts } from "@/hooks/useFetchPosts";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardPosts({ label }: { label?: string }) {
+    const navigate = useNavigate();
     const { data: categories } = useCategories();
     const [category, setCategory] = useState<string | null>(null);
     const [language, setLanguage] = useState<string | null>(null);
@@ -15,11 +17,11 @@ export default function DashboardPosts({ label }: { label?: string }) {
     let isFeatured = false;
     let isBreaking = false;
 
-
+    
     if (label == "Slider Posts") isSlider = true;
     if (label === "Featured Posts") isFeatured = true
     if (label === "Breaking News") isBreaking = true
-
+    
     const { data: posts, isLoading } = useFetchPosts({
         category: category ?? undefined,
         language,
@@ -44,6 +46,7 @@ export default function DashboardPosts({ label }: { label?: string }) {
                     <button
                         type="button"
                         className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold bg-[#13967B] hover:bg-[#0e7a64] text-white rounded-lg shadow-md transition-all"
+                        onClick={()=>navigate("/admin/add-post")}
                     >
                         <span>Add Post</span>
                     </button>
@@ -141,7 +144,7 @@ export default function DashboardPosts({ label }: { label?: string }) {
                 {/* Table */}
                 <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm text-left text-gray-600 border-collapse">
+                        <table className="w-full text-sm text-left text-gray-600 border-collapse table-auto">
                             <thead className="text-xs uppercase text-gray-700 bg-gray-100 sticky top-0 z-10">
                                 <tr>
                                     <th className="p-4"><input type="checkbox" className="rounded border-gray-300 text-[#13967B]" /></th>
@@ -182,11 +185,15 @@ export default function DashboardPosts({ label }: { label?: string }) {
                                         {posts?.data.items.map((item) => (
                                             <tr
                                                 key={item.id}
-                                                className="border-b hover:bg-gray-50 transition-colors"
+                                                className="hover:bg-gray-50 transition-colors"
                                             >
                                                 <td className="p-4"><input type="checkbox" className="rounded border-gray-300 text-[#13967B]" /></td>
-                                                <td className="px-6 py-4 text-gray-700">{item.id}</td>
-                                                <td className="px-6 py-4 flex items-center space-x-3">
+                                                <td className="px-6 py-4 text-gray-700">
+                                                <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth:"150px"}}>
+                                                    {item.id}
+                                                </div>
+                                                </td>
+                                                <td className="px-6 py-4 flex items-center space-x-3 cursor-pointer">
                                                     <img
                                                         src={item.image}
                                                         alt={item.imageDescription}
@@ -201,7 +208,7 @@ export default function DashboardPosts({ label }: { label?: string }) {
                                                         {item.categoryName}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4">{item.authorName}</td>
+                                                <td className="px-6 py-4">{item.authorName || "Created by"}</td>
                                                 <td className="px-6 py-4">{item.viewsCount}</td>
                                                 <td className="px-6 py-4">
                                                     {new Date(item.updatedAt).toLocaleDateString("en-US", {

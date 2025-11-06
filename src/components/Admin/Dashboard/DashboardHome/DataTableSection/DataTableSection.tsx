@@ -2,6 +2,7 @@ import Loader from "../../../../Loader/Loader";
 import type { CommentInterface, MessageInterface } from "../DashboardHome";
 import DataTableHeader from "./DataTableHeader";
 import TableRow from "./TableRow";
+import { useNavigate } from "react-router-dom";
 
 interface DataTableSectionInterFace {
   label: string;
@@ -11,6 +12,7 @@ interface DataTableSectionInterFace {
   isLoading: boolean,
   isError: boolean
   error?:string
+  viewAllPath?: string;
 }
 
 export default function DataTableSection({
@@ -20,8 +22,11 @@ export default function DataTableSection({
   data,
   isLoading,
   isError,
-  error
+  error,
+  viewAllPath
 }: DataTableSectionInterFace) {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white  rounded-lg shadow">
       <DataTableHeader label={label} description={description} />
@@ -52,11 +57,17 @@ export default function DataTableSection({
           </tbody>
         </table>
       </div>
-      <div className="p-4 border-t border-slate-200 flex justify-end">
-        <button className="text-sm px-4 py-2 rounded-md bg-slate-100  hover:bg-slate-200 cursor-pointer">
-          View All
-        </button>
-      </div>
+      {viewAllPath && (
+        <div className="p-4 border-t border-slate-200 flex justify-end">
+          <button 
+            type="button"
+            onClick={() => navigate(viewAllPath)}
+            className="text-sm px-4 py-2 rounded-md bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors"
+          >
+            View All
+          </button>
+        </div>
+      )}
     </div>
   );
 }

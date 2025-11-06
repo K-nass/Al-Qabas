@@ -3,11 +3,9 @@ import type { HandleChangeType } from "./types";
 import type { ArticleInitialStateInterface, GalleryInitialStateInterface, SortedListInitialStateInterface } from "./usePostReducer/postData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import { apiClient } from "@/api/client";
 import { useMutation } from "@tanstack/react-query";
 import type { ApiValidationError } from './types';
-
-const apiUrl = import.meta.env.VITE_API_URL;
 
 export interface TagInterface {
   id: string; 
@@ -21,7 +19,7 @@ interface PostDetailsForm {
   isLoading: boolean;
   tags: TagInterface[];
   errors?: ApiValidationError['errors'];
-  fieldErrors?: Record<string, string>;
+  fieldErrors?: Record<string, string[]>;
   type: string | null;
 }
 
@@ -49,9 +47,7 @@ export default function PostDetailsForm({
           },
         ],
       };
-      const res = await axios.post(`${apiUrl}/tags`, payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await apiClient.post(`/tags`, payload);
       // according to your example the API returns an array of created tags
       return res.data as Array<{ id: string; name: string; language?: string }>;
     },
@@ -91,7 +87,7 @@ export default function PostDetailsForm({
       const syntheticEvent = { target: { name: "tagIds", value: ids, type: "text" } } as Parameters<HandleChangeType>[0];
       handleChange(syntheticEvent, ids)
     } catch (err) {
-      console.error("Failed to create tag", err);
+      
     } finally {
       setInputValue("");
     }

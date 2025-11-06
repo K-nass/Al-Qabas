@@ -79,7 +79,11 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
             const files = Array.from(filesList);
             const uploadPromises = files.map((file) => uploadMutation.mutateAsync(file));
             const results = await Promise.all(uploadPromises);
-            const uploadedUrls = results.map((r) => r.url);
+            
+            // Use the full URL exactly as returned from upload endpoint
+            const uploadedUrls = results.map((r) => {
+                return r.url;
+            });
 
             const fieldName =
                 header === "images"
@@ -89,6 +93,7 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                         : "fileUrls";
 
             const value = header === "images" ? uploadedUrls[0] : uploadedUrls;
+            
             const payload = {
                 target: {
                     name: fieldName,
@@ -103,7 +108,6 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
             setShowModal(false);
             setTimeout(onClose, 180);
         } catch (err) {
-            console.error("File upload error:", err);
             alert("Failed to upload files. Please try again.");
         }
     }
@@ -183,15 +187,46 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                     ) : mediaList.length === 0 ? (
                         <p className="col-span-2 sm:col-span-3 md:col-span-4 text-center text-gray-500 text-sm sm:text-base">No media found.</p>
                     ) : (
-                        mediaList.map((item) => (
-                            <div key={item.id} className="relative cursor-pointer rounded overflow-hidden">
-                                <img
-                                    src={item.url}
-                                    alt={item.fileName}
-                                    className="w-full h-32 object-cover rounded-md hover:opacity-80 transition"
-                                />
-                            </div>
-                        ))
+                        mediaList.map((item) => {
+                            const fieldName =
+                                header === "images"
+                                    ? "imageUrl"
+                                    : header === "additional images"
+                                        ? "additionalImageUrls"
+                                        : "fileUrls";
+
+                            const handleSelectMedia = () => {
+                                const value = header === "images" ? item.url : [item.url];
+                                const payload = {
+                                    target: {
+                                        name: fieldName,
+                                        value,
+                                        type: "text",
+                                    },
+                                };
+                                handleChange(payload);
+                                setShowModal(false);
+                                setTimeout(onClose, 180);
+                            };
+
+                            return (
+                                <button
+                                    key={item.id}
+                                    type="button"
+                                    onClick={handleSelectMedia}
+                                    className="relative cursor-pointer rounded overflow-hidden group"
+                                >
+                                    <img
+                                        src={item.url}
+                                        alt={item.fileName}
+                                        className="w-full h-32 object-cover rounded-md hover:opacity-80 transition"
+                                    />
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition flex items-center justify-center">
+                                        <span className="text-white opacity-0 group-hover:opacity-100 transition text-xs font-semibold">Select</span>
+                                    </div>
+                                </button>
+                            );
+                        })
                     )}
                 </div>
 

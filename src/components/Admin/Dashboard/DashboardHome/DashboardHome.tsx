@@ -13,7 +13,9 @@ export interface CommentInterface {
 
 export interface MessageInterface {
   id: string;
-  name: string;
+  userId: string | null;
+  username: string;
+  email: string;
   message: string;
   date: string;
 }
@@ -23,7 +25,32 @@ export default function DashboardHome() {
   }
 
   function fetchLatestContactMessages() {
-    return apiClient.get("/messages");
+    return apiClient.get("/contact-messages", {
+      params: {
+        PageNumber: 1,
+        PageSize: 15,
+        SearchPhrase: ""
+      }
+    });
+  }
+
+  function fetchContactMessagesCount() {
+    return apiClient.get("/contact-messages", {
+      params: {
+        PageNumber: 1,
+        PageSize: 15,
+        SearchPhrase: ""
+      }
+    });
+  }
+
+  function fetchPostsCount() {
+    return apiClient.get("/posts", {
+      params: {
+        PageNumber: 1,
+        PageSize: 15
+      }
+    });
   }
   
   const { data: pendingComments, isLoading: loadingComments, isError: isErrorPendingComments, error: pendingCommentsError } = useQuery({
@@ -35,11 +62,23 @@ export default function DashboardHome() {
     queryKey: ["latestContactMessages"],
     queryFn: fetchLatestContactMessages,
   });
+
+  const { data: contactMessagesData } = useQuery({
+    queryKey: ["contactMessagesCount"],
+    queryFn: fetchContactMessagesCount,
+  });
+
+  const { data: postsData } = useQuery({
+    queryKey: ["postsCount"],
+    queryFn: fetchPostsCount,
+  });
+
+  const postsCount = postsData?.data?.totalCount || 0;
   return (
     <div className="flex-1 p-6 overflow-y-auto bg-[#F3F6F8]">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <StatsCard count={104} label="posts" bgColor="bg-teal-500" />
-        <StatsCard count={10} label="Pending Posts" bgColor="bg-red-500" />
+        <StatsCard count={postsCount} label="posts" bgColor="bg-teal-500" />
+        <StatsCard count={contactMessagesData?.data?.totalCount || 0} label="Contact Messages" bgColor="bg-red-500" />
         <StatsCard count={0} label="Drafts" bgColor="bg-indigo-500" />
         <StatsCard count={0} label="Scheduled Posts" bgColor="bg-amber-500" />
       </div>
@@ -56,11 +95,12 @@ export default function DashboardHome() {
         <DataTableSection
           label="Latest Contact Messages"
           description=" Recently added contact messages"
-          cols={["Id", "Name", "Message", "Date"]}
-          data={latestContactMessages?.data}
+          cols={["Id", "Username", "Email", "Message", "Date"]}
+          data={latestContactMessages?.data?.items?.slice(0, 5)}
           isLoading={loadingMessages}
           isError={isErrorLatestContactMessages}
           error={latestContactMessagesError?.message}
+          viewAllPath="/admin/contact-messages"
         />
       </div>
 

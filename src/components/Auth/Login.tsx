@@ -1,0 +1,204 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { setAuthToken, setRefreshToken } from '@/api/client';
+import { authApi, type LoginRequest } from '@/api/auth.api';
+
+export default function Login() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<LoginRequest>({
+    email: '',
+    password: '',
+  });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
+  const [notification, setNotification] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
+
+  const mutation = useMutation({
+    mutationFn: authApi.login,
+    onSuccess: (data: any) => {
+      // Store tokens in memory - API returns accessToken and refreshToken
+      const token = data?.accessToken || data?.token || data?.data?.accessToken;
+      const refreshTok = data?.refreshToken || data?.data?.refreshToken;
+
+      if (token) {
+        setAuthToken(token);
+      } else {
+        // No token found in response
+      }
+
+      if (refreshTok) {
+        setRefreshToken(refreshTok);
+      } else {
+        // No refresh token found in response
+      }
+      
+      setFieldErrors({});
+      setNotification({
+        type: 'success',
+        message: 'Login successful!',
+      });
+      
+      // Redirect to dashboard after short delay
+      setTimeout(() => {
+        navigate('/admin');
+      }, 1000);
+    },
+    onError: (error: unknown) => {
+      let message = 'Login failed';
+      const errors: Record<string, string[]> = {};
+
+      if (axios.isAxiosError(error)) {
+        const d = error.response?.data;
+        // Check for title first (general error message)
+        if (d?.title) message = String(d.title);
+        else if (d?.message) message = String(d.message);
+        else if (d?.errors) {
+          if (typeof d.errors === 'object') {
+            Object.entries(d.errors).forEach(([field, messages]) => {
+              // Normalize field name to lowercase for matching form fields
+              const normalizedField = field.toLowerCase();
+              if (Array.isArray(messages)) {
+                errors[normalizedField] = messages;
+              } else if (typeof messages === 'string') {
+                errors[normalizedField] = [messages];
+              }
+            });
+          }
+          message = d.message || 'Validation failed';
+        } else message = error.message;
+      } else if (error instanceof Error) {
+        message = error.message;
+      }
+
+      setFieldErrors(errors);
+      setNotification({ type: 'error', message });
+    },
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[name];
+        return updated;
+      });
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate(formData);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2">Al-Qabas</h1>
+          <p className="text-indigo-100">Admin Login</p>
+        </div>
+
+        {/* Card */}
+        <div className="bg-white rounded-lg shadow-xl p-8">
+          {/* Notification */}
+          {notification && (
+            <div
+              className={`mb-6 p-4 rounded-lg ${
+                notification.type === 'success'
+                  ? 'bg-green-50 border border-green-200 text-green-800'
+                  : 'bg-red-50 border border-red-200 text-red-800'
+              }`}
+            >
+              <p className="text-sm font-medium">{notification.message}</p>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  fieldErrors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                }`}
+                required
+              />
+              {fieldErrors.email && (
+                <ul className="mt-1 space-y-1">
+                  {fieldErrors.email.map((error, idx) => (
+                    <li key={idx} className="text-sm text-red-600">• {error}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  fieldErrors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                }`}
+                required
+              />
+              {fieldErrors.password && (
+                <ul className="mt-1 space-y-1">
+                  {fieldErrors.password.map((error, idx) => (
+                    <li key={idx} className="text-sm text-red-600">• {error}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
+              {mutation.isPending ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+
+          {/* Register Link */}
+          <div className="mt-6 text-center">
+            <p className="text-gray-600 text-sm">
+              Don't have an account?{' '}
+              <Link to="/register" className="text-indigo-600 hover:text-indigo-700 font-semibold">
+                Register here
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import WebsiteLayout from "./layouts/WebsiteLayout";
 import Home from "./components/Home/Home";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -6,37 +6,37 @@ import DashboardHome from "./components/Admin/Dashboard/DashboardHome/DashboardH
 import DashboardAddPost from "./components/Admin/Dashboard/DashboardAddPost/DashboardAddPost";
 import DashboardForm from "./components/Admin/Dashboard/DashboardAddPost/DashboardForm/DashboardForm";
 import DashboardPosts from "./components/Admin/Dashboard/DashboardPosts/DashboardPosts";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { getAuthToken } from "./api/client";
+
+// Wrapper component to redirect authenticated users away from login/register
+function AuthPageWrapper({ children }: { children: React.ReactNode }) {
+  const token = getAuthToken();
+  if (token) {
+    return <Navigate to="/admin" replace />;
+  }
+  return <>{children}</>;
+}
 
 export const routes = createBrowserRouter([
+  {
+    path: "login",
+    element: <AuthPageWrapper><Login /></AuthPageWrapper>,
+  },
+  {
+    path: "register",
+    element: <AuthPageWrapper><Register /></AuthPageWrapper>,
+  },
   {
     path: "",
     element: <WebsiteLayout />,
     children: [{ index: true, element: <Home /> }],
   },
-  // {
-  //   path: "admin",
-  //   element: <DashboardLayout />,
-  //   children: [
-  //     {
-  //       index: true,
-  //       element: <DashboardHome />,
-  //     },
-  //     { path: "post-format", element: <DashboardAddPost /> },
-  //     { path: "add-post", element: <DashboardForm /> },
-  //     {
-  //       path: "posts", element: <DashboardPosts />, children: [
-  //         {
-  //           path: "all", element: <DashboardPosts label="posts" />,
-  //         }, {
-  //           path: "slider-posts", element: <DashboardPosts label=" Slider Posts" />
-  //         }
-  //       ]
-  //     }
-  //   ],
-  // },
   {
     path: "admin",
-    element: <DashboardLayout />,
+    element: <ProtectedRoute><DashboardLayout /></ProtectedRoute>,
     children: [
       { index: true, element: <DashboardHome /> },
       { path: "post-format", element: <DashboardAddPost /> },
@@ -48,5 +48,4 @@ export const routes = createBrowserRouter([
 
     ]
   }
-
 ]);

@@ -6,14 +6,27 @@ import UserCard from "./UserCard/UserCard";
 
 export interface UserInterface {
   id: string;
-  name: string;
-  imgSrc: string;
-  date: string;
+  userName: string;
+  email: string;
+  avatarImageUrl: string | null;
+  isActive: boolean;
+  emailConfirmed: boolean;
+  createdAt: string;
+  role: string;
 }
 export default function LatestUsersSection() {
 
-  async function fetchLatestUsers(): Promise<UserInterface[]> {
-    const res = await apiClient.get("/recentUsers");
+  async function fetchLatestUsers() {
+    const res = await apiClient.get("/users/all", {
+      params: {
+        Role: "",
+        IsActive: true,
+        EmailConfirmed: true,
+        PageNumber: 1,
+        PageSize: 15,
+        SearchPhrase: ""
+      }
+    });
     return res.data;
   }
 
@@ -33,7 +46,7 @@ export default function LatestUsersSection() {
           {isLoading ? (
             <Loader />
           ) : (
-            data?.map((user) => <UserCard key={user.id} user={user} />)
+            data?.items?.slice(0, 5).map((user: UserInterface) => <UserCard key={user.id} user={user} />)
           )}
         </div>
       </div>
