@@ -3,6 +3,7 @@ import type { CommentInterface, MessageInterface } from "../DashboardHome";
 import DataTableHeader from "./DataTableHeader";
 import TableRow from "./TableRow";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface DataTableSectionInterFace {
   label: string;
@@ -26,6 +27,7 @@ export default function DataTableSection({
   viewAllPath
 }: DataTableSectionInterFace) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="bg-white  rounded-lg shadow">
@@ -64,7 +66,7 @@ export default function DataTableSection({
             onClick={() => navigate(viewAllPath)}
             className="text-sm px-4 py-2 rounded-md bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors"
           >
-            View All
+            {t('common.show')}
           </button>
         </div>
       )}

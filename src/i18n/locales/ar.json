@@ -31,10 +31,35 @@
     "bulkPostUpload": "تحميل مقالات جماعي",
     "categories": "الفئات",
     "tags": "الوسوم",
-    "adminPanel": "لوحة التحكم"
+    "adminPanel": "لوحة التحكم",
+    "stats": {
+      "posts": "المقالات",
+      "contactMessages": "رسائل الاتصال",
+      "drafts": "المسودات",
+      "scheduledPosts": "المقالات المجدولة"
+    },
+    "tables": {
+      "id": "المعرف",
+      "username": "اسم المستخدم",
+      "email": "البريد الإلكتروني",
+      "message": "الرسالة",
+      "date": "التاريخ",
+      "name": "الاسم",
+      "comment": "التعليق",
+      "pendingComments": "التعليقات المعلقة",
+      "recentlyAddedUnapprovedComments": "التعليقات غير المعتمدة المضافة مؤخراً",
+      "latestContactMessages": "آخر رسائل الاتصال",
+      "recentlyAddedContactMessages": "رسائل الاتصال المضافة مؤخراً",
+      "latestUsers": "آخر المستخدمين",
+      "recentlyRegisteredUsers": "المستخدمون المسجلون مؤخراً"
+    }
   },
   "common": {
     "loading": "جاري التحميل...",
+    "uploading": "جاري التحميل",
+    "noItems": "لا توجد عناصر",
+    "close": "إغلاق",
+    "selectedFile": "الملف المحدد",
     "save": "حفظ",
     "cancel": "إلغاء",
     "delete": "حذف",
@@ -50,7 +75,7 @@
   },
   "app": {
     "name": "جريدة الثورة",
-    "nameAlt": "القبس"
+    "nameAlt": "جريدة الثورة"
   },
   "post": {
     "addPost": "إضافة مقال",
@@ -99,5 +124,69 @@
     "subcategory": "الفئة الفرعية",
     "user": "المستخدم",
     "search": "بحث"
+  },
+  "contentTypes": {
+    "article": "مقال",
+    "articleDesc": "مقال يحتوي على صور وفيديوهات مدمجة",
+    "gallery": "معرض",
+    "galleryDesc": "مجموعة من الصور",
+    "sortedList": "قائمة مرتبة",
+    "sortedListDesc": "مقال قائم على قائمة",
+    "tableOfContents": "جدول المحتويات",
+    "tableOfContentsDesc": "قائمة روابط بناءً على العناوين",
+    "video": "فيديو",
+    "videoDesc": "تحميل أو تضمين مقاطع الفيديو",
+    "audio": "صوت",
+    "audioDesc": "تحميل الملفات الصوتية وإنشاء قائمة تشغيل",
+    "triviaQuiz": "اختبار معلومات",
+    "triviaQuizDesc": "اختبارات بإجابات صحيحة وخاطئة",
+    "personalityQuiz": "اختبار شخصية",
+    "personalityQuizDesc": "اختبارات بنتائج مخصصة",
+    "poll": "استطلاع",
+    "pollDesc": "احصل على آراء المستخدمين حول شيء ما",
+    "recipe": "وصفة",
+    "recipeDesc": "قائمة بالمكونات والتعليمات للطهي"
+  },
+  "imageUpload": {
+    "selectImage": "اختر صورة",
+    "addImageUrl": "أو أضف رابط صورة",
+    "useFullUrl": "استخدم رابط كامل (https://...) أو اختر من مكتبة الوسائط",
+    "imageDescription": "وصف الصورة",
+    "additionalImages": "صور إضافية",
+    "moreMainImages": "صور رئيسية إضافية (سيكون المنزلق نشطاً)",
+    "files": "ملفات",
+    "downloadableFiles": "ملفات قابلة للتحميل (.pdf,.docx,.zip إلخ..)",
+    "selectFile": "اختر ملف",
+    "imageUrl": "رابط الصورة",
+    "mainPostImage": "صورة المقال الرئيسية",
+    "videoThumbnail": "صورة مصغرة للفيديو",
+    "imageForVideo": "صورة للفيديو",
+    "invalidUrlFormat": "⚠️ تنسيق رابط غير صحيح. يجب أن يبدأ بـ http:// أو https://"
+  },
+  "formLabels": {
+    "choosePostFormat": "اختر تنسيق المقال",
+    "posts": "المقالات",
+    "category": "الفئة",
+    "selectCategory": "اختر فئة",
+    "visibility": "الرؤية",
+    "show": "عرض",
+    "hide": "إخفاء",
+    "addToSlider": "إضافة إلى السلايدر",
+    "addToFeatured": "إضافة إلى المميزة",
+    "addToBreaking": "إضافة إلى الأخبار العاجلة",
+    "addToRecommended": "إضافة إلى الموصى به",
+    "showOnlyToRegisteredUsers": "عرض فقط للمستخدمين المسجلين",
+    "showItemNumbers": "عرض أرقام العناصر في صفحة تفاصيل المقال",
+    "metaDescription": "وصف ميتا",
+    "metaKeywords": "كلمات مفتاحية (علامة ميتا)",
+    "getVideoFromURL": "الحصول على فيديو من رابط",
+    "uploadVideo": "تحميل فيديو",
+    "uploadAudio": "تحميل صوت",
+    "videoURL": "رابط الفيديو",
+    "videoURLSources": "(YouTube, Vimeo, Dailymotion, Facebook)",
+    "enterVideoURL": "أدخل رابط الفيديو",
+    "videoEmbedCode": "كود تضمين الفيديو",
+    "audioEmbedCode": "كود تضمين الصوت",
+    "pasteVideoEmbedCode": "الصق كود تضمين الفيديو هنا..."
   }
 }

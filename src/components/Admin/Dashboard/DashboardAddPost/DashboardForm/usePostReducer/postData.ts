@@ -53,11 +53,12 @@ export const articleInitialState: ArticleInitialStateInterface = {
   fileUrls: null,
 };
 
-interface AudioInitialStateInterface {
+export interface AudioInitialStateInterface extends ShardedInitialStateInterface {
   addToBreaking: boolean;
   addToFeatured: boolean;
   addToSlider: boolean;
-  audioUrl: boolean;
+  audioUrl: string | null;
+  imageUrl: string;
   thumbnailUrl: string | null;
 }
 export const audioInitialState: AudioInitialStateInterface = {
@@ -65,8 +66,9 @@ export const audioInitialState: AudioInitialStateInterface = {
   addToBreaking: true,
   addToFeatured: true,
   addToSlider: true,
-  audioUrl: true,
-  thumbnailUrl: "",
+  audioUrl: null,
+  imageUrl: "",
+  thumbnailUrl: null,
 };
 
 interface Item {
@@ -86,7 +88,7 @@ export interface GalleryInitialStateInterface
 export const galleryInitialState: GalleryInitialStateInterface = {
   ...shardedInitialState,
   imageUrl: "",
-  imageDescription: "",
+  imageDescription: null,
   items: [
     {
       title: "",
@@ -120,7 +122,7 @@ export const sortedListInitialState: SortedListInitialStateInterface = {
   showNumbers: true,
 };
 
-interface VideoInitialStateInterface {
+export interface VideoInitialStateInterface extends ShardedInitialStateInterface {
   addToBreaking: boolean;
   addToFeatured: boolean;
   addToSlider: boolean;
@@ -129,6 +131,7 @@ interface VideoInitialStateInterface {
   videoUrl: string | null;
   videoFileUrls: string[] | null;
   videoEmbedCode: string | null;
+  imageUrl: string;
   videoThumbnailUrl: string;
 }
 export const videoInitialState: VideoInitialStateInterface = {
@@ -137,9 +140,10 @@ export const videoInitialState: VideoInitialStateInterface = {
   addToFeatured: true,
   addToSlider: true,
   content: "",
-  duration: "",
-  videoUrl: "string",
-  videoFileUrls: [""],
-  videoEmbedCode: "",
+  duration: null,
+  videoUrl: null,
+  videoFileUrls: null,
+  videoEmbedCode: null,
+  imageUrl: "",
   videoThumbnailUrl: "",
 };

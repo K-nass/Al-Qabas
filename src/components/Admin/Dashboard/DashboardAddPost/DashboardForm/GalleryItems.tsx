@@ -1,26 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import type { GalleryInitialStateInterface } from "./usePostReducer/postData";
-import type { ChangeEvent } from "react";
-import FileModal from "./FileModal";
 import { useState } from "react";
+import FileModal from "./FileModal";
+import type { HandleChangeType } from "./types";
+import { useTranslation } from "react-i18next";
 
 interface GalleryItemsProps {
   state: GalleryInitialStateInterface;
-  handleChange: (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | {
-      target: {
-        name: string;
-        value: string | string[];
-        type: string;
-      };
-    }
-  ) => void;
+  handleChange: HandleChangeType;
   errors?: Record<string, string>;
 }
 
 export default function GalleryItems({ state, handleChange, errors = {} }: GalleryItemsProps) {
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   const handleItemChange = (index: number, field: string, value: string) => {
     const updatedItems = [...state.items];
@@ -139,7 +133,7 @@ export default function GalleryItems({ state, handleChange, errors = {} }: Galle
             {/* Image URL */}
             <div>
               <label className="block text-sm font-medium mb-1">
-                Image URL
+                {t('imageUpload.imageUrl')}
               </label>
               <div className="border-2 border-dashed border-slate-300 rounded-lg p-4 flex flex-col items-center justify-center text-center mb-2">
                 <button
@@ -147,7 +141,7 @@ export default function GalleryItems({ state, handleChange, errors = {} }: Galle
                   onClick={() => setOpenModalIndex(index)}
                   className="text-sm px-3 py-1.5 border border-slate-300 rounded text-slate-600 hover:bg-slate-100"
                 >
-                  Select Image
+                  {t('imageUpload.selectImage')}
                 </button>
               </div>
               {openModalIndex === index && (
@@ -161,7 +155,7 @@ export default function GalleryItems({ state, handleChange, errors = {} }: Galle
                   }}
                 />
               )}
-              <p className="text-center text-xs text-slate-500 mb-2">or Add Image URL</p>
+              <p className="text-center text-xs text-slate-500 mb-2">{t('imageUpload.addImageUrl')}</p>
               <input
                 className={`w-full bg-slate-50 border rounded focus:ring-primary focus:border-primary p-2 ${
                   errors[`items.${index}.imageUrl`] ? 'border-red-500' : 'border-slate-300'

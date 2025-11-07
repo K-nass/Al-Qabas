@@ -149,7 +149,7 @@ export default function DashboardSidebar() {
       >
         <div className="flex items-center justify-center md:justify-between mb-4 md:mb-6">
           <div className="md:flex md:items-center">
-            <h1 className="hidden md:block text-xl text-white ml-2"><span className="font-bold">Admin</span> {t('dashboard.adminPanel')}</h1>
+            <h1 className="hidden md:block text-xl text-white ml-2">{t('dashboard.adminPanel')}</h1>
           </div>
           <button
             type="button"

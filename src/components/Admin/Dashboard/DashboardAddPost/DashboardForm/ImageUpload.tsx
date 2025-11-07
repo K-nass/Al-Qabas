@@ -8,6 +8,7 @@ import type {
 import { useState, type ChangeEvent } from "react";
 import FileModal from "./FileModal";
 import { isValidUrl } from "./types";
+import { useTranslation } from "react-i18next";
 
 interface ImageUploadProps {
   state:
@@ -36,11 +37,13 @@ export default function ImageUpload({
   fieldErrors = {}
 }: ImageUploadProps) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+
   return (
     <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-slate-200 space-y-3 sm:space-y-4">
-      <h3 className="text-base font-semibold  ">{type === "video"? "Video Thumbnail" : "Image"}</h3>
+      <h3 className="text-base font-semibold  ">{type === "video"? t('imageUpload.videoThumbnail') : t('imageUpload.imageUrl')}</h3>
       <p className="text-sm text-slate-500 dark:text-slate-400 -mt-2">
-       {type === "video"? "Image for video" : "Main post image"}
+       {type === "video"? t('imageUpload.imageForVideo') : t('imageUpload.mainPostImage')}
       </p>
       <div className="border-2 border-dashed border-slate-300  rounded-lg p-6 flex flex-col items-center justify-center text-center">
         <span className="material-icons-sharp text-5xl text-slate-400 dark:text-slate-500">
@@ -51,7 +54,7 @@ export default function ImageUpload({
           className="mt-2 text-sm px-3 py-1.5 border border-slate-300  rounded text-slate-600 dark:text-slate-300 hover:bg-slate-100"
           onClick={() => setOpen(true)}
         >
-          Select Image
+          {t('imageUpload.selectImage')}
         </button>
       </div>
       {open && (
@@ -61,7 +64,7 @@ export default function ImageUpload({
           handleChange={handleChange}
         />
       )}
-      <p className="text-center text-sm text-slate-500">or Add Image Url</p>
+      <p className="text-center text-sm text-slate-500">{t('imageUpload.addImageUrl')}</p>
       <div data-error-field={fieldErrors.imageUrl ? true : undefined}>
         <input
           className={`w-full text-sm bg-slate-50 border rounded focus:ring-primary focus:border-primary p-2 ${
@@ -73,9 +76,9 @@ export default function ImageUpload({
           value={state.imageUrl}
           onChange={handleChange}
         />
-        <p className="text-xs text-slate-500 mt-1">Use full URL (https://...) or select from media library</p>
+        <p className="text-xs text-slate-500 mt-1">{t('imageUpload.useFullUrl')}</p>
         {state.imageUrl && !isValidUrl(state.imageUrl) && (
-          <p className="text-xs text-orange-600 mt-1">⚠️ Invalid URL format. Must start with http:// or https://</p>
+          <p className="text-xs text-orange-600 mt-1">{t('imageUpload.invalidUrlFormat')}</p>
         )}
         {fieldErrors.imageUrl && (
           <ul className="mt-1 space-y-1">
@@ -90,7 +93,7 @@ export default function ImageUpload({
           className={`w-full text-sm bg-slate-50 border rounded focus:ring-primary focus:border-primary p-2 ${
             fieldErrors.imageDescription ? 'border-red-500' : 'border-slate-300'
           }`}
-          placeholder="Image Description"
+          placeholder={t('imageUpload.imageDescription')}
           type="text"
           name="imageDescription"
           value={

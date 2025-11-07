@@ -4,6 +4,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import type { HandleChangeType } from "./types";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -19,6 +20,7 @@ interface MediaItem {
     sizeInBytes: number;
     mimeType: string;
     uploadedAt: string;
+    duration?: number;
 }
 
 interface MediaResponse {
@@ -26,14 +28,30 @@ interface MediaResponse {
     totalCount: number;
 }
 
+export type MediaType = "images" | "additional images" | "files" | "video" | "audio";
+
 interface FileModalProps {
     onClose: () => void;
-    header: "images" | "additional images" | "files";
+    header: MediaType;
     handleChange: HandleChangeType;
 }
 
 export default function FileModal({ onClose, header, handleChange }: FileModalProps) {
+    const { t } = useTranslation();
     const [showModal, setShowModal] = useState(false);
+
+    // Determine upload endpoint and media type based on header
+    const getUploadEndpoint = () => {
+        if (header === "video") return "/media/upload-video";
+        if (header === "audio") return "/media/upload-audio";
+        return "/media/upload-image";
+    };
+
+    const getMediaTypeFilter = () => {
+        if (header === "video") return "Video";
+        if (header === "audio") return "Audio";
+        return "Image";
+    };
 
     // --- Upload Mutation ---
     const uploadMutation = useMutation({
@@ -41,7 +59,7 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
             const formData = new FormData();
             formData.append("File", file);
             const response = await axios.post<UploadResponse>(
-                `${apiUrl}/media/upload-image`,
+                `${apiUrl}${getUploadEndpoint()}`,
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -55,9 +73,13 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
     // Using useQuery with enabled: true so it fetches once when component mounts
     // and uses React Query's built-in caching to prevent duplicate requests
     const { data: mediaData, isLoading: isLoadingMedia, refetch: refetchMedia } = useQuery<MediaResponse>({
-        queryKey: ["media"],
+        queryKey: ["media", getMediaTypeFilter()],
         queryFn: async () => {
-            const response = await axios.get<MediaResponse>(`${apiUrl}/media`);
+            const response = await axios.get<MediaResponse>(`${apiUrl}/media`, {
+                params: {
+                    Type: getMediaTypeFilter(),
+                },
+            });
             return response.data;
         },
         staleTime: 30000, // Cache for 30 seconds - prevents refetching if data is fresh
@@ -90,9 +112,13 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                     ? "imageUrl"
                     : header === "additional images"
                         ? "additionalImageUrls"
-                        : "fileUrls";
+                        : header === "video"
+                            ? "videoUrl"
+                            : header === "audio"
+                                ? "audioUrl"
+                                : "fileUrls";
 
-            const value = header === "images" ? uploadedUrls[0] : uploadedUrls;
+            const value = (header === "images" || header === "video" || header === "audio") ? uploadedUrls[0] : uploadedUrls;
             
             const payload = {
                 target: {
@@ -137,14 +163,16 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                 <div className="p-3 sm:p-4">
                     <input
                         type="text"
-                        placeholder="Search images..."
+                        placeholder={`Search ${header}...`}
                         className="w-full rounded-md p-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                 </div>
 
                 {/* Upload Area */}
                 <div className="p-4 sm:p-6 rounded-md text-center mx-2 sm:mx-4 my-2 sm:my-4 bg-gray-50">
-                    <p className="text-sm text-gray-500 mb-2">JPG, JPEG, WEBP, PNG, GIF</p>
+                    <p className="text-sm text-gray-500 mb-2">
+                        {header === "video" ? "MP4, WebM, Ogg" : header === "audio" ? "MP3, WAV, OGG, WebM" : "JPG, JPEG, WEBP, PNG, GIF"}
+                    </p>
                     <div className="flex flex-col items-center justify-center gap-2">
                         <div className="bg-gray-100 p-4 rounded-full">
                             <svg
@@ -166,7 +194,14 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                         </p>
                         <input
                             type="file"
-                            multiple={header !== "images"}
+                            multiple={header !== "images" && header !== "video" && header !== "audio"}
+                            accept={
+                                header === "video"
+                                    ? "video/mp4,video/webm,video/ogg"
+                                    : header === "audio"
+                                        ? "audio/mpeg,audio/wav,audio/ogg,audio/webm"
+                                        : "image/*"
+                            }
                             className="text-center text-sm px-3 py-2 bg-[#605CA8] text-white rounded hover:bg-indigo-700 cursor-pointer"
                             onChange={(e) => void handleFiles(e.target.files)}
                             disabled={uploadMutation.isPending}
@@ -180,12 +215,12 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                     </div>
                 </div>
 
-                {/* Image Grid */}
+                {/* Media Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4 px-3 sm:px-6 pb-4 sm:pb-6 overflow-y-auto flex-1 max-h-96">
                     {isLoadingMedia ? (
-                        <p className="col-span-2 sm:col-span-3 md:col-span-4 text-center text-gray-500 text-sm sm:text-base">Loading images...</p>
+                        <p className="col-span-2 sm:col-span-3 md:col-span-4 text-center text-gray-500 text-sm sm:text-base">{t('common.loading')}</p>
                     ) : mediaList.length === 0 ? (
-                        <p className="col-span-2 sm:col-span-3 md:col-span-4 text-center text-gray-500 text-sm sm:text-base">No media found.</p>
+                        <p className="col-span-2 sm:col-span-3 md:col-span-4 text-center text-gray-500 text-sm sm:text-base">{t('common.noItems')}</p>
                     ) : (
                         mediaList.map((item) => {
                             const fieldName =
@@ -193,10 +228,14 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                                     ? "imageUrl"
                                     : header === "additional images"
                                         ? "additionalImageUrls"
-                                        : "fileUrls";
+                                        : header === "video"
+                                            ? "videoUrl"
+                                            : header === "audio"
+                                                ? "audioUrl"
+                                                : "fileUrls";
 
                             const handleSelectMedia = () => {
-                                const value = header === "images" ? item.url : [item.url];
+                                const value = (header === "images" || header === "video" || header === "audio") ? item.url : [item.url];
                                 const payload = {
                                     target: {
                                         name: fieldName,
@@ -209,21 +248,46 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                                 setTimeout(onClose, 180);
                             };
 
+                            // For images, show thumbnail
+                            if (header === "images" || header === "additional images") {
+                                return (
+                                    <button
+                                        key={item.id}
+                                        type="button"
+                                        onClick={handleSelectMedia}
+                                        className="relative cursor-pointer rounded overflow-hidden group"
+                                    >
+                                        <img
+                                            src={item.url}
+                                            alt={item.fileName}
+                                            className="w-full h-32 object-cover rounded-md hover:opacity-80 transition"
+                                        />
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition flex items-center justify-center">
+                                            <span className="text-white opacity-0 group-hover:opacity-100 transition text-xs font-semibold">Select</span>
+                                        </div>
+                                    </button>
+                                );
+                            }
+
+                            // For video, audio, and files - show file info
                             return (
                                 <button
                                     key={item.id}
                                     type="button"
                                     onClick={handleSelectMedia}
-                                    className="relative cursor-pointer rounded overflow-hidden group"
+                                    className="relative cursor-pointer rounded overflow-hidden group bg-gray-100 p-3 flex flex-col items-center justify-center h-32 hover:bg-gray-200 transition"
                                 >
-                                    <img
-                                        src={item.url}
-                                        alt={item.fileName}
-                                        className="w-full h-32 object-cover rounded-md hover:opacity-80 transition"
-                                    />
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition flex items-center justify-center">
-                                        <span className="text-white opacity-0 group-hover:opacity-100 transition text-xs font-semibold">Select</span>
+                                    <div className="text-2xl mb-2">
+                                        {header === "video" ? "🎬" : header === "audio" ? "🎵" : "📄"}
                                     </div>
+                                    <p className="text-xs font-semibold text-gray-700 text-center truncate w-full px-1">
+                                        {item.fileName}
+                                    </p>
+                                    {item.duration && (
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            {Math.round(item.duration)}s
+                                        </p>
+                                    )}
                                 </button>
                             );
                         })
@@ -240,7 +304,7 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                         }}
                         className="px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-gray-200 rounded hover:bg-gray-300"
                     >
-                        Close
+                        {t('common.close')}
                     </button>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import DataTableHeader from "../DataTableSection/DataTableHeader";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../../../../Loader/Loader";
 import UserCard from "./UserCard/UserCard";
+import { useTranslation } from "react-i18next";
 
 export interface UserInterface {
   id: string;
@@ -15,31 +16,38 @@ export interface UserInterface {
   role: string;
 }
 export default function LatestUsersSection() {
+  const { t } = useTranslation();
 
   async function fetchLatestUsers() {
     const res = await apiClient.get("/users/all", {
       params: {
         Role: "",
-        IsActive: true,
+        Status: "",
         EmailConfirmed: true,
         PageNumber: 1,
-        PageSize: 15,
+        PageSize: 5,
         SearchPhrase: ""
       }
     });
     return res.data;
   }
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["latestUsers"],
     queryFn: fetchLatestUsers,
+    retry: false, // Don't retry on 403
   });
+
+  // Don't render if there's an error (403 Forbidden - insufficient permissions)
+  if (isError) {
+    return null;
+  }
 
   return (
     <div className="bg-white rounded-lg shadow">
       <DataTableHeader
-        label="Latest Users"
-        description="Recently registered users"
+        label={t('dashboard.tables.latestUsers')}
+        description={t('dashboard.tables.recentlyRegisteredUsers')}
       />
       <div className="p-6">
         <div className="flex flex-wrap gap-8 justify-center sm:justify-start">

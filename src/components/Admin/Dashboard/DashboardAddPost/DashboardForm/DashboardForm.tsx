@@ -10,6 +10,7 @@ import FileUpload from "./FileUpload";
 import CategorySelect from "./CategorySelect";
 import PublishSection from "./PublishSection";
 import ImageUpload from "./ImageUpload";
+import MediaUploadComponent from "./MediaUploadComponent";
 import { useEffect, type ChangeEvent, useState } from "react";
 import axios from "axios";
 import { apiClient, getAuthToken } from "@/api/client";
@@ -20,6 +21,8 @@ import type {
   ArticleInitialStateInterface,
   GalleryInitialStateInterface,
   SortedListInitialStateInterface,
+  VideoInitialStateInterface,
+  AudioInitialStateInterface,
 } from "./usePostReducer/postData";
 import { postConfig } from "./usePostReducer/postConfig";
 import { useCategories } from "@/hooks/useCategories";
@@ -100,10 +103,7 @@ export default function DashboardForm() {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const payload = state as
-        | ArticleInitialStateInterface
-        | GalleryInitialStateInterface
-        | SortedListInitialStateInterface;
+      let payload: any = state;
       const categoryId = payload.categoryId;
       if (!categoryId) throw new Error("categoryId missing");
       if (!type) throw new Error("Post type is required");
@@ -112,6 +112,22 @@ export default function DashboardForm() {
       if (!config) throw new Error(`Unknown post type: ${type}`);
 
       const endpoint = config.endpoint;
+      
+      // For video posts, copy imageUrl to videoThumbnailUrl
+      if (type === "video" && "imageUrl" in payload) {
+        payload = {
+          ...payload,
+          videoThumbnailUrl: payload.imageUrl || "",
+        };
+      }
+      
+      // For audio posts, copy imageUrl to thumbnailUrl
+      if (type === "audio" && "imageUrl" in payload) {
+        payload = {
+          ...payload,
+          thumbnailUrl: payload.imageUrl || null,
+        };
+      }
       
       const response = await apiClient.post(
         `/posts/categories/${categoryId}/${endpoint}`,
@@ -234,7 +250,34 @@ export default function DashboardForm() {
                 <FileUpload handleChange={handleChange} fieldErrors={fieldErrors} />
               </>
             )}
-            {type === "video" && <MediaUpload />}
+            {type === "video" && (
+              <MediaUploadComponent
+                mediaType="video"
+                onMediaSelect={(media) => {
+                  handleChange({
+                    target: {
+                      name: "videoUrl",
+                      value: media.url,
+                      type: "text",
+                    },
+                  } as any);
+                }}
+              />
+            )}
+            {type === "audio" && (
+              <MediaUploadComponent
+                mediaType="audio"
+                onMediaSelect={(media) => {
+                  handleChange({
+                    target: {
+                      name: "audioUrl",
+                      value: media.url,
+                      type: "text",
+                    },
+                  } as any);
+                }}
+              />
+            )}
             <CategorySelect
               handleChange={handleChange}
               categories={categories?.data ?? []}
@@ -249,80 +292,3 @@ export default function DashboardForm() {
     </>
   );
 }
-
-function MediaUpload() {
-  return (
-    <div className="bg-white p-4 sm:p-6  border border-slate-200 space-y-6">
-      <div className="bg-white overflow-hidden">
-        {/* Tabs */}
-        <div className="border-b border-slate-200">
-          <nav aria-label="Tabs" className="flex">
-            <a
-              aria-current="page"
-              className="border-b-2 border-primary text-primary whitespace-nowrap font-medium text-base py-3"
-              href="#"
-            >
-              Get Video from URL
-            </a>
-            <a
-              className="border-b-2 border-transparent text-slate-500 whitespace-nowrap font-medium text-base px-6 py-3 hover:text-primary hover:border-primary/40"
-              href="#"
-            >
-              Upload Video
-            </a>
-          </nav>
-        </div>
-
-        {/* Content */}
-        <div className=" space-y-6">
-          {/* Video URL Field */}
-          <div className="space-y-2">
-            <label
-              htmlFor="video-url"
-              className="block font-semibold text-slate-800"
-            >
-              Video URL
-              <span className="text-sm font-normal text-slate-500 ml-1">
-                (YouTube, Vimeo, Dailymotion, Facebook)
-              </span>
-            </label>
-
-            <div className="">
-              <input
-                id="video-url"
-                name="video-url"
-                type="url"
-                placeholder="Enter video URL"
-                className="block w-full border border-slate-300 bg-white text-slate-700 placeholder-slate-400 focus:border-primary "
-              />
-              {/* <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-md px-5 py-2.5 font-medium  hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition"
-              >
-                Get Video
-              </button> */}
-            </div>
-          </div>
-
-          {/* Video Embed Field */}
-          <div className="space-y-2">
-            <label
-              htmlFor="video-embed"
-              className="block text-base font-semibold text-slate-800"
-            >
-              Video Embed Code
-            </label>
-            <textarea
-              id="video-embed"
-              name="video-embed"
-              placeholder="Paste video embed code here..."
-              rows={4}
-              className="block w-full rounded-md border border-slate-300 bg-white  text-slate-700 placeholder-slate-400 focus:border-primary focus:ring focus:ring-primary/20 resize-none"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-

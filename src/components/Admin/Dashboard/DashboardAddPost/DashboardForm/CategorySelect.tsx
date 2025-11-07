@@ -1,6 +1,7 @@
 import type { ChangeEvent } from "react";
 import { memo } from "react";
 import type { HandleChangeType } from "./types";
+import { useTranslation } from "react-i18next";
 
 interface Category {
   id: string;
@@ -26,9 +27,11 @@ interface Props {
 }
 
 export default memo(function CategorySelect({ categories = [], isLoading, handleChange, value, errors = {} }: Props) {
+  const { t } = useTranslation();
+  
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 space-y-3" data-error-field={errors.categoryId ? true : undefined}>
-      <label className="block text-sm font-medium mb-1" htmlFor="categoryId">Category</label>
+      <label className="block text-sm font-medium mb-1" htmlFor="categoryId">{t('formLabels.category')}</label>
       <select
         id="categoryId"
         name="categoryId"
@@ -39,7 +42,7 @@ export default memo(function CategorySelect({ categories = [], isLoading, handle
         }`}
         disabled={isLoading}
       >
-        <option value="">Select a category</option>
+        <option value="">{t('formLabels.selectCategory')}</option>
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
             {cat.name}

@@ -160,7 +160,7 @@ export default function PostDetailsForm({
         {/* Meta Tag */}
         <div>
           <label className="block text-sm font-medium mb-1" htmlFor="summary">
-            {t('post.description')} &amp; Meta Tag
+            {t('formLabels.metaDescription')}
           </label>
           <textarea
             className="w-full bg-slate-50  border-slate-300  rounded focus:ring-primary focus:border-primary"
@@ -175,14 +175,14 @@ export default function PostDetailsForm({
         {/* metaKeywords */}
         <div>
           <label className="block text-sm font-medium mb-1" htmlFor="keywords">
-            Keywords (Meta Tag)
+            {t('formLabels.metaKeywords')}
           </label>
           <input
             className="w-full bg-slate-50  border-slate-300  rounded focus:ring-primary focus:border-primary p-2"
             type="text"
             id="keywords"
             name="metaKeywords"
-            placeholder="Keywords (Meta Tag)"
+            placeholder={t('formLabels.metaKeywords')}
             value={state.metaKeywords ?? ""}
             onChange={handleChange}
           />
@@ -190,7 +190,7 @@ export default function PostDetailsForm({
 
         {/* {Visibility} */}
         <div>
-          <label className="block text-sm font-medium mb-2">Visibility</label>
+          <label className="block text-sm font-medium mb-2">{t('formLabels.visibility')}</label>
           <div className="flex items-center space-x-4 sm:space-x-6">
             <label className="flex items-center" htmlFor="visibility-true">
               <input
@@ -202,7 +202,7 @@ export default function PostDetailsForm({
                 checked={state.visibility === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Show</span>
+              <span className="ml-2">{t('formLabels.show')}</span>
             </label>
             <label className="flex items-center" htmlFor="visibility-false">
               <input
@@ -214,7 +214,7 @@ export default function PostDetailsForm({
                 checked={state.visibility === false}
                 onChange={handleChange}
               />
-              <span className="ml-2">Hide</span>
+              <span className="ml-2">{t('formLabels.hide')}</span>
             </label>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function PostDetailsForm({
                 checked={(state as ArticleInitialStateInterface).addToSlider === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Add to Slider</span>
+              <span className="ml-2">{t('formLabels.addToSlider')}</span>
             </label>
           )}
           {/* Add to Featured */}
@@ -243,7 +243,7 @@ export default function PostDetailsForm({
                 checked={(state as ArticleInitialStateInterface).addToFeatured === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Add to Featured</span>
+              <span className="ml-2">{t('formLabels.addToFeatured')}</span>
             </label>
           )}
           {/* Add to Breaking */}
@@ -256,7 +256,7 @@ export default function PostDetailsForm({
                 checked={(state as ArticleInitialStateInterface).addToBreaking === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Add to Breaking</span>
+              <span className="ml-2">{t('formLabels.addToBreaking')}</span>
             </label>
           )}
           {/* Add to Recommended */}
@@ -268,7 +268,7 @@ export default function PostDetailsForm({
               checked={state.addToRecommended === true}
               onChange={handleChange}
             />
-            <span className="ml-2">Add to Recommended</span>
+            <span className="ml-2">{t('formLabels.addToRecommended')}</span>
           </label>
           {/* Show Only to Registered Users */}
           <label className="flex items-center">
@@ -279,7 +279,7 @@ export default function PostDetailsForm({
               checked={state.showOnlyToRegisteredUsers === true}
               onChange={handleChange}
             />
-            <span className="ml-2">Show Only to Registered Users</span>
+            <span className="ml-2">{t('formLabels.showOnlyToRegisteredUsers')}</span>
           </label>
 
           {/* Show Item Numbers in Post Details Page */}
@@ -292,7 +292,7 @@ export default function PostDetailsForm({
                 checked={(state as GalleryInitialStateInterface).showItemNumbersInPostDetailsPage === true}
                 onChange={handleChange}
               />
-              <span className="ml-2">Show Item Numbers in Post Details Page</span>
+              <span className="ml-2">{t('formLabels.showItemNumbers')}</span>
             </label>
           )}
           {/* Show Numbers (for sorted-list) */}

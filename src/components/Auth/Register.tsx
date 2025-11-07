@@ -125,6 +125,9 @@ export default function Register() {
         
         {/* Header */}
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <img src="/icon.png" alt="Logo" className="w-20 h-20 rounded-lg shadow-lg" />
+          </div>
           <h1 className="text-4xl font-bold text-white mb-2">{t('app.name')}</h1>
           <p className="text-indigo-100">{t('auth.register')}</p>
         </div>
