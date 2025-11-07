@@ -6,8 +6,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 
 const query = new QueryClient();
 
-
-export default function App() {
+function AppContent() {
   const { isLoading } = useAuthRefresh();
 
   if (isLoading) {
@@ -19,10 +18,16 @@ export default function App() {
   }
 
   return (
+    <QueryClientProvider client={query}>
+      <RouterProvider router={routes}></RouterProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default function App() {
+  return (
     <LanguageProvider>
-      <QueryClientProvider client={query}>
-        <RouterProvider router={routes}></RouterProvider>
-      </QueryClientProvider>
+      <AppContent />
     </LanguageProvider>
   );
 }
