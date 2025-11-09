@@ -31,6 +31,7 @@
     "bulkPostUpload": "تحميل مقالات جماعي",
     "categories": "الفئات",
     "tags": "الوسوم",
+    "users": "المستخدمين",
     "adminPanel": "لوحة التحكم",
     "stats": {
       "posts": "المقالات",
@@ -194,5 +195,26 @@
     "videoEmbedCode": "كود تضمين الفيديو",
     "audioEmbedCode": "كود تضمين الصوت",
     "pasteVideoEmbedCode": "الصق كود تضمين الفيديو هنا..."
+  },
+  "roles": {
+    "rolesAndPermissions": "الأدوار والصلاحيات",
+    "addRole": "إضافة دور",
+    "searchRoles": "البحث عن الأدوار...",
+    "roleName": "اسم الدور",
+    "permissions": "الصلاحيات",
+    "options": "الخيارات",
+    "default": "افتراضي",
+    "allPermissions": "جميع الصلاحيات",
+    "noRolesFound": "لا توجد أدوار",
+    "showing": "عرض",
+    "to": "إلى",
+    "of": "من",
+    "rolesText": "دور",
+    "page": "صفحة",
+    "previous": "السابق",
+    "next": "التالي",
+    "accessDenied": "تم رفض الوصول",
+    "accessDeniedMessage": "ليس لديك صلاحية لعرض الأدوار. يمكن للمسؤولين فقط الوصول إلى هذه الصفحة.",
+    "errorLoadingRoles": "خطأ في تحميل الأدوار"
   }
 }

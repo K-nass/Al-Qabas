@@ -10,6 +10,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { getAuthToken } from "./api/client";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
+import Roles from "./components/Admin/Dashboard/Roles/Roles";
+import AddRole from "./components/Admin/Dashboard/AddRole/AddRole";
+import EditRole from "./components/Admin/Dashboard/EditRole/EditRole";
+import Users from "./components/Admin/Dashboard/Users/Users";
 
 // Wrapper component to redirect authenticated users away from login/register
 function AuthPageWrapper({ children }: { children: React.ReactNode }) {
@@ -53,7 +57,11 @@ export const routes = createBrowserRouter([
           { path: "posts/slider-posts", element: <DashboardPosts label="Slider Posts" /> },
           { path: "posts/featured-posts", element: <DashboardPosts label="Featured Posts" /> },
           { path: "posts/breaking-news", element: <DashboardPosts label="Breaking News" /> },
-          { path: "pages", element: <DashboardPosts label="pages"/> },
+          { path: "pages", element: <DashboardPosts label="pages" /> },
+          {path:"roles-permissions",element:<Roles />},
+          {path:"add-role",element:<AddRole />},
+          {path:"edit-role/:id",element:<EditRole />},
+          {path:"users",element:<Users />}
         ]
       }
     ]
