@@ -3,6 +3,7 @@ import { routes } from "./routes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthRefresh } from "./hooks/useAuthRefresh";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { ToastProvider } from "./components/Toast/ToastContainer";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Loader from "./components/Loader/Loader";
@@ -34,7 +35,9 @@ function AppContent() {
 export default function App() {
   return (
     <LanguageProvider>
-      <AppContent />
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
     </LanguageProvider>
   );
 }

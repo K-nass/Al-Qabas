@@ -4,6 +4,8 @@ import DashboardHome from "./components/Admin/Dashboard/DashboardHome/DashboardH
 import DashboardAddPost from "./components/Admin/Dashboard/DashboardAddPost/DashboardAddPost";
 import DashboardForm from "./components/Admin/Dashboard/DashboardAddPost/DashboardForm/DashboardForm";
 import DashboardPosts from "./components/Admin/Dashboard/DashboardPosts/DashboardPosts";
+import DashboardCategories from "./components/Admin/Dashboard/DashboardCategories/DashboardCategories";
+import DashboardAddCategory from "./components/Admin/Dashboard/DashboardAddCategory/DashboardAddCategory";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -15,7 +17,6 @@ import Roles from "./components/Admin/Dashboard/Roles/Roles";
 import AddRole from "./components/Admin/Dashboard/AddRole/AddRole";
 import EditRole from "./components/Admin/Dashboard/EditRole/EditRole";
 import Users from "./components/Admin/Dashboard/Users/Users";
-import Categories from "./components/Admin/Dashboard/Categories/Categories";
 import Home from "./components/Home/Home";
 
 // Wrapper component to redirect authenticated users away from login/register
@@ -69,7 +70,9 @@ export const routes = createBrowserRouter([
           {path:"add-role",element:<AddRole />},
           {path:"edit-role/:id",element:<EditRole />},
           {path:"users",element:<Users />},
-          {path:"categories",element:<Categories />}
+          {path:"categories",element:<DashboardCategories />},
+          {path:"add-category",element:<DashboardAddCategory />},
+          {path:"edit-category/:id",element:<DashboardAddCategory />}
         ]
       }
     ]
