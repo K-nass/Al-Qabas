@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { usersApi, type GetUsersParams } from "@/api";
 import Loader from "@/components/Common/Loader";
+import axios from "axios";
 
 export default function Users() {
     const [role, setRole] = useState<string>("");
@@ -158,9 +159,15 @@ export default function Users() {
                 {/* Error State */}
                 {isError && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-                        <p className="font-semibold">Error loading users</p>
+                        <p className="font-semibold">
+                            {axios.isAxiosError(error) && error.response?.status === 403
+                                ? "Access Denied"
+                                : "Error loading users"}
+                        </p>
                         <p className="text-sm">
-                            {error instanceof Error ? error.message : "An error occurred"}
+                            {axios.isAxiosError(error) && error.response?.status === 403
+                                ? "You don't have permission to view users. Please contact your administrator."
+                                : error instanceof Error ? error.message : "An error occurred"}
                         </p>
                     </div>
                 )}

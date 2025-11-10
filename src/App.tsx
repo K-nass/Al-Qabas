@@ -11,7 +11,7 @@ const query = new QueryClient();
 
 function AppContent() {
   const { isLoading } = useAuthRefresh();
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
 
   // Set document direction based on language
   useEffect(() => {
@@ -21,7 +21,7 @@ function AppContent() {
   }, [i18n.language]);
 
   if (isLoading) {
-    return <Loader text={t('common.loading')} fullScreen />;
+    return <Loader fullScreen />;
   }
 
   return (

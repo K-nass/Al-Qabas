@@ -44,18 +44,6 @@ export default function EditRole() {
         );
     };
 
-    // Format permission name for display
-    const formatPermissionName = (permission: string) => {
-        // Add spaces before capital letters and handle special cases
-        return permission
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/^./, (str) => str.toUpperCase())
-            .replace('R S S', 'RSS')
-            .replace('S E O', 'SEO')
-            .replace('A I', 'AI')
-            .trim();
-    };
-
     // Update role mutation
     const updateRoleMutation = useMutation({
         mutationFn: (data: { roleId: string; name: string; permissions: string[] }) =>
@@ -212,37 +200,10 @@ export default function EditRole() {
                     <div className="p-4 sm:p-6">
                         <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-4 sm:mb-6">
                             Permissions
-                            <span className="text-xs text-slate-500 ml-2">
-                                ({permissions.length} permission{permissions.length !== 1 ? 's' : ''})
-                            </span>
                         </h3>
-                        {permissions.length === 0 ? (
-                            <p className="text-slate-500 text-sm">No permissions assigned to this role.</p>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                {permissions.map((permission) => (
-                                    <div
-                                        key={permission}
-                                        className="flex items-center p-3 bg-slate-50 rounded-lg border border-slate-200"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={true}
-                                            readOnly
-                                            className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary cursor-default"
-                                        />
-                                        <span className="ml-3 text-sm text-slate-700 font-medium">
-                                            {formatPermissionName(permission)}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Old hardcoded permissions section removed */}
-                    <div className="p-4 sm:p-6 hidden">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 lg:gap-x-12 gap-y-3 sm:gap-y-4">
+                        
+                        {/* Hardcoded permissions for Author and Member roles */}
+                        {(roleNameEn === "Author" || roleNameEn === "Member") && (
                             <div className="space-y-3">
                                 <label className="flex items-center cursor-pointer">
                                     <input
@@ -256,11 +217,96 @@ export default function EditRole() {
                                 <label className="flex items-center cursor-pointer">
                                     <input
                                         type="checkbox"
+                                        checked={permissions.includes("AddReels")}
+                                        onChange={() => handlePermissionToggle("AddReels")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Add Reels</span>
+                                </label>
+                            </div>
+                        )}
+
+                        {/* Hardcoded permissions for Writer role */}
+                        {roleNameEn === "Writer" && (
+                            <div className="space-y-3">
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={permissions.includes("AddPost")}
+                                        onChange={() => handlePermissionToggle("AddPost")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Add Post</span>
+                                </label>
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={permissions.includes("AddReels")}
+                                        onChange={() => handlePermissionToggle("AddReels")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Add Reels</span>
+                                </label>
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
                                         checked={permissions.includes("CanReferPost")}
                                         onChange={() => handlePermissionToggle("CanReferPost")}
                                         className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
                                     />
                                     <span className="ml-3 text-sm text-slate-700">Can Refer Post</span>
+                                </label>
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={permissions.includes("CanReferReels")}
+                                        onChange={() => handlePermissionToggle("CanReferReels")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Can Refer Reels</span>
+                                </label>
+                            </div>
+                        )}
+
+                        {/* All permissions for other roles */}
+                        {roleNameEn !== "Author" && roleNameEn !== "Member" && roleNameEn !== "Writer" && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 lg:gap-x-12 gap-y-3 sm:gap-y-4">
+                            <div className="space-y-3">
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={permissions.includes("AddPost")}
+                                        onChange={() => handlePermissionToggle("AddPost")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Add Post</span>
+                                </label>
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={permissions.includes("AddReels")}
+                                        onChange={() => handlePermissionToggle("AddReels")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Add Reels</span>
+                                </label>
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={permissions.includes("CanReferPost")}
+                                        onChange={() => handlePermissionToggle("CanReferPost")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Can Refer Post</span>
+                                </label>
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={permissions.includes("CanReferReels")}
+                                        onChange={() => handlePermissionToggle("CanReferReels")}
+                                        className="w-4 h-4 text-primary border-slate-300 rounded focus:ring-primary"
+                                    />
+                                    <span className="ml-3 text-sm text-slate-700">Can Refer Reels</span>
                                 </label>
                                 <label className="flex items-center cursor-pointer">
                                     <input
@@ -430,6 +476,7 @@ export default function EditRole() {
                                 </label>
                             </div>
                         </div>
+                        )}
                     </div>
 
                     {/* Submit Button */}

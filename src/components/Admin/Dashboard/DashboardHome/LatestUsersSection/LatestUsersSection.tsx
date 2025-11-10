@@ -25,7 +25,7 @@ export default function LatestUsersSection() {
         Status: "",
         EmailConfirmed: true,
         PageNumber: 1,
-        PageSize: 5,
+        PageSize: 15, // Backend only accepts [15, 30, 60, 90]
         SearchPhrase: ""
       }
     });
