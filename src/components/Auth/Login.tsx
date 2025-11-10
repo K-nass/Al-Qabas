@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { setAuthToken, setRefreshToken } from '@/api/client';
+import { setAuthToken, setRefreshToken, setUserRole } from '@/api/client';
 import { authApi, type LoginRequest } from '@/api/auth.api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle/LanguageToggle';
@@ -39,15 +39,27 @@ export default function Login() {
         // No refresh token found in response
       }
       
+      // Get user role from response and store it
+      const userRole = data?.user?.role || '';
+      if (userRole) {
+        setUserRole(userRole);
+      }
+      
       setFieldErrors({});
       setNotification({
         type: 'success',
         message: t('auth.loginSuccess'),
       });
       
-      // Redirect to dashboard after short delay
+      // Redirect based on role after short delay
       setTimeout(() => {
-        navigate('/admin');
+        // Member and Author go to home page
+        if (userRole === 'Member' || userRole === 'Author') {
+          navigate('/home');
+        } else {
+          // Admin and other roles go to admin panel
+          navigate('/admin');
+        }
       }, 1000);
     },
     onError: (error: unknown) => {
@@ -114,7 +126,7 @@ export default function Login() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <img src="/icon.png" alt="Logo" className="w-20 h-20 rounded-lg shadow-lg" />
+            <img src="/icon.jpg" alt="Logo" className="w-20 h-20 rounded-lg shadow-lg" />
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">{t('app.name')}</h1>
           <p className="text-indigo-100">{t('auth.adminLogin')}</p>

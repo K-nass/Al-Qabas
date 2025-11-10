@@ -3,9 +3,11 @@ import axios from 'axios';
 // Token storage: 
 // - Auth token in memory (cleared on page refresh for security)
 // - Refresh token in sessionStorage (survives page refresh, cleared when tab closes)
+// - User role in sessionStorage (for role-based routing)
 let authToken: string | null = null;
 
 const REFRESH_TOKEN_KEY = 'refresh_token';
+const USER_ROLE_KEY = 'user_role';
 
 // Token management functions
 export function setAuthToken(token: string | null) {
@@ -28,6 +30,19 @@ export function getRefreshToken(): string | null {
   return sessionStorage.getItem(REFRESH_TOKEN_KEY);
 }
 
+// User role management functions
+export function setUserRole(role: string | null) {
+  if (role) {
+    sessionStorage.setItem(USER_ROLE_KEY, role);
+  } else {
+    sessionStorage.removeItem(USER_ROLE_KEY);
+  }
+}
+
+export function getUserRole(): string | null {
+  return sessionStorage.getItem(USER_ROLE_KEY);
+}
+
 export function clearAuthToken() {
   authToken = null;
 }
@@ -36,9 +51,14 @@ export function clearRefreshToken() {
   sessionStorage.removeItem(REFRESH_TOKEN_KEY);
 }
 
+export function clearUserRole() {
+  sessionStorage.removeItem(USER_ROLE_KEY);
+}
+
 export function clearAllTokens() {
   authToken = null;
   sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+  sessionStorage.removeItem(USER_ROLE_KEY);
 }
 
 // Create axios instance with default config

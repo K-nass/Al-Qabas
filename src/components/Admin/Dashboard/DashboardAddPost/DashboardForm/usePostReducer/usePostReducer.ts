@@ -13,6 +13,11 @@ function genericReducer(
   switch (action.type) {
     case "set-field":
       if (!action.field) return state;
+      // Prevent undefined from overwriting existing values
+      // If payload is undefined and the field exists with a non-undefined value, keep the existing value
+      if (action.payload === undefined && state[action.field] !== undefined) {
+        return state;
+      }
       return { ...state, [action.field]: action.payload };
     default:
       return state;

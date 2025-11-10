@@ -76,7 +76,10 @@ export default function Users() {
                             </label>
                             <select
                                 value={role}
-                                onChange={(e) => setRole(e.target.value)}
+                                onChange={(e) => {
+                                    setRole(e.target.value);
+                                    setPageNumber(1); // Reset to first page when changing role
+                                }}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-sm"
                             >
                                 <option value="">All Roles</option>
@@ -93,7 +96,10 @@ export default function Users() {
                             </label>
                             <select
                                 value={status}
-                                onChange={(e) => setStatus(e.target.value)}
+                                onChange={(e) => {
+                                    setStatus(e.target.value);
+                                    setPageNumber(1); // Reset to first page when changing status
+                                }}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-sm"
                             >
                                 <option value="">All Status</option>
@@ -112,6 +118,7 @@ export default function Users() {
                                 onChange={(e) => {
                                     const value = e.target.value;
                                     setEmailConfirmed(value === "" ? undefined : value === "true");
+                                    setPageNumber(1); // Reset to first page when changing email status
                                 }}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-sm"
                             >
@@ -128,7 +135,10 @@ export default function Users() {
                             </label>
                             <select
                                 value={rewardSystem}
-                                onChange={(e) => setRewardSystem(e.target.value)}
+                                onChange={(e) => {
+                                    setRewardSystem(e.target.value);
+                                    setPageNumber(1); // Reset to first page when changing reward system
+                                }}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-sm"
                             >
                                 <option value="">All</option>

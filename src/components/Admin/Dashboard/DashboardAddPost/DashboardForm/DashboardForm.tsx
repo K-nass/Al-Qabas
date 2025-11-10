@@ -111,6 +111,50 @@ export default function DashboardForm() {
       const config = postConfig[type as keyof typeof postConfig];
       if (!config) throw new Error(`Unknown post type: ${type}`);
 
+      // Client-side validation for articles - imageUrl cannot be null
+      // Note: Empty string is allowed by the API
+      if (type === "article" && payload.imageUrl === null) {
+        payload.imageUrl = "";
+      }
+
+      // Client-side validation for video posts
+      // Check if at least one video source is provided with actual content
+      const hasVideoUrl = payload.videoUrl && payload.videoUrl.trim() !== '';
+      const hasVideoFiles = payload.videoFileUrls && Array.isArray(payload.videoFileUrls) && 
+                           payload.videoFileUrls.some((url: string) => url && url.trim() !== '');
+      const hasEmbedCode = payload.videoEmbedCode && payload.videoEmbedCode.trim() !== '';
+      
+      if (type === "video" && !hasVideoUrl && !hasVideoFiles && !hasEmbedCode) {
+        const validationError = new Error("Please provide at least one video source: Video URL, video file, or embed code");
+        (validationError as any).isAxiosError = true;
+        (validationError as any).response = {
+          status: 422,
+          data: {
+            errors: {
+              VideoUrl: ["Please provide at least one video source: Video URL, video file, or embed code"]
+            },
+            message: "Please provide at least one video source: Video URL, video file, or embed code"
+          }
+        };
+        throw validationError;
+      }
+
+      // Client-side validation for audio posts
+      if (type === "audio" && !payload.audioUrl && !payload.audioFileUrls?.length) {
+        const validationError = new Error("Audio URL or audio file is required");
+        (validationError as any).isAxiosError = true;
+        (validationError as any).response = {
+          status: 422,
+          data: {
+            errors: {
+              AudioUrl: ["Audio URL or audio file is required"]
+            },
+            message: "Audio URL or audio file is required"
+          }
+        };
+        throw validationError;
+      }
+
       const endpoint = config.endpoint;
       
       // For video posts, copy imageUrl to videoThumbnailUrl
@@ -167,17 +211,29 @@ export default function DashboardForm() {
       }
       
       // Clean up empty string values for single URL fields
-      if (payload.videoThumbnailUrl === '') {
-        payload.videoThumbnailUrl = null;
+      // Note: imageUrl is required for articles, so don't convert to null
+      if (type === "video") {
+        if (payload.videoThumbnailUrl === '') {
+          payload.videoThumbnailUrl = null;
+        }
+        if (payload.videoUrl === '') {
+          payload.videoUrl = null;
+        }
       }
-      if (payload.thumbnailUrl === '') {
-        payload.thumbnailUrl = null;
+      
+      if (type === "audio") {
+        if (payload.thumbnailUrl === '') {
+          payload.thumbnailUrl = null;
+        }
+        if (payload.audioUrl === '') {
+          payload.audioUrl = null;
+        }
       }
-      if (payload.imageUrl === '') {
+      
+      // For articles, keep imageUrl as empty string if not provided (required field)
+      // For other types, convert empty imageUrl to null if needed
+      if (type !== "article" && payload.imageUrl === '') {
         payload.imageUrl = null;
-      }
-      if (payload.videoUrl === '') {
-        payload.videoUrl = null;
       }
 
       const response = await apiClient.post(
@@ -193,12 +249,14 @@ export default function DashboardForm() {
       setNotification({ type: "success", message: String(msg) });
     },
     onError: (error: unknown) => {
+      console.error("Post creation error:", error);
       let message = "Failed to create post";
       const errors: Record<string, string[]> = {};
       
       if (axios.isAxiosError(error)) {
         const d = error.response?.data;
         const status = error.response?.status;
+        console.error("API Error Response:", { status, data: d });
         
         // Handle 401 Unauthorized - only redirect if token refresh failed
         // The axios interceptor will automatically try to refresh the token
@@ -241,7 +299,8 @@ export default function DashboardForm() {
   });
 
   // #505458 new color i will use for form
-
+  console.log(state);
+  
   return (
     <>
       {notification && (

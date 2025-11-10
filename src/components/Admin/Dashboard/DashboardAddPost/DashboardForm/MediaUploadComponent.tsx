@@ -93,6 +93,18 @@ export default function MediaUploadComponent({
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+      {/* Header with Required indicator */}
+      <div className="px-4 sm:px-6 py-3 bg-slate-50 border-b border-slate-200">
+        <h3 className="text-base font-semibold text-slate-800">
+          {mediaType === "video" ? t("formLabels.videoUpload") || "Video Upload" : t("formLabels.audioUpload") || "Audio Upload"}
+          <span className="text-red-500 ml-1">*</span>
+        </h3>
+        <p className="text-sm text-slate-500 mt-1">
+          {mediaType === "video" 
+            ? "Please provide a video URL, upload a video file, or paste embed code" 
+            : "Please provide an audio URL or upload an audio file"}
+        </p>
+      </div>
       {/* Tabs Header */}
       <div className="border-b border-slate-200 bg-slate-50">
         <nav className="flex" aria-label="Tabs">
