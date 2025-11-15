@@ -93,31 +93,27 @@ export default function ArticlePage({ params }: Route.ComponentProps) {
   const article = mockArticles[params.id];
   
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <PostDetails
-          category={article.category}
-          categoryHref={article.categoryHref}
-          title={article.title}
-          date={article.date}
-          commentsCount={article.commentsCount}
-          imageSrc={article.imageSrc}
-          imageAlt={article.imageAlt}
-          content={article.content}
-          registerHref="/register"
-          loginHref="/login"
-          relatedPostsTitle="مقالات ذات صلة"
-          relatedPosts={
-            article.relatedPosts && article.relatedPosts.length > 0 && (
-              <>
-                {article.relatedPosts.slice(0, 3).map((post) => (
-                  <PostCard key={post.id} post={post} />
-                ))}
-              </>
-            )
-          }
-        />
-      </div>
-    </div>
+    <PostDetails
+      category={article.category}
+      categoryHref={article.categoryHref}
+      title={article.title}
+      date={article.date}
+      commentsCount={article.commentsCount}
+      imageSrc={article.imageSrc}
+      imageAlt={article.imageAlt}
+      content={article.content}
+      registerHref="/register"
+      loginHref="/login"
+      relatedPostsTitle="مقالات ذات صلة"
+      relatedPosts={
+        article.relatedPosts && article.relatedPosts.length > 0 && (
+          <>
+            {article.relatedPosts.slice(0, 3).map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </>
+        )
+      }
+    />
   );
 }

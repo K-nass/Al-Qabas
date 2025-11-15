@@ -5,11 +5,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Layout as PageLayout } from "./components/Layout";
+import { Sidebar } from "./components/Sidebar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -43,9 +45,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const location = useLocation();
+  
+  // Pages that should not show sidebar
+  const noSidebarPages = ['/login', '/register', '/forgot-password', '/reset-password'];
+  const showSidebar = !noSidebarPages.includes(location.pathname);
+
   return (
     <PageLayout>
-      <Outlet />
+      {showSidebar ? (
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Main Content Area */}
+            <div className="flex-1 min-w-0">
+              <Outlet />
+            </div>
+            {/* Sidebar */}
+            <div className="lg:w-72 flex-shrink-0">
+              <Sidebar />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <Outlet />
+      )}
     </PageLayout>
   );
 }

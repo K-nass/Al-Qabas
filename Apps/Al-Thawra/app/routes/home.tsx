@@ -1,7 +1,6 @@
 import type { Route } from "./+types/home";
 import { PostsGrid } from "../components/PostsGrid";
 import { Slider } from "../components/Slider";
-import { Sidebar } from "../components/Sidebar";
 import { NewsletterSubscription } from "../components/NewsletterSubscription";
 import type { Post } from "../components/PostCard";
 
@@ -115,41 +114,19 @@ const sliderPosts: Post[] = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Content Area */}
-          <div className="flex-1 space-y-12">
-            {/* Slider */}
-            <Slider posts={sliderPosts} />
+    <div className="space-y-8">
+      {/* Slider */}
+      <Slider posts={sliderPosts} />
 
-            {/* Local News Section */}
-            <PostsGrid posts={mockPosts} categoryName="محليات" />
+      {/* Local News Section */}
+      <PostsGrid posts={mockPosts} categoryName="محليات" />
 
-            {/* Opinion Section */}
-            <PostsGrid posts={mockOpinionPosts} categoryName="كتاب وآراء" />
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:w-80 flex-shrink-0">
-            <Sidebar />
-          </div>
-        </div>
-      </main>
+      {/* Opinion Section */}
+      <PostsGrid posts={mockOpinionPosts} categoryName="كتاب وآراء" />
 
       {/* Newsletter Subscription */}
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Newsletter - Main Content Area */}
-            <div className="flex-1">
-              <NewsletterSubscription />
-            </div>
-            {/* Empty space for sidebar alignment */}
-            <div className="lg:w-80 flex-shrink-0"></div>
-          </div>
-        </div>
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-8 mt-8">
+        <NewsletterSubscription />
       </div>
     </div>
   );
