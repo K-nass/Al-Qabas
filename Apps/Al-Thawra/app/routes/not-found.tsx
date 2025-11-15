@@ -10,7 +10,7 @@ export function meta() {
 
 export default function NotFoundPage() {
   return (
-    <div className="flex items-center justify-center" style={{ backgroundColor: "var(--color-background-light)" }}>
+    <div className="flex items-center justify-center mt-30" style={{ backgroundColor: "var(--color-background-light)" }}>
       <div className="text-center max-w-md mx-auto px-4">
         {/* 404 Icon */}
         <div className="mb-8">

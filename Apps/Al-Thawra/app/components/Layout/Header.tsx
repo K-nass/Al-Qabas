@@ -14,11 +14,8 @@ export function Header() {
           <div className="flex justify-between items-center py-2 text-sm">
             {/* Right Side - Editor Info */}
             <div className="flex items-center gap-6 text-gray-700">
-              <span className="font-medium">رئيس التحرير: وليد عبداللطيف النصف</span>
-              <span className="hidden md:block">|</span>
-              <span className="hidden md:block font-medium">نائب رئيس التحرير: عبدالله غازي المضف</span>
+              <span className="font-medium">رئيس مجلس الادارة: سام الغبارى </span>
             </div>
-
             {/* Left Side - Social Icons */}
             <div className="flex items-center gap-3">
               <a href="https://t.me/althawra" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-[var(--color-primary)] transition-colors" aria-label="Telegram">
