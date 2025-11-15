@@ -8,4 +8,8 @@ export default [
   route("cart", "routes/cart.tsx"),
   route("profile", "routes/profile.tsx"),
   route("*", "routes/not-found.tsx"),
+  route("login", "routes/login.tsx"),
+  route("register", "routes/register.tsx"),
+  route("forgot-password", "routes/forgot-password.tsx"),
+  route("reset-password", "routes/reset-password.tsx"),
 ] satisfies RouteConfig;
