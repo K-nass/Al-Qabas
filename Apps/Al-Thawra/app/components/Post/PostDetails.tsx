@@ -3,6 +3,7 @@ import { PostHeader } from "./PostHeader";
 import { PostImage } from "./PostImage";
 import { PostContent } from "./PostContent";
 import { CommentsSection } from "./CommentsSection";
+import { CommentsDisplay } from "./CommentsDisplay";
 import { RelatedPosts } from "./RelatedPosts";
 
 interface PostDetailsProps {
@@ -65,13 +66,8 @@ export function PostDetails({
         {/* Article Content */}
         <PostContent content={content} />
 
-        {/* Comments Section */}
-        <CommentsSection
-          onRegister={onRegister}
-          onLogin={onLogin}
-          registerHref={registerHref}
-          loginHref={loginHref}
-        />
+        {/* Comments Display */}
+        <CommentsDisplay commentsCount={commentsCount} />
 
         {/* Related Posts */}
         {relatedPosts && (
@@ -79,6 +75,14 @@ export function PostDetails({
             {relatedPosts}
           </RelatedPosts>
         )}
+
+        {/* Comments Section - Login/Register Prompt */}
+        <CommentsSection
+          onRegister={onRegister}
+          onLogin={onLogin}
+          registerHref={registerHref}
+          loginHref={loginHref}
+        />
       </article>
     </section>
   );
