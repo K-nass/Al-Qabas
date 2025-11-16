@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://new-cms-dev.runasp.net',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -10,21 +10,21 @@ const axiosInstance = axios.create({
 });
 
 // Request interceptor
-axiosInstance.interceptors.request.use(
-  (config) => {
-    // Get token from localStorage
-    const token = localStorage.getItem('authToken'); //TODO: change!
+// axiosInstance.interceptors.request.use(
+//   (config) => {
+//     // Get token from localStorage
+//     const token = localStorage.getItem('authToken'); //TODO: change!
     
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
     
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 // Response interceptor
 axiosInstance.interceptors.response.use(

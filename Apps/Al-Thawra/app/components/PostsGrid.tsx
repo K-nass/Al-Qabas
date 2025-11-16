@@ -1,14 +1,18 @@
 import { PostCard, type Post } from "./PostCard";
+import { Link } from "react-router";
+import { ArrowLeft } from "lucide-react";
 
 interface PostsGridProps {
   posts: Post[];
   categoryName?: string;
+  categorySlug?: string;
   showCategoryHeader?: boolean;
 }
 
 export function PostsGrid({
   posts,
   categoryName,
+  categorySlug,
   showCategoryHeader = true,
 }: PostsGridProps) {
   if (!posts || posts.length === 0) {
@@ -20,32 +24,22 @@ export function PostsGrid({
   }
 
   return (
-    <section className="w-full">
+    <section className="w-full" dir="rtl" lang="ar">
       {/* Category Header */}
       {showCategoryHeader && categoryName && (
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex-1"></div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold text-gray-900">{categoryName}</h2>
-            <button
-              className="text-gray-600 hover:text-gray-900 transition-colors"
+        <div className="flex items-center mb-6">
+          {categorySlug && (
+            <Link
+              to={`/category/${categorySlug}`}
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors group"
               aria-label="عرض المزيد"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-          </div>
+              <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-[var(--color-primary)] transition-colors" />
+            </Link>
+          )}
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mr-3">
+            {categoryName}
+          </h2>
         </div>
       )}
 

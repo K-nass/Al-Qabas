@@ -5,6 +5,7 @@ export default [
   route("article/:id", "routes/article.tsx"),
   route("author/:slug", "routes/author.$slug.tsx"),
   route("category/:slug", "routes/category.$slug.tsx"),
+  route("tv", "routes/tv.tsx"),
   route("login", "routes/login.tsx"),
   route("register", "routes/register.tsx"),
   route("forgot-password", "routes/forgot-password.tsx"),

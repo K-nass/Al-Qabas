@@ -48,13 +48,13 @@ export default function App() {
   const location = useLocation();
   
   // Pages that should not show sidebar
-  const noSidebarPages = ['/login', '/register', '/forgot-password', '/reset-password'];
+  const noSidebarPages = ['/login', '/register', '/forgot-password', '/reset-password', '/tv'];
   const showSidebar = !noSidebarPages.includes(location.pathname);
 
   return (
     <PageLayout>
       {showSidebar ? (
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="container mx-auto px-0.5 py-8 max-w-7xl">
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Main Content Area */}
             <div className="flex-1 min-w-0">

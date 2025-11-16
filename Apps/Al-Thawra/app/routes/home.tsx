@@ -114,15 +114,23 @@ const sliderPosts: Post[] = [
 
 export default function Home() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" dir="rtl" lang="ar">
       {/* Slider */}
       <Slider posts={sliderPosts} />
 
       {/* Local News Section */}
-      <PostsGrid posts={mockPosts} categoryName="محليات" />
+      <PostsGrid 
+        posts={mockPosts} 
+        categoryName="محليات" 
+        categorySlug="local"
+      />
 
       {/* Opinion Section */}
-      <PostsGrid posts={mockOpinionPosts} categoryName="كتاب وآراء" />
+      <PostsGrid 
+        posts={mockOpinionPosts} 
+        categoryName="كتاب وآراء" 
+        categorySlug="opinion"
+      />
 
       {/* Newsletter Subscription */}
       <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-8 mt-8">
