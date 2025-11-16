@@ -7,11 +7,15 @@ import {
   ScrollRestoration,
   useLocation,
 } from "react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Layout as PageLayout } from "./components/Layout";
 import { Sidebar } from "./components/Sidebar";
+
+// Create a client for the app
+const queryClient = new QueryClient();
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -52,24 +56,26 @@ export default function App() {
   const showSidebar = !noSidebarPages.includes(location.pathname);
 
   return (
-    <PageLayout>
-      {showSidebar ? (
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* Main Content Area */}
-            <div className="flex-1 min-w-0">
-              <Outlet />
-            </div>
-            {/* Sidebar */}
-            <div className="lg:w-72 flex-shrink-0">
-              <Sidebar />
+    <QueryClientProvider client={queryClient}>
+      <PageLayout>
+        {showSidebar ? (
+          <div className="container mx-auto px-4 py-8 max-w-7xl">
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Main Content Area */}
+              <div className="flex-1 min-w-0">
+                <Outlet />
+              </div>
+              {/* Sidebar */}
+              <div className="lg:w-72 flex-shrink-0">
+                <Sidebar />
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <Outlet />
-      )}
-    </PageLayout>
+        ) : (
+          <Outlet />
+        )}
+      </PageLayout>
+    </QueryClientProvider>
   );
 }
 

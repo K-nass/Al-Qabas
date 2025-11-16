@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -12,16 +12,30 @@ const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Get token from localStorage
-    const token = localStorage.getItem('authToken'); //TODO: change!
+    // Get token from localStorage (only in browser)
+    let token = null;
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      token = localStorage.getItem('authToken');
+    }
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     
+    // Log request details
+    console.log("📤 [Axios] Request:", {
+      method: config.method?.toUpperCase(),
+      url: config.url,
+      fullUrl: `${config.baseURL}${config.url}`,
+      params: config.params,
+      headers: config.headers,
+      hasToken: !!token,
+    });
+    
     return config;
   },
   (error) => {
+    console.error("❌ [Axios] Request error:", error);
     return Promise.reject(error);
   }
 );
@@ -29,6 +43,12 @@ axiosInstance.interceptors.request.use(
 // Response interceptor
 axiosInstance.interceptors.response.use(
   (response) => {
+    console.log("📥 [Axios] Response:", {
+      status: response.status,
+      statusText: response.statusText,
+      url: response.config.url,
+      dataLength: JSON.stringify(response.data).length,
+    });
     return response;
   },
   (error) => {
@@ -37,11 +57,20 @@ axiosInstance.interceptors.response.use(
       // Server responded with error status
       const { status, data } = error.response;
       
+      console.error("❌ [Axios] Response error:", {
+        status,
+        statusText: error.response.statusText,
+        url: error.config?.url,
+        data,
+      });
+      
       switch (status) {
         case 401:
           // Unauthorized - clear token and redirect to login
-          localStorage.removeItem('authToken');
-          window.location.href = '/login';
+          if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+            localStorage.removeItem('authToken');
+            window.location.href = '/login';
+          }
           break;
         case 403:
           // Forbidden
@@ -60,10 +89,13 @@ axiosInstance.interceptors.response.use(
       }
     } else if (error.request) {
       // Request made but no response received
-      console.error('Network error: No response from server');
+      console.error('❌ [Axios] Network error: No response from server', {
+        request: error.request,
+        config: error.config,
+      });
     } else {
       // Something else happened
-      console.error('Error:', error.message);
+      console.error('❌ [Axios] Error:', error.message);
     }
     
     return Promise.reject(error);
