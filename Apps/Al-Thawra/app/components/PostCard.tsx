@@ -23,6 +23,9 @@ export function PostCard({ post }: PostCardProps) {
           <img
             src={post.image}
             alt={post.title}
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
@@ -30,7 +33,7 @@ export function PostCard({ post }: PostCardProps) {
             <span className="text-gray-400 text-sm">لا توجد صورة</span>
           </div>
         )}
-        
+
         {/* Share Icon */}
         <button
           className="absolute top-3 left-3 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-sm transition-colors"

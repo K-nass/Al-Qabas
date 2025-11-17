@@ -11,8 +11,5 @@ export default [
   route("forgot-password", "routes/forgot-password.tsx"),
   route("reset-password", "routes/reset-password.tsx"),
   route("profile", "routes/profile.tsx"),
-<<<<<<< Updated upstream
-=======
   route("admin", "routes/admin.tsx")
->>>>>>> Stashed changes
 ] satisfies RouteConfig;
