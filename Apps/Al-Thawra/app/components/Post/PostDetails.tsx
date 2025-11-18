@@ -5,6 +5,7 @@ import { PostContent } from "./PostContent";
 import { CommentsSection } from "./CommentsSection";
 import { CommentsDisplay } from "./CommentsDisplay";
 import { RelatedPosts } from "./RelatedPosts";
+import { ScrollAnimation } from "../ScrollAnimation";
 
 interface PostDetailsProps {
   // Header props
@@ -52,19 +53,25 @@ export function PostDetails({
     <section className="lg:col-span-2">
       <article className="rounded-lg p-6 shadow-sm" style={{ backgroundColor: "var(--color-background-light)", color: "var(--color-text-primary)" }}>
         {/* Article Header */}
-        <PostHeader
+        <ScrollAnimation animation="slideUp" duration={0.6}>
+          <PostHeader
           category={category}
           categoryHref={categoryHref}
           title={title}
           date={date}
           commentsCount={commentsCount}
-        />
+          />
+        </ScrollAnimation>
 
         {/* Article Image */}
-        <PostImage src={imageSrc} alt={imageAlt} />
+        <ScrollAnimation animation="scale" duration={0.7} delay={0.1}>
+          <PostImage src={imageSrc} alt={imageAlt} />
+        </ScrollAnimation>
 
         {/* Article Content */}
-        <PostContent content={content} />
+        <ScrollAnimation animation="fade" delay={0.2}>
+          <PostContent content={content} />
+        </ScrollAnimation>
 
         {/* Comments Display */}
         <CommentsDisplay commentsCount={commentsCount} />

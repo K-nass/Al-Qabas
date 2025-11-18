@@ -108,11 +108,12 @@ class PostsService {
   /**
    * Get slider posts
    */
-  async getSliderPosts(pageSize: number = 15): Promise<Post[]> {
+  async getSliderPosts(pageSize: number = 15, type="Article"): Promise<Post[]> {
     try {
       const response = await this.getPosts({
         isSlider: true,
         pageSize,
+        type,
       });
       return response.items;
     } catch (error: any) {
@@ -124,11 +125,12 @@ class PostsService {
   /**
    * Get featured posts
    */
-  async getFeaturedPosts(pageSize: number = 15): Promise<Post[]> {
+  async getFeaturedPosts(pageSize: number = 15, type="Article"): Promise<Post[]> {
     try {
       const response = await this.getPosts({
         isFeatured: true,
         pageSize,
+        type,
       });
       return response.items;
     } catch (error: any) {
@@ -140,11 +142,12 @@ class PostsService {
   /**
    * Get recommended posts
    */
-  async getRecommendedPosts(pageSize: number = 15): Promise<Post[]> {
+  async getRecommendedPosts(pageSize: number = 15, type="Article"): Promise<Post[]> {
     try {
       const response = await this.getPosts({
         isRecommended: true,
         pageSize,
+        type,
       });
       return response.items;
     } catch (error: any) {
@@ -156,11 +159,12 @@ class PostsService {
   /**
    * Get breaking news posts
    */
-  async getBreakingNews(pageSize: number = 15): Promise<Post[]> {
+  async getBreakingNews(pageSize: number = 15, type="Article"): Promise<Post[]> {
     try {
       const response = await this.getPosts({
         isBreaking: true,
         pageSize,
+        type,
       });
       return response.items;
     } catch (error: any) {
@@ -174,12 +178,14 @@ class PostsService {
    */
   async getPostsByCategory(
     categorySlug: string,
-    params?: Omit<PostQueryParams, "categorySlug">
+    params?: Omit<PostQueryParams, "categorySlug">,
+    type="Article"
   ): Promise<PaginatedPostsResponse> {
     try {
       return await this.getPosts({
         ...params,
         categorySlug,
+        type,
       });
     } catch (error: any) {
       console.error(`Error fetching posts for category ${categorySlug}:`, error.message);
@@ -214,7 +220,7 @@ class PostsService {
       return response.data;
     } catch (error: any) {
       console.error(`Error fetching post ${slug}:`, error.message);
-      throw error;
+      throw error; 
     }
   }
 

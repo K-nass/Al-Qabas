@@ -1,18 +1,20 @@
 import { Link } from "react-router";
 import type { Post } from "../services/postsService";
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "./ScrollAnimation";
 
 export function Sidebar({ trendingPosts }: { trendingPosts: Post[] }) {
   return (
     <aside className="space-y-6">
       {/* Trending Posts Section */}
-      <div className="bg-[var(--color-white)] rounded-lg shadow-sm p-6">
+      <ScrollAnimation animation="slideLeft" once={false}>
+        <div className="bg-[var(--color-white)] rounded-lg shadow-sm p-6">
         <h3 className="text-xl font-bold text-[var(--color-text-primary)] mb-4 border-b-2 border-[var(--color-primary)] pb-2">
           الأكثر قراءة
         </h3>
         {trendingPosts && trendingPosts.length > 0 ? (
-          <ul className="space-y-4">
+          <StaggerContainer className="space-y-4" staggerDelay={0.1} once={false}>
             {trendingPosts.slice(0, 5).map((post: Post, index: number) => (
-              <li key={post.id}>
+              <StaggerItem key={post.id}>
                 <Link 
                   to={`/posts/categories/${post.categorySlug}/articles/${post.slug}`}
                   className="flex gap-3 group cursor-pointer"
@@ -33,13 +35,14 @@ export function Sidebar({ trendingPosts }: { trendingPosts: Post[] }) {
                     </span>
                   </div>
                 </Link>
-              </li>
+              </StaggerItem>
             ))}
-          </ul>
+          </StaggerContainer>
         ) : (
           <p className="text-sm text-[var(--color-text-secondary)]">لا توجد مقالات متاحة حاليًا.</p>
         )}
-      </div>
+        </div>
+      </ScrollAnimation>
     </aside>
   );
 }

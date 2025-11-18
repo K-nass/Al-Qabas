@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { PostCard, type Post } from "./PostCard";
+import { StaggerContainer, StaggerItem, ScrollAnimation } from "./ScrollAnimation";
 
 interface PostsGridProps {
   posts: Post[];
@@ -53,7 +54,7 @@ export function PostsGrid({
     <section className="w-full" dir="rtl" lang="ar">
       {/* Category Header */}
       {showCategoryHeader && categoryName && (
-        <div className="flex items-center justify-between mb-6">
+        <ScrollAnimation animation="slideUp" once={false} className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             {categorySlug && (
               <Link 
@@ -91,15 +92,17 @@ export function PostsGrid({
               </button>
             </div>
           )}
-        </div>
+        </ScrollAnimation>
       )}
 
       {/* Posts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.15} once={false}>
         {visiblePosts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <StaggerItem key={post.id}>
+            <PostCard post={post} />
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
     </section>
   );
 }

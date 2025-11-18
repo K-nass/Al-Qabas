@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ScrollAnimation } from "./ScrollAnimation";
 
 export function NewsletterSubscription() {
   const [email, setEmail] = useState("");
@@ -11,7 +12,8 @@ export function NewsletterSubscription() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+    <ScrollAnimation animation="slideUp" once={false}>
+      <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
           {/* Title */}
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-right mb-8">
             هل تريد الاشتراك في نشرتنا الاخبارية؟
@@ -103,6 +105,7 @@ export function NewsletterSubscription() {
               شروط الاستخدام
             </a>
           </p>
-    </div>
+      </div>
+    </ScrollAnimation>
   );
 }

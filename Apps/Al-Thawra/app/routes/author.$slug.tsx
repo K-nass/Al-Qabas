@@ -4,6 +4,7 @@ import { AuthorPageSkeleton } from "../components/skeletons";
 import type { Post } from "../components/PostCard";
 import axiosInstance from "../lib/axios";
 import { cache, CacheTTL } from "../lib/cache";
+import { ScrollAnimation } from "../components/ScrollAnimation";
 
 interface AuthorProfile {
   userName: string;
@@ -94,7 +95,8 @@ export default function AuthorPage() {
   return (
     <div className="space-y-6">
       {/* Author Header */}
-      <div className="bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg p-6">
+      <ScrollAnimation animation="slideUp" duration={0.6}>
+        <div className="bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg p-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           {/* Author Avatar */}
           <div className="relative">
@@ -149,7 +151,8 @@ export default function AuthorPage() {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </ScrollAnimation>
 
       {/* Author Posts Grouped by Category */}
       <div>

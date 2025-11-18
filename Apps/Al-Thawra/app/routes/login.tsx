@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Link, Form, useActionData, useNavigation, redirect } from "react-router";
+import { useState, useEffect } from "react";
+import { Link, Form, useActionData, useNavigation, redirect, useNavigate } from "react-router";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import type { Route } from "./+types/login";
 import authService from "~/services/authService";
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "~/components/ScrollAnimation";
 
 export const action = async ({ request }: Route.ActionArgs) => {
   if (request.method !== "POST") {
@@ -33,9 +34,9 @@ export const action = async ({ request }: Route.ActionArgs) => {
   }
 
   try {
-    await authService.login({ email, password });
-    // Redirect to admin on successful login
-    return redirect("/admin");
+    const authResponse = await authService.login({ email, password });
+    // Return success with auth data - cookies will be set client-side
+    return { success: true, authData: authResponse };
   } catch (error: any) {
     const generalError =
       error.response?.data?.title ||
@@ -66,6 +67,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 export default function LoginPage() {
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const isSubmitting = navigation.state === "submitting";
@@ -73,9 +75,97 @@ export default function LoginPage() {
   const generalError = actionData?.generalError || "";
   const previousValues = actionData?.values || { email: "" };
 
+  // Handle successful login on client-side
+  useEffect(() => {
+    if (actionData?.success && actionData?.authData) {
+      console.log('✅ Login successful! Setting cookies on client-side...');
+      
+      // Set cookies on client-side
+      const { accessToken, refreshToken, user, expiresAt } = actionData.authData;
+      
+      // Use a helper to set cookies (will work because we're on client now)
+      if (typeof document !== 'undefined') {
+        const setCookie = (name: string, value: string, expiresAt?: string, httpOnly: boolean = false) => {
+          let expires = '';
+          if (expiresAt) {
+            const expiryDate = new Date(expiresAt);
+            const now = new Date();
+            
+            if (expiryDate <= now) {
+              const futureDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+              expires = `; expires=${futureDate.toUTCString()}`;
+            } else {
+              expires = `; expires=${expiryDate.toUTCString()}`;
+            }
+          } else {
+            const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+            expires = `; expires=${futureDate.toUTCString()}`;
+          }
+          
+          // Note: HttpOnly cannot be set from JavaScript for security reasons
+          // It must be set by the server in HTTP response headers
+          // We can only set Secure and SameSite from client-side
+          const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+          document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/; SameSite=Strict${secure}`;
+          
+          if (httpOnly) {
+            console.warn(`⚠️ Cannot set HttpOnly flag for "${name}" from client-side. This must be done by the backend server.`);
+          }
+        };
+        
+        // Set tokens (ideally these should be HttpOnly from backend)
+        setCookie('accessToken', accessToken, expiresAt, true);
+        setCookie('refreshToken', refreshToken, expiresAt, true);
+        // User data can be non-HttpOnly since it's not sensitive
+        setCookie('user', JSON.stringify(user), expiresAt, false);
+        
+        console.log('✅ Cookies set successfully on client-side!');
+        console.log('⚠️ Note: For maximum security, ask your backend to set HttpOnly cookies');
+        authService.debugCookies();
+        
+        // Redirect to admin or home based on role
+        setTimeout(() => {
+          if (user.role === 'Admin') {
+            navigate('/admin');
+          } else {
+            navigate('/');
+          }
+        }, 100);
+      }
+    }
+  }, [actionData, navigate]);
+
   return (
-    <div className="h-screen flex items-start justify-center pt-8 p-4 bg-[var(--color-background-light)] overflow-hidden">
-      <div className="max-w-md w-full bg-[var(--color-white)] rounded-2xl shadow-xl p-6">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden relative">
+      {/* Animated Background Pattern */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Geometric shapes */}
+        <div className="absolute top-0 left-0 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+        
+        {/* Floating elements */}
+        <div className="absolute top-20 right-20 w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
+        <div className="absolute bottom-32 left-32 w-3 h-3 bg-purple-400 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
+        <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{ animationDuration: '5s', animationDelay: '1s' }}></div>
+      </div>
+
+      <ScrollAnimation animation="scale" duration={0.5}>
+        <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 relative z-10 border border-white/20">
+            {/* Back to Home Link */}
+            <Link 
+              to="/" 
+              className="inline-flex items-center gap-2 text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors mb-4"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              العودة للرئيسية
+            </Link>
+
             {/* Logo */}
             <div className="flex justify-center mb-4">
               <Link to="/">
@@ -100,9 +190,10 @@ export default function LoginPage() {
             )}
 
             {/* Login Form */}
-            <Form method="post" className="space-y-5">
+            <Form method="post">
+              <StaggerContainer className="space-y-5" staggerDelay={0.1}>
               {/* Email Field */}
-              <div>
+              <StaggerItem>
                 <label htmlFor="email" className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">
                   البريد الإلكتروني
                 </label>
@@ -126,10 +217,10 @@ export default function LoginPage() {
                 {errors.email && (
                   <p className="mt-1 text-sm text-[var(--color-error)]">{errors.email}</p>
                 )}
-              </div>
+              </StaggerItem>
 
               {/* Password Field */}
-              <div>
+              <StaggerItem>
                 <label htmlFor="password" className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">
                   كلمة المرور
                 </label>
@@ -160,38 +251,46 @@ export default function LoginPage() {
                 {errors.password && (
                   <p className="mt-1 text-sm text-[var(--color-error)]">{errors.password}</p>
                 )}
-              </div>
+              </StaggerItem>
 
               {/* Forgot Password */}
-              <div className="text-right">
+              <StaggerItem>
+                <div className="text-right">
                 <Link
                   to="/forgot-password"
                   className="text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors"
                 >
                   نسيت كلمة المرور؟
                 </Link>
-              </div>
+                </div>
+              </StaggerItem>
 
               {/* Submit Button */}
-              <button
+              <StaggerItem>
+                <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "جاري تسجيل الدخول..." : "الدخول"}
-              </button>
+                </button>
+              </StaggerItem>
+            </StaggerContainer>
             </Form>
 
           {/* Register Link */}
-          <div className="text-center mt-6">
+          <ScrollAnimation animation="fade" delay={0.5}>
+            <div className="text-center mt-6">
             <Link
               to="/register"
               className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors text-sm"
             >
               ليس لديك حساب؟ <span className="font-medium">سجل الآن</span>
             </Link>
+            </div>
+          </ScrollAnimation>
         </div>
-      </div>
+      </ScrollAnimation>
     </div>
   );
 }
