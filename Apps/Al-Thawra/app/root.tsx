@@ -42,7 +42,7 @@ export async function loader() {
       ),
       cache.getOrFetch(
         "posts:featured:15",
-        () => postsService.getFeaturedPosts(15),
+        () => postsService.getFeaturedPosts(15,'Article'),
         CacheTTL.MEDIUM
       ),
     ]);
@@ -77,9 +77,24 @@ export default function App() {
   const { categories, trendingPosts } = useLoaderData<typeof loader>();
   
   // Pages that should not show sidebar
-  const noSidebarPages = ['/login', '/register', '/forgot-password', '/reset-password'];
+  const noSidebarPages = ['/forgot-password', '/reset-password', '/contact'];
   const showSidebar = !noSidebarPages.includes(location.pathname);
 
+  // Pages that should not show header and footer (auth pages)
+  const noLayoutPages = ['/login', '/register'];
+  const showLayout = !noLayoutPages.includes(location.pathname);
+
+  // If it's an auth page, render without layout
+  if (!showLayout) {
+    return (
+      <>
+        <NavigationLoader />
+        <Outlet />
+      </>
+    );
+  }
+
+  // Normal pages with layout
   return (
     <>
       <NavigationLoader />

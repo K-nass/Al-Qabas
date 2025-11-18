@@ -35,36 +35,42 @@ export async function loader() {
       .sort((a, b) => a.order - b.order)
       .slice(0, 6);
     
-    // Make only ONE request for ALL posts with caching
-    const allPostsResponse = await cache.getOrFetch(
-      "posts:all:90:Arabic",
-      () => postsService.getPosts({ 
-        pageSize: 90,
-        language: 'Arabic' 
-      }),
+    // Fetch slider posts separately with caching
+    const sliderPosts = await cache.getOrFetch(
+      "posts:slider:15:Article",
+      () => postsService.getSliderPosts(15, "Article"),
       CacheTTL.SHORT
-    ).catch(() => ({ items: [], totalCount: 0, pageNumber: 1, pageSize: 90, totalPages: 0 }));
+    ).catch(() => []);
     
-    // Filter slider posts locally (posts marked as isSlider)
-    const sliderPosts = allPostsResponse.items
-      .filter(post => post.isSlider)
-      .slice(0, 15);
-    
-    // Filter posts by category locally (fast!)
-    const categoryPosts = limitedCategories
-      .map(category => {
-        const posts = allPostsResponse.items
-          .filter(post => post.categorySlug === category.slug)
-          .slice(0, 15); // Limit to 15 posts per category
+    // Fetch posts for each category separately (no Promise.all)
+    const categoryPosts = [];
+    for (const category of limitedCategories) {
+      try {
+        const posts = await cache.getOrFetch(
+          `posts:category:${category.slug}:15:Article`,
+          async () => {
+            const response = await postsService.getPostsByCategory(
+              category.slug,
+              { pageSize: 15 },
+              "Article"
+            );
+            return response.items;
+          },
+          CacheTTL.SHORT
+        );
         
-        return {
-          category,
-          posts,
-        };
-      })
-      .filter(cp => cp.posts.length > 0); // Only include categories with posts
-
-    return {
+        if (posts.length > 0) {
+          categoryPosts.push({
+            category,
+            posts,
+          });
+        }
+      } catch (error) {
+        console.error(`Error fetching posts for category ${category.slug}:`, error);
+        // Continue with next category
+      }
+    }
+    return {  
       sliderPosts,
       categoryPosts,
     };

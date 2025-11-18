@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Post } from "./PostCard";
+import { ScrollAnimation } from "./ScrollAnimation";
 
 interface SliderProps {
   posts: Post[];
@@ -24,48 +26,82 @@ export function Slider({ posts }: SliderProps) {
   const currentPost = posts[currentIndex];
 
   return (
-    <div className="relative w-full h-[500px] rounded-lg overflow-hidden shadow-lg group">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        {currentPost.image ? (
-          <img
-            src={currentPost.image}
-            alt={currentPost.title}
-            className="w-full h-full object-cover"
-            loading="eager"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600" />
-        )}
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-      </div>
+    <ScrollAnimation animation="scale" duration={0.8} once={false}>
+      <div className="relative w-full h-[500px] rounded-lg overflow-hidden shadow-lg group">
+      {/* Background Images with Animation */}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
+          {currentPost.image ? (
+            <img
+              src={currentPost.image}
+              alt={currentPost.title}
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600" />
+          )}
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        </motion.div>
+      </AnimatePresence>
 
-      {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-        {/* Category Badge */}
-        {currentPost.categoryName && (
-          <span className="inline-block px-3 py-1 mb-3 text-sm font-medium bg-red-600 rounded">
-            {currentPost.categoryName}
-          </span>
-        )}
+      {/* Content with Animation */}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={`content-${currentIndex}`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="absolute bottom-0 left-0 right-0 p-8 text-white"
+        >
+          {/* Category Badge */}
+          {currentPost.categoryName && (
+            <motion.span
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="inline-block px-3 py-1 mb-3 text-sm font-medium bg-red-600 rounded"
+            >
+              {currentPost.categoryName}
+            </motion.span>
+          )}
 
-        {/* Title */}
-        <Link to={`/posts/${currentPost.slug}`}>
-          <h2 className="text-3xl font-bold mb-3 line-clamp-2 hover:text-[var(--color-secondary)] transition-colors">
-            {currentPost.title}
-          </h2>
-        </Link>
+          {/* Title */}
+          <Link to={`/posts/categories/${currentPost.categorySlug}/articles/${currentPost.slug}`}>
+            <motion.h2
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-3xl font-bold mb-3 line-clamp-2 hover:text-[var(--color-secondary)] transition-colors"
+            >
+              {currentPost.title}
+            </motion.h2>
+          </Link>
 
-        {/* Date */}
-        <time className="text-sm text-gray-300">
-          {new Date(currentPost.publishedAt || currentPost.createdAt).toLocaleDateString("ar-EG", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </time>
-      </div>
+          {/* Date */}
+          <motion.time
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className="text-sm text-gray-300"
+          >
+            {new Date(currentPost.publishedAt || currentPost.createdAt).toLocaleDateString("ar-EG", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </motion.time>
+        </motion.div>
+      </AnimatePresence>
 
       {/* Navigation Dots */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
@@ -101,5 +137,6 @@ export function Slider({ posts }: SliderProps) {
         </svg>
       </button>
     </div>
+    </ScrollAnimation>
   );
 }

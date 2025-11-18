@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import {
   Search,
@@ -35,6 +35,7 @@ export function Header({ categories = [] }: HeaderProps) {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const location = useLocation();
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Get current user from cookies
@@ -42,6 +43,22 @@ export function Header({ categories = [] }: HeaderProps) {
     console.log("Header - Current user:", user);
     setCurrentUser(user);
   }, [location.pathname]);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+        setIsProfileMenuOpen(false);
+      }
+    }
+
+    if (isProfileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isProfileMenuOpen]);
   // Filter and sort menu categories
   const allMenuCategories = categories
     .filter(cat => cat.showOnMenu && cat.isActive)
@@ -197,11 +214,9 @@ export function Header({ categories = [] }: HeaderProps) {
               
               {/* Profile Dropdown or Login Button */}
               {currentUser ? (
-                <div className="relative hidden md:block">
+                <div className="relative hidden md:block" ref={profileDropdownRef}>
                   <button
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                    onMouseEnter={() => setIsProfileMenuOpen(true)}
-                    onMouseLeave={() => setIsProfileMenuOpen(false)}
                     className="flex items-center gap-2 px-4 py-2 text-[var(--color-primary)] bg-[var(--color-white)] hover:bg-[var(--color-secondary-light)] rounded-lg transition-colors duration-300 font-medium"
                   >
                     <User className="w-4 h-4" />
@@ -213,8 +228,6 @@ export function Header({ categories = [] }: HeaderProps) {
                   {isProfileMenuOpen && (
                     <div
                       className="absolute top-full right-0 mt-1 w-48 bg-[var(--color-white)] rounded-lg shadow-lg border border-[var(--color-divider)] py-2 z-50"
-                      onMouseEnter={() => setIsProfileMenuOpen(true)}
-                      onMouseLeave={() => setIsProfileMenuOpen(false)}
                     >
                       <Link
                         to="/profile"
@@ -410,6 +423,13 @@ export function Header({ categories = [] }: HeaderProps) {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               لايت
+            </Link>
+            <Link
+              className="px-4 py-2 hover:bg-white hover:bg-opacity-10 hover:text-[var(--color-primary)] rounded transition-colors"
+              to="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              اتصل بنا
             </Link>
           </nav>
         </div>

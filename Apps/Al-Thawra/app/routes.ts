@@ -7,6 +7,7 @@ export default [
   route("category/:slug", "routes/category.$slug.tsx"),
   route("search", "routes/search.tsx"),
   route("magazines", "routes/magazines.tsx"),
+  route("contact", "routes/contact.tsx"),
   route("login", "routes/login.tsx"),
   route("register", "routes/register.tsx"),
   route("logout", "routes/logout.tsx"),

@@ -4,6 +4,7 @@ import type { Route } from "./+types/magazines";
 import axiosInstance from "~/lib/axios";
 import { FileText, Calendar, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { cache, CacheTTL } from "~/lib/cache";
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "~/components/ScrollAnimation";
 
 interface Magazine {
   issueNumber: string;
@@ -113,14 +114,16 @@ export default function MagazinesPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="mb-8">
+      <ScrollAnimation animation="slideUp">
+        <div className="mb-8">
         <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-2">
           أرشيف الثورة
         </h1>
         <p className="text-[var(--color-text-secondary)]">
           تصفح جميع أعداد صحيفة الثورة
         </p>
-      </div>
+        </div>
+      </ScrollAnimation>
 
       {/* Results Info */}
       {totalCount > 0 && (
@@ -131,8 +134,9 @@ export default function MagazinesPage() {
 
       {/* Magazines Grid */}
       {magazines.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8" staggerDelay={0.1}>
           {magazines.map((magazine) => (
+            <StaggerItem key={magazine.issueNumber}>
             <div
               key={magazine.issueNumber}
               className="bg-[var(--color-white)] rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
@@ -175,8 +179,9 @@ export default function MagazinesPage() {
                 </div>
               </div>
             </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       ) : (
         <div className="text-center py-12">
           <FileText className="w-16 h-16 text-[var(--color-text-secondary)] mx-auto mb-4" />

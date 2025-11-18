@@ -1,13 +1,12 @@
 import type { Route } from "./+types/category.$slug";
-import { useLoaderData, useSearchParams, useFetcher, Link } from "react-router";
-import { useState } from "react";
+import { useLoaderData, useSearchParams } from "react-router";
 import { PostsGrid } from "../components/PostsGrid";
 import { CategoryPageSkeleton } from "../components/skeletons";
 import { EmptyState } from "../components/EmptyState";
-import { ButtonSpinner } from "../components/Spinner";
 import { postsService } from "../services/postsService";
 import { categoriesService } from "../services/categoriesService";
 import { cache, CacheTTL } from "../lib/cache";
+import { ScrollAnimation } from "../components/ScrollAnimation";
 
 // Loader function for server-side data fetching
 export async function loader({ params, request }: Route.LoaderArgs) {
@@ -87,76 +86,37 @@ export function HydrateFallback() {
 }
 
 export default function CategoryPage() {
-  const { category, posts, totalPosts, currentPage, selectedSubcategory } = useLoaderData<typeof loader>();
+  const { category, posts, totalPosts, currentPage, totalPages, selectedSubcategory } = useLoaderData<typeof loader>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const fetcher = useFetcher<typeof loader>();
   
-  // Client-only state: how many posts to display (progressive reveal)
-  const [displayCount, setDisplayCount] = useState(6);
-  
-  // Accumulate posts from fetcher loads
-  const [accumulatedPosts, setAccumulatedPosts] = useState(posts);
-  
-  // When loader data changes (navigation/filter), reset accumulated posts and display count
-  const loaderKey = `${category.slug}-${selectedSubcategory || 'all'}`;
-  const [lastLoaderKey, setLastLoaderKey] = useState(loaderKey);
-  
-  if (loaderKey !== lastLoaderKey) {
-    setAccumulatedPosts(posts);
-    setDisplayCount(6);
-    setLastLoaderKey(loaderKey);
-  }
-  
-  // When fetcher loads more data, append to accumulated posts
-  if (fetcher.data && fetcher.state === "idle") {
-    const fetcherPosts = fetcher.data.posts;
-    const lastAccumulatedId = accumulatedPosts[accumulatedPosts.length - 1]?.id;
-    const firstFetchedId = fetcherPosts[0]?.id;
-    
-    // Only append if this is new data (avoid duplicates)
-    if (fetcherPosts.length > 0 && lastAccumulatedId !== firstFetchedId) {
-      setAccumulatedPosts(prev => [...prev, ...fetcherPosts]);
-      setDisplayCount(prev => prev + 6);
-    }
-  }
-  
-  // Handle subcategory filter change via URL params
+  // Handle subcategory filter change via URL params (SSR-based)
   const handleSubcategoryFilter = (subcategorySlug: string | null) => {
-    const newParams = new URLSearchParams(searchParams);
+    const newParams = new URLSearchParams();
     if (subcategorySlug) {
       newParams.set("sub", subcategorySlug);
-    } else {
-      newParams.delete("sub");
     }
-    newParams.delete("page"); // Reset to page 1
-    setSearchParams(newParams, { replace: true });
+    // Always reset to page 1 when filtering
+    setSearchParams(newParams);
   };
   
-  // Handle load more
-  const handleLoadMore = () => {
-    // If we have more posts in the current batch, just reveal more
-    if (displayCount < accumulatedPosts.length) {
-      setDisplayCount(prev => Math.min(prev + 6, accumulatedPosts.length));
-      return;
-    }
-    
-    // Otherwise, fetch the next page using fetcher
-    const nextPage = Math.floor(accumulatedPosts.length / 15) + 1;
-    const params = new URLSearchParams(searchParams);
-    params.set("page", String(nextPage));
-    
-    fetcher.load(`?${params.toString()}`);
+  // Handle pagination
+  const handlePageChange = (newPage: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", String(newPage));
+    setSearchParams(newParams);
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
-  // Determine loading state
-  const isLoading = fetcher.state === "loading";
-  const visiblePosts = accumulatedPosts.slice(0, displayCount);
-  const hasMorePosts = displayCount < totalPosts;
+  // Determine if there are more pages
+  const hasNextPage = currentPage < totalPages;
+  const hasPrevPage = currentPage > 1;
   
   return (
     <div className="space-y-6">
       {/* Category Header */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4">
+      <ScrollAnimation key={selectedSubcategory || 'all'} animation="slideUp" duration={0.6}>
+        <div className="bg-white border border-gray-200 rounded-lg p-4">
         <div className="flex items-center gap-6 flex-wrap">
           {/* Category Title */}
           <h1 className="text-2xl font-bold text-[var(--color-primary)]">
@@ -199,33 +159,42 @@ export default function CategoryPage() {
         {category.description && (
           <p className="text-gray-600 mt-2">{category.description}</p>
         )}
-      </div>
+        </div>
+      </ScrollAnimation>
 
       {/* Category Posts Grid */}
-      {visiblePosts.length > 0 ? (
-        <div>
+      {posts.length > 0 ? (
+        <div key={`posts-${selectedSubcategory || 'all'}-${currentPage}`}>
           <PostsGrid 
-            posts={visiblePosts} 
+            posts={posts} 
             showCategoryHeader={false}
-            postsPerPage={visiblePosts.length}
+            postsPerPage={posts.length}
           />
           
-          {/* Load More Button - Always show if there are more results */}
-          {hasMorePosts && (
-            <div className="flex justify-center mt-8">
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+              {/* Previous Button */}
               <button 
-                onClick={handleLoadMore}
-                disabled={isLoading}
-                className="px-8 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={!hasPrevPage}
+                className="px-6 py-2 bg-white border border-gray-300 text-[var(--color-text-primary)] rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <ButtonSpinner />
-                    جاري التحميل...
-                  </span>
-                ) : (
-                  `تحميل المزيد (${totalPosts - displayCount} مقالة متبقية)`
-                )}
+                السابق
+              </button>
+              
+              {/* Page Info */}
+              <span className="text-[var(--color-text-secondary)]">
+                صفحة {currentPage} من {totalPages}
+              </span>
+              
+              {/* Next Button */}
+              <button 
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={!hasNextPage}
+                className="px-6 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                التالي
               </button>
             </div>
           )}

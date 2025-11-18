@@ -1,23 +1,14 @@
-import { redirect } from "react-router";
 import type { Route } from "./+types/admin";
-import authService from "~/services/authService";
+import { requireAuth, getCurrentUserFromRequest } from "~/lib/protectedRoute";
 
-export const loader = async ({}: Route.LoaderArgs) => {
-  // Get current user from memory
-  const user = authService.getCurrentUser();
-
-  // If no user is logged in, redirect to login
-  if (!user) {
-    return redirect("/login");
-  }
-
-  // If user is Member or Author, redirect to home
-  if (user.role === "Member" || user.role === "Author") {
-    return redirect("/");
-  }
-
-  // Only Admin users can access this page
-  return null;
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  // Check authentication and require Admin role
+  requireAuth(request, ['Admin']);
+  
+  // Get current user from request cookies
+  const user = getCurrentUserFromRequest(request);
+  
+  return { user };
 };
 
 export default function AdminPage() {

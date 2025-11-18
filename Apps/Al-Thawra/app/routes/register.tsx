@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "~/components/ScrollAnimation";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -54,8 +55,36 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="h-screen flex items-start justify-center pt-8 p-4 bg-[var(--color-background-light)] overflow-hidden">
-      <div className="max-w-md w-full bg-[var(--color-white)] rounded-2xl shadow-xl p-6 max-h-[calc(100vh-4rem)] overflow-y-auto">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden relative">
+      {/* Animated Background Pattern */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Geometric shapes */}
+        <div className="absolute top-0 left-0 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+        
+        {/* Floating elements */}
+        <div className="absolute top-20 right-20 w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDuration: '3s' }}></div>
+        <div className="absolute bottom-32 left-32 w-3 h-3 bg-purple-400 rounded-full animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }}></div>
+        <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{ animationDuration: '5s', animationDelay: '1s' }}></div>
+      </div>
+
+      <ScrollAnimation animation="scale" duration={0.5}>
+        <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 max-h-[calc(100vh-4rem)] overflow-y-auto relative z-10 border border-white/20">
+        {/* Back to Home Link */}
+        <Link 
+          to="/" 
+          className="inline-flex items-center gap-2 text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors mb-4"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          العودة للرئيسية
+        </Link>
+
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Link to="/">
@@ -73,9 +102,10 @@ export default function RegisterPage() {
         </h2>
 
         {/* Register Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit}>
+          <StaggerContainer className="space-y-4" staggerDelay={0.1}>
           {/* Username Field */}
-          <div>
+          <StaggerItem>
             <label htmlFor="username" className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">
               اسم المستخدم
             </label>
@@ -98,10 +128,10 @@ export default function RegisterPage() {
             {errors.username && (
               <p className="mt-1 text-sm text-red-500">{errors.username}</p>
             )}
-          </div>
+          </StaggerItem>
 
           {/* Email Field */}
-          <div>
+          <StaggerItem>
             <label htmlFor="email" className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">
               البريد الإلكتروني
             </label>
@@ -124,10 +154,10 @@ export default function RegisterPage() {
             {errors.email && (
               <p className="mt-1 text-sm text-red-500">{errors.email}</p>
             )}
-          </div>
+          </StaggerItem>
 
           {/* Password Field */}
-          <div>
+          <StaggerItem>
             <label htmlFor="password" className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">
               كلمة المرور
             </label>
@@ -157,10 +187,10 @@ export default function RegisterPage() {
             {errors.password && (
               <p className="mt-1 text-sm text-red-500">{errors.password}</p>
             )}
-          </div>
+          </StaggerItem>
 
           {/* Confirm Password Field */}
-          <div>
+          <StaggerItem>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">
               تأكيد كلمة المرور
             </label>
@@ -190,27 +220,33 @@ export default function RegisterPage() {
             {errors.confirmPassword && (
               <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
             )}
-          </div>
+          </StaggerItem>
 
           {/* Submit Button */}
-          <button
+          <StaggerItem>
+            <button
             type="submit"
             className="w-full py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors font-medium shadow-md hover:shadow-lg"
           >
             إنشاء حساب
-          </button>
+            </button>
+          </StaggerItem>
+        </StaggerContainer>
         </form>
 
         {/* Login Link */}
-        <div className="text-center mt-6">
+        <ScrollAnimation animation="fade" delay={0.5}>
+          <div className="text-center mt-6">
           <Link
             to="/login"
             className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors text-sm"
           >
             لديك حساب بالفعل؟ <span className="font-medium">تسجيل الدخول</span>
           </Link>
+          </div>
+        </ScrollAnimation>
         </div>
-      </div>
+      </ScrollAnimation>
     </div>
   );
 }

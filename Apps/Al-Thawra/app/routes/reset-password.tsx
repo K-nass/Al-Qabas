@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router";
 import { Lock, Eye, EyeOff } from "lucide-react";
 import authService from "../services/authService";
+import { ScrollAnimation } from "~/components/ScrollAnimation";
 
 export default function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -72,7 +73,8 @@ export default function ResetPasswordPage() {
   if (success) {
     return (
       <div className="flex items-center justify-center p-4 bg-gray-50">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <ScrollAnimation animation="scale" duration={0.5}>
+          <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
               <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,14 +94,16 @@ export default function ResetPasswordPage() {
               تسجيل الدخول الآن
             </Link>
           </div>
-        </div>
+          </div>
+        </ScrollAnimation>
       </div>
     );
   }
 
   return (
     <div className="flex items-center justify-center p-4 bg-gray-50">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+      <ScrollAnimation animation="scale" duration={0.5}>
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         {/* Title */}
         <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2 text-center">
           إعادة تعيين كلمة المرور
@@ -204,7 +208,8 @@ export default function ResetPasswordPage() {
             العودة إلى تسجيل الدخول
           </Link>
         </div>
-      </div>
+        </div>
+      </ScrollAnimation>
     </div>
   );
 }
