@@ -64,7 +64,7 @@ export function Header({ categories = [] }: HeaderProps) {
   const allMenuCategories = categories
     .filter(cat => cat.showOnMenu && cat.isActive)
     .sort((a, b) => a.order - b.order);
-  
+
   // Split categories: first 6 in main menu, rest in "More" dropdown
   const visibleCategories = allMenuCategories.slice(0, 6);
   const moreCategories = allMenuCategories.slice(6);
@@ -158,11 +158,10 @@ export function Header({ categories = [] }: HeaderProps) {
               {/* Navigation Links */}
               <nav className="hidden lg:flex items-center gap-6 text-white">
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
-                    location.pathname === "/" 
-                      ? "border-white text-white font-bold" 
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/"
+                      ? "border-white text-white font-bold"
                       : "border-transparent hover:border-white/50"
-                  }`}
+                    }`}
                   to="/"
                 >
                   <Newspaper className="w-4 h-4" />
@@ -170,11 +169,10 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
-                    location.pathname === "/magazines" 
-                      ? "border-white text-white font-bold" 
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/magazines"
+                      ? "border-white text-white font-bold"
                       : "border-transparent hover:border-white/50"
-                  }`}
+                    }`}
                   to="/magazines"
                 >
                   <FileText className="w-4 h-4" />
@@ -182,11 +180,10 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
-                    location.pathname === "/writers-opinions" 
-                      ? "border-white text-white font-bold" 
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/writers-opinions"
+                      ? "border-white text-white font-bold"
                       : "border-transparent hover:border-white/50"
-                  }`}
+                    }`}
                   to="/writers-opinions"
                 >
                   <PenTool className="w-4 h-4" />
@@ -194,15 +191,25 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
-                    location.pathname === "/profile" 
-                      ? "border-white text-white font-bold" 
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/profile"
+                      ? "border-white text-white font-bold"
                       : "border-transparent hover:border-white/50"
-                  }`}
+                    }`}
                   to="/profile"
                 >
                   <User className="w-4 h-4" />
                   <span>صفحتي</span>
+                </Link>
+
+                <Link
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/podcast"
+                      ? "border-white text-white font-bold"
+                      : "border-transparent hover:border-white/50"
+                    }`}
+                  to="/podcast"
+                >
+                  <Podcast className="w-4 h-4" />
+                  <span>بودكاست</span>
                 </Link>
               </nav>
             </div>
@@ -216,7 +223,7 @@ export function Header({ categories = [] }: HeaderProps) {
               >
                 <Search className="w-5 h-5" />
               </button>
-              
+
               <Link
                 to="/contact"
                 className="hidden md:flex items-center gap-2 px-4 py-2 text-[var(--color-primary)] bg-white hover:bg-white/80 hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300 font-medium"
@@ -224,7 +231,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 <Mail className="w-4 h-4" />
                 <span>اتصل بنا</span>
               </Link>
-              
+
               {/* Profile Dropdown or Login Button */}
               {currentUser ? (
                 <div className="relative hidden md:block" ref={profileDropdownRef}>
@@ -274,7 +281,7 @@ export function Header({ categories = [] }: HeaderProps) {
                   <span>تسجيل الدخول</span>
                 </Link>
               )}
-              
+
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden p-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors"
@@ -310,7 +317,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 {category.name}
               </Link>
             ))}
-            
+
             {/* More dropdown menu - only show if there are more categories */}
             {moreCategories.length > 0 && (
               <div className="relative">
@@ -323,7 +330,7 @@ export function Header({ categories = [] }: HeaderProps) {
                   المزيد
                   <ChevronDown className={`w-4 h-4 transition-transform ${isMoreMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
-                
+
                 {/* Dropdown */}
                 {isMoreMenuOpen && (
                   <div

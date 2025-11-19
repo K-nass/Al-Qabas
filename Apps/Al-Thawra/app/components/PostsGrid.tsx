@@ -10,6 +10,7 @@ interface PostsGridProps {
   categorySlug?: string;
   showCategoryHeader?: boolean;
   postsPerPage?: number;
+  buildLink?: (post: Post) => string;
 }
 
 export function PostsGrid({
@@ -18,6 +19,7 @@ export function PostsGrid({
   categorySlug,
   showCategoryHeader = true,
   postsPerPage = 3,
+  buildLink,
 }: PostsGridProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -109,7 +111,7 @@ export function PostsGrid({
       >
         {visiblePosts.map((post) => (
           <StaggerItem key={post.id}>
-            <PostCard post={post} />
+            <PostCard post={post} buildLink={buildLink} />
           </StaggerItem>
         ))}
       </StaggerContainer>

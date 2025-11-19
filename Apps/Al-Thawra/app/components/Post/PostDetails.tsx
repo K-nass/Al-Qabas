@@ -3,7 +3,6 @@ import { PostHeader } from "./PostHeader";
 import { PostImage } from "./PostImage";
 import { PostContent } from "./PostContent";
 import { CommentsSection } from "./CommentsSection";
-import { CommentsDisplay } from "./CommentsDisplay";
 import { RelatedPosts } from "./RelatedPosts";
 import { ScrollAnimation } from "../ScrollAnimation";
 
@@ -31,6 +30,9 @@ interface PostDetailsProps {
   // Related posts
   relatedPosts?: ReactNode;
   relatedPostsTitle?: string;
+
+  // Optional extra content before comments (e.g. audio player)
+  extraContentBeforeComments?: ReactNode;
 }
 
 export function PostDetails({
@@ -48,6 +50,7 @@ export function PostDetails({
   loginHref,
   relatedPosts,
   relatedPostsTitle,
+  extraContentBeforeComments,
 }: PostDetailsProps) {
   return (
     <section className="lg:col-span-2">
@@ -64,9 +67,11 @@ export function PostDetails({
         </ScrollAnimation>
 
         {/* Article Image */}
-        <ScrollAnimation animation="scale" duration={0.7} delay={0.1}>
-          <PostImage src={imageSrc} alt={imageAlt} />
-        </ScrollAnimation>
+        {imageSrc && (
+          <ScrollAnimation animation="scale" duration={0.7} delay={0.1}>
+            <PostImage src={imageSrc} alt={imageAlt} />
+          </ScrollAnimation>
+        )}
 
         {/* Article Content */}
         <ScrollAnimation animation="fade" delay={0.2}>
@@ -74,7 +79,6 @@ export function PostDetails({
         </ScrollAnimation>
 
         {/* Comments Display */}
-        <CommentsDisplay commentsCount={commentsCount} />
 
         {/* Related Posts */}
         {relatedPosts && (
@@ -82,6 +86,9 @@ export function PostDetails({
             {relatedPosts}
           </RelatedPosts>
         )}
+
+        {/* Extra content before comments (e.g. audio player) */}
+        {extraContentBeforeComments}
 
         {/* Comments Section - Login/Register Prompt */}
         <CommentsSection

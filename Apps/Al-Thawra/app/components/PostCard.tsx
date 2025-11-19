@@ -5,9 +5,10 @@ export type { Post };
 
 interface PostCardProps {
   post: Post;
+  buildLink?: (post: Post) => string;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, buildLink }: PostCardProps) {
   const displayDate = post.publishedAt || post.createdAt;
   const formattedDate = new Date(displayDate).toLocaleDateString("ar-EG", {
     year: "numeric",
@@ -15,10 +16,14 @@ export function PostCard({ post }: PostCardProps) {
     day: "numeric",
   });
 
+  const linkHref = buildLink
+    ? buildLink(post)
+    : `/posts/categories/${post.categorySlug}/articles/${post.slug}`;
+
   return (
     <article className="group relative bg-[var(--color-white)] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       {/* Image */}
-      <Link to={`/posts/categories/${post.categorySlug}/articles/${post.slug}`} className="block relative aspect-16/10 overflow-hidden">
+      <Link to={linkHref} className="block relative aspect-16/10 overflow-hidden">
         {post.image ? (
           <img
             src={post.image}
@@ -40,7 +45,7 @@ export function PostCard({ post }: PostCardProps) {
             if (navigator.share) {
               navigator.share({
                 title: post.title,
-                url: window.location.origin + `/posts/categories/${post.categorySlug}/articles/${post.slug}`,
+                url: window.location.origin + linkHref,
               });
             }
           }}
@@ -74,7 +79,7 @@ export function PostCard({ post }: PostCardProps) {
         )}
 
         {/* Title */}
-        <Link to={`/posts/categories/${post.categorySlug}/articles/${post.slug}`}>
+        <Link to={linkHref}>
           <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-2 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors leading-tight">
             {post.title}
           </h3>

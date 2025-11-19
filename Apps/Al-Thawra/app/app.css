@@ -75,3 +75,54 @@ body {
     width: 100%;
   }
 }
+
+@keyframes spin-audio-thumbnail {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Modern audio player styling for audio detail page */
+.modern-audio-player {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 60%, var(--color-secondary) 100%);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-text-light);
+}
+
+.modern-audio-player__thumbnail {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-secondary-light);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  animation: spin-audio-thumbnail 12s linear infinite;
+}
+
+.modern-audio-player audio {
+  width: 100%;
+  accent-color: var(--color-secondary);
+}
+
+.modern-audio-player audio::-webkit-media-controls-panel {
+  background-color: rgba(2, 16, 36, 0.85);
+}
+
+.modern-audio-player audio::-webkit-media-controls-current-time-display,
+.modern-audio-player audio::-webkit-media-controls-time-remaining-display {
+  color: var(--color-text-light);
+}
+
+.modern-audio-player audio::-webkit-media-controls-play-button {
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.6));
+}

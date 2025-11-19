@@ -6,9 +6,10 @@ import { ScrollAnimation } from "./ScrollAnimation";
 
 interface SliderProps {
   posts: Post[];
+  buildLink?: (post: Post) => string;
 }
 
-export function Slider({ posts }: SliderProps) {
+export function Slider({ posts, buildLink }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -24,6 +25,9 @@ export function Slider({ posts }: SliderProps) {
   }
 
   const currentPost = posts[currentIndex];
+  const linkHref = buildLink
+    ? buildLink(currentPost)
+    : `/posts/categories/${currentPost.categorySlug}/articles/${currentPost.slug}`;
 
   return (
     <ScrollAnimation animation="scale" duration={0.8} once={false}>
@@ -76,7 +80,7 @@ export function Slider({ posts }: SliderProps) {
           )}
 
           {/* Title */}
-          <Link to={`/posts/categories/${currentPost.categorySlug}/articles/${currentPost.slug}`}>
+          <Link to={linkHref}>
             <motion.h2
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
