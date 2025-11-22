@@ -201,19 +201,6 @@ export function Header({ categories = [] }: HeaderProps) {
                   <Tv className="w-4 h-4" />
                   <span>التلفزيون</span>
                 </Link>
-
-                <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
-                    location.pathname === "/tv" 
-                      ? "border-white text-white font-bold" 
-                      : "border-transparent hover:border-white/50"
-                  }`}
-                  to="/tv"
-                >
-                  <Tv className="w-4 h-4" />
-                  <span>التلفزيون</span>
-                </Link>
-
                 <Link
                   className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
                     location.pathname === "/profile" 
