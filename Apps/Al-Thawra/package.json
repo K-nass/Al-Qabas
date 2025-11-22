@@ -19,6 +19,7 @@
     "react-audio-player": "^0.17.0",
     "react-dom": "^19.1.1",
     "react-router": "^7.9.2",
+    "shaka-player": "^4.16.9",
     "swiper": "^11.1.14"
   },
   "devDependencies": {

@@ -19,4 +19,5 @@ export default [
   route("profile", "routes/profile.tsx"),
   route("admin", "routes/admin.tsx"),
   route("podcast", "routes/podcast.tsx"),
+  route("tv", "routes/tv.tsx")
 ] satisfies RouteConfig;

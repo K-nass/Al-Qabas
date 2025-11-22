@@ -77,7 +77,7 @@ export default function App() {
   const { categories, trendingPosts } = useLoaderData<typeof loader>();
   
   // Pages that should not show sidebar
-  const noSidebarPages = ['/forgot-password', '/reset-password', '/contact'];
+  const noSidebarPages = ['/forgot-password', '/reset-password', '/contact', '/tv'];
   const showSidebar = !noSidebarPages.includes(location.pathname);
 
   // Pages that should not show header and footer (auth pages)
