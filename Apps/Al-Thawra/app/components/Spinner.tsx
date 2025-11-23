@@ -50,7 +50,7 @@ export function ButtonSpinner({ className = "" }: { className?: string }) {
 // Full page spinner overlay
 export function PageSpinner({ text = "جاري التحميل..." }: { text?: string }) {
   return (
-    <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-[var(--color-white)]/80 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="text-center">
         <Spinner size="xl" variant="primary" />
         <p className="mt-4 text-lg font-medium text-[var(--color-primary)]">

@@ -159,7 +159,7 @@ export default function LoginPage() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 relative z-10 border border-white/20">
+        <div className="max-w-md w-full bg-[var(--color-white)]/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 relative z-10 border border-[var(--color-divider)]/20">
             {/* Back to Home Link */}
             <Link 
               to="/" 

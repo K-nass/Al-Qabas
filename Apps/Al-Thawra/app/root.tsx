@@ -19,6 +19,7 @@ import { categoriesService } from "./services/categoriesService";
 import { postsService } from "./services/postsService";
 import { cache, CacheTTL } from "./lib/cache";
 import { generateOrganizationSchema, generateWebSiteSchema } from "./utils/seo";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 export const links: Route.LinksFunction = () => {
   // Get current URL for canonical - will be set per-route if needed
@@ -68,31 +69,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const websiteSchema = generateWebSiteSchema();
   
   return (
-    <html lang="ar" dir="rtl">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
-        {/* Global JSON-LD Schemas */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
-        
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <ToastContainer />
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+    <ThemeProvider>
+      <html lang="ar" dir="rtl">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          
+          {/* Global JSON-LD Schemas */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          />
+          
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          <ToastContainer />
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+        </body>
+      </html>
+    </ThemeProvider>
   );
 }
 

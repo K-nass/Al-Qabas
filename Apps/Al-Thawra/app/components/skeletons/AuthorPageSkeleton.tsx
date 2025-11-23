@@ -4,7 +4,7 @@ export function AuthorPageSkeleton() {
   return (
     <div className="space-y-6">
       {/* Author profile skeleton */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6 animate-pulse">
+      <div className="bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg p-6 animate-pulse">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           {/* Avatar */}
           <div className="w-32 h-32 rounded-full bg-gray-200"></div>

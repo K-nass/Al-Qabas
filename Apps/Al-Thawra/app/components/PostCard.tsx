@@ -21,7 +21,7 @@ export function PostCard({ post, buildLink }: PostCardProps) {
     : `/posts/categories/${post.categorySlug}/articles/${post.slug}`;
 
   return (
-    <article className="group relative bg-[var(--color-white)] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <article className="group relative bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       {/* Image */}
       <Link to={linkHref} className="block relative aspect-16/10 overflow-hidden">
         {post.image ? (
@@ -98,7 +98,7 @@ export function PostCard({ post, buildLink }: PostCardProps) {
         {post.authorName && (
           <Link
             to={`/author/${post.authorName}`}
-            className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 group/author hover:bg-gray-50 -mx-4 px-4 py-2 transition-colors"
+            className="flex items-center gap-2 mt-3 pt-3 border-t border-[var(--color-divider)] group/author hover:bg-[var(--color-background-light)] -mx-4 px-4 py-2 transition-colors"
           >
             <img 
               src={post.authorImage} 

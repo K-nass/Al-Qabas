@@ -134,7 +134,7 @@ export default function WritersOpinionsPage() {
                         className={`w-10 h-10 rounded-lg font-medium transition-colors ${
                           currentPage === pageNum
                             ? "bg-[var(--color-primary)] text-white"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            : "bg-[var(--color-background-light)] text-[var(--color-text-primary)] hover:bg-[var(--color-card)]"
                         }`}
                       >
                         {pageNum}
@@ -156,7 +156,7 @@ export default function WritersOpinionsPage() {
         </div>
       ) : (
         <ScrollAnimation animation="fade" once={false}>
-          <div className="text-center py-16 bg-white rounded-2xl shadow-sm">
+          <div className="text-center py-16 bg-[var(--color-white)] rounded-2xl shadow-sm">
             <PenTool className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-gray-700 mb-2">
               لا توجد مقالات حالياً

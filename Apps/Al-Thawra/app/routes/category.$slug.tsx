@@ -13,6 +13,9 @@ import { motion } from "framer-motion";
 // Loader function for server-side data fetching
 export async function loader({ params, request }: Route.LoaderArgs) {
   const slug = params.slug;
+  if (!slug) {
+    throw new Response("Category slug required", { status: 404 });
+  }
   const url = new URL(request.url);
   const subcategorySlug = url.searchParams.get("sub");
   const page = parseInt(url.searchParams.get("page") || "1", 10);
@@ -132,7 +135,7 @@ export default function CategoryPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg p-4">
         <div className="flex items-center gap-6 flex-wrap">
           {/* Category Title */}
           <h1 className="text-2xl font-bold text-[var(--color-primary)]">
@@ -149,7 +152,7 @@ export default function CategoryPage() {
                   className={`px-3 py-1 text-sm transition-all font-medium border rounded-md ${
                     selectedSubcategory === null
                       ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
-                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-blue-50 border-gray-200'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] border-[var(--color-divider)]'
                   }`}
                 >
                   الكل
@@ -161,7 +164,7 @@ export default function CategoryPage() {
                     className={`px-3 py-1 text-sm transition-all font-medium border rounded-md ${
                       selectedSubcategory === subcategory.slug
                         ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
-                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-blue-50 border-gray-200'
+                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] border-[var(--color-divider)]'
                     }`}
                   >
                     {subcategory.name}
@@ -194,7 +197,7 @@ export default function CategoryPage() {
               <button 
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={!hasPrevPage}
-                className="px-6 py-2 bg-white border border-gray-300 text-[var(--color-text-primary)] rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-[var(--color-white)] border border-[var(--color-divider)] text-[var(--color-text-primary)] rounded-lg hover:bg-[var(--color-background-light)] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 السابق
               </button>

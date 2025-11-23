@@ -72,9 +72,9 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="flex items-center justify-center p-4 bg-gray-50">
+      <div className="flex items-center justify-center p-4 bg-[var(--color-background-light)]">
         <ScrollAnimation animation="scale" duration={0.5}>
-          <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+          <div className="max-w-md w-full bg-[var(--color-white)] rounded-2xl shadow-xl p-8">
           <div className="text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
               <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,9 +101,9 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="flex items-center justify-center p-4 bg-gray-50">
+    <div className="flex items-center justify-center p-4 bg-[var(--color-background-light)]">
       <ScrollAnimation animation="scale" duration={0.5}>
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <div className="max-w-md w-full bg-[var(--color-white)] rounded-2xl shadow-xl p-8">
         {/* Title */}
         <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2 text-center">
           إعادة تعيين كلمة المرور
@@ -136,7 +136,7 @@ export default function ResetPasswordPage() {
                 value={formData.newPassword}
                 onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
                 className={`w-full px-4 py-3 pl-12 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all ${
-                  errors.newPassword ? "border-red-500" : "border-gray-300"
+                  errors.newPassword ? "border-red-500" : "border-[var(--color-divider)]"
                 }`}
                 placeholder="••••••••"
                 dir="ltr"
@@ -170,7 +170,7 @@ export default function ResetPasswordPage() {
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 className={`w-full px-4 py-3 pl-12 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all ${
-                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                  errors.confirmPassword ? "border-red-500" : "border-[var(--color-divider)]"
                 }`}
                 placeholder="••••••••"
                 dir="ltr"

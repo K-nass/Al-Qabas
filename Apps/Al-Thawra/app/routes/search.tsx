@@ -116,7 +116,7 @@ export default function SearchPage() {
   return (
     <div className="space-y-6">
       {/* Search Header */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-[var(--color-white)] rounded-lg shadow-sm p-6">
         <h1 className="text-2xl font-bold text-[var(--color-primary)] mb-4">
           البحث في الثورة
         </h1>
@@ -129,7 +129,7 @@ export default function SearchPage() {
               name="q"
               defaultValue={initialQuery}
               placeholder="ابحث عن مقالات، أخبار، كتاب..."
-              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
+              className="w-full px-4 py-3 pr-12 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
               dir="rtl"
             />
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

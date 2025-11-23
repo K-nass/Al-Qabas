@@ -1,6 +1,6 @@
 export function PostCardSkeleton() {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm animate-pulse">
+    <div className="bg-[var(--color-white)] rounded-lg overflow-hidden shadow-sm animate-pulse">
       {/* Image skeleton */}
       <div className="aspect-[16/10] bg-gray-200"></div>
       

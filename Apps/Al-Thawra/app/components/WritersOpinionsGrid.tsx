@@ -47,7 +47,7 @@ export function WritersOpinionsGrid({ posts, showHeader = true, postsPerPage = 3
           <div className="flex items-center">
             <Link
               to="/writers-opinions"
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors group"
+              className="p-2 rounded-full hover:bg-[var(--color-background-light)] transition-colors group"
               title="عرض جميع كتاب وآراء"
             >
               <ChevronLeft className="w-5 h-5 text-gray-600 group-hover:text-[var(--color-primary)] transition-colors" />
@@ -62,7 +62,7 @@ export function WritersOpinionsGrid({ posts, showHeader = true, postsPerPage = 3
               <button
                 onClick={handlePrev}
                 disabled={!canGoPrev}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                className="p-2 rounded-full hover:bg-[var(--color-background-light)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 aria-label="السابق"
               >
                 <ChevronRight className="w-5 h-5 text-gray-600" />
@@ -73,7 +73,7 @@ export function WritersOpinionsGrid({ posts, showHeader = true, postsPerPage = 3
               <button
                 onClick={handleNext}
                 disabled={!canGoNext}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                className="p-2 rounded-full hover:bg-[var(--color-background-light)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 aria-label="التالي"
               >
                 <ChevronLeft className="w-5 h-5 text-gray-600" />
