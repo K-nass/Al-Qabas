@@ -22,7 +22,7 @@ export function NavigationLoader() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[100] h-1">
+    <div className="fixed top-0 left-0 right-0 z-[100] h-0.5">
       <div className="h-full bg-[var(--color-primary)] animate-[loading-bar_1s_ease-in-out_infinite]" 
            style={{
              width: navigation.state === "loading" ? "70%" : "100%",

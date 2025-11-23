@@ -77,8 +77,8 @@ export function Profile() {
 
   if (loaderData?.error && !profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50" dir="rtl">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-background-light)]" dir="rtl">
+        <div className="bg-[var(--color-white)] p-8 rounded-lg shadow-md max-w-md w-full">
           <div className="text-center">
             <div className="text-red-500 text-5xl mb-4">⚠️</div>
             <h2 className="text-xl font-bold text-gray-800 mb-2">خطأ في تحميل الملف الشخصي</h2>
@@ -91,7 +91,7 @@ export function Profile() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-background-light)]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-primary)] mx-auto"></div>
           <p className="mt-4 text-gray-600">جاري التحميل...</p>
@@ -136,14 +136,14 @@ export function Profile() {
         )}
 
         {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-[var(--color-white)] rounded-2xl shadow-xl overflow-hidden">
           {/* Header Background */}
           <div className="h-32 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] relative">
             <div className="absolute top-4 left-4">
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-[var(--color-primary)] rounded-lg transition-colors shadow-md"
+                  className="flex items-center gap-2 px-4 py-2 bg-[var(--color-white)]/90 hover:bg-[var(--color-white)] text-[var(--color-primary)] rounded-lg transition-colors shadow-md"
                 >
                   <Edit className="w-4 h-4" />
                   <span className="font-medium">تعديل الملف</span>
@@ -292,7 +292,7 @@ export function Profile() {
                 )}
 
                 {/* Logout Button */}
-                <div className="pt-6 border-t border-gray-200">
+                <div className="pt-6 border-t border-[var(--color-divider)]">
                   <button
                     onClick={handleLogout}
                     className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium"
@@ -355,8 +355,8 @@ export function Profile() {
                       id="userName"
                       name="userName"
                       defaultValue={profile.userName}
-                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] ${
-                        errors.userName ? "border-red-500" : "border-gray-300"
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] ${
+                        errors.userName ? "border-red-500" : "border-[var(--color-divider)]"
                       }`}
                       disabled={isSubmitting}
                     />
@@ -376,7 +376,7 @@ export function Profile() {
                     name="aboutMe"
                     rows={4}
                     defaultValue={profile.aboutMe}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] resize-none"
+                    className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] resize-none"
                     placeholder="اكتب نبذة مختصرة عنك..."
                     disabled={isSubmitting}
                   />
@@ -395,7 +395,7 @@ export function Profile() {
                       id="facebook"
                       name="facebook"
                       defaultValue={profile.socialAccounts?.Facebook || profile.socialAccounts?.facebook || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://facebook.com/username"
                       disabled={isSubmitting}
                     />
@@ -410,7 +410,7 @@ export function Profile() {
                       id="twitter"
                       name="twitter"
                       defaultValue={profile.socialAccounts?.Twitter || profile.socialAccounts?.twitter || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://twitter.com/username"
                       disabled={isSubmitting}
                     />
@@ -425,7 +425,7 @@ export function Profile() {
                       id="instagram"
                       name="instagram"
                       defaultValue={profile.socialAccounts?.Instagram || profile.socialAccounts?.instagram || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://instagram.com/username"
                       disabled={isSubmitting}
                     />
@@ -440,7 +440,7 @@ export function Profile() {
                       id="linkedin"
                       name="linkedin"
                       defaultValue={profile.socialAccounts?.LinkedIn || profile.socialAccounts?.linkedin || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://linkedin.com/in/username"
                       disabled={isSubmitting}
                     />
@@ -448,7 +448,7 @@ export function Profile() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4 pt-6 border-t border-gray-200">
+                <div className="flex gap-4 pt-6 border-t border-[var(--color-divider)]">
                   <button
                     type="submit"
                     disabled={isSubmitting}

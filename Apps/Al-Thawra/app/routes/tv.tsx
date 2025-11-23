@@ -368,7 +368,7 @@ function VideoCard({ video }: { video: Video }) {
       : "#";
 
   return (
-    <div className="group cursor-pointer rounded-2xl bg-white shadow-md hover:shadow-xl border border-[var(--color-divider)]/80 overflow-hidden transition-all duration-300 hover:-translate-y-1">
+    <div className="group cursor-pointer rounded-2xl bg-[var(--color-white)] shadow-md hover:shadow-xl border border-[var(--color-divider)]/80 overflow-hidden transition-all duration-300 hover:-translate-y-1">
       {/* Thumbnail */}
       <div className="relative aspect-video rounded-lg overflow-hidden mb-3 bg-[var(--color-secondary-light)]">
         <img
