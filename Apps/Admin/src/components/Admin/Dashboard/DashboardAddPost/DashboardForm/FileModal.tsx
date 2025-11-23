@@ -257,7 +257,7 @@ export default function FileModal({ onClose, header, handleChange }: FileModalPr
                     }
                 });
 
-                signalRService.onUploadCompleted((data) => {
+                signalRService. onUploadCompleted((data) => {
                     if (data.mediaId === uploadId) {
                         handleSuccess(data.url, uploadId);
                     }
