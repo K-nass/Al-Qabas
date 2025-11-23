@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Post } from "./PostCard";
-import { ScrollAnimation } from "./ScrollAnimation";
 
 interface SliderProps {
   posts: Post[];
@@ -30,7 +29,11 @@ export function Slider({ posts, buildLink }: SliderProps) {
     : `/posts/categories/${currentPost.categorySlug}/articles/${currentPost.slug}`;
 
   return (
-    <ScrollAnimation animation="scale" duration={0.8} once={false}>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <div className="relative w-full h-[500px] rounded-lg overflow-hidden shadow-lg group">
       {/* Background Images with Animation */}
       <AnimatePresence initial={false}>
@@ -141,6 +144,6 @@ export function Slider({ posts, buildLink }: SliderProps) {
         </svg>
       </button>
     </div>
-    </ScrollAnimation>
+    </motion.div>
   );
 }
