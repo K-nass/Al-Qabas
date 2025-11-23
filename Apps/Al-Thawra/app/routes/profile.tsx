@@ -4,6 +4,7 @@ import { requireAuth } from "~/lib/protectedRoute";
 import profileService from "~/services/profileService";
 import type { UpdateProfileData } from "~/services/profileService";
 import { getCookiesFromRequest } from "~/utils/cookies";
+import { cache, CacheTTL } from "~/lib/cache";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -22,8 +23,15 @@ export async function loader({ request }: Route.LoaderArgs) {
   const accessToken = cookies.accessToken;
   
   try {
-    // Fetch profile from API with token
-    const profile = await profileService.getCurrentProfile(accessToken);
+    // Fetch profile from API with caching and ETag validation
+    // validateAlways: true ensures we check ETag even if cache is fresh (for testing)
+    const profile = await cache.getOrFetch(
+      'profile:current',
+      () => profileService.getCurrentProfile(accessToken),
+      CacheTTL.MEDIUM, // 15 minutes
+      '/profile', // URL for ETag validation
+      true // validateAlways - check ETag even if cache is fresh
+    );
     return { profile, error: null };
   } catch (error: any) {
     return { 
@@ -98,6 +106,9 @@ export async function action({ request }: Route.ActionArgs) {
       // Pass userId and token to update function for server-side requests
       // Backend returns 204 No Content, so no profile data is returned
       await profileService.updateProfile(userId, updateData, accessToken);
+      
+      // Invalidate profile cache after update
+      cache.delete('profile:current');
       
       console.log('✅ Server: Profile update completed successfully');
       
