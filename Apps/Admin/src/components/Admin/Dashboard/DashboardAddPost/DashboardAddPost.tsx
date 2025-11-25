@@ -21,11 +21,6 @@ type NameType =
   | "Table of Contents"
   | "Video"
   | "Audio"
-  | "Trivia Quiz"
-  | "Personality Quiz"
-  | "Poll"
-  | "Recipe";
-
 const getContentTypes = (): ContentType[] => [
   {
     id: 1,
@@ -63,30 +58,7 @@ const getContentTypes = (): ContentType[] => [
     icon: faPlay,
     descriptionKey: "contentTypes.audioDesc",
   },
-  {
-    id: 7,
-    name: "Trivia Quiz",
-    icon: faFileLines,
-    descriptionKey: "contentTypes.triviaQuizDesc",
-  },
-  {
-    id: 8,
-    name: "Personality Quiz",
-    icon: faUser,
-    descriptionKey: "contentTypes.personalityQuizDesc",
-  },
-  {
-    id: 9,
-    name: "Poll",
-    icon: faFlag,
-    descriptionKey: "contentTypes.pollDesc",
-  },
-  {
-    id: 10,
-    name: "Recipe",
-    icon: faLightbulb,
-    descriptionKey: "contentTypes.recipeDesc",
-  },
+
 ];
 
 export interface ContentType {

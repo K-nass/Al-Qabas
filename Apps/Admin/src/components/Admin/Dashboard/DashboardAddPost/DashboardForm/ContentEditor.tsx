@@ -12,7 +12,7 @@ export default function ContentEditor({ state, handleChange, errors = {} }: Cont
   return (
     <div className="border border-gray-200 rounded-md overflow-hidden" data-error-field={errors.content ? true : undefined}>
       <Editor
-        apiKey='dqv0ltqmlrx488fon0ljbzpen8t2qm04tl8fw3tpgf7j3aom'
+        apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
         value={state.content}
         onEditorChange={(content) => {
           handleChange({
@@ -41,7 +41,7 @@ export default function ContentEditor({ state, handleChange, errors = {} }: Cont
             { value: 'Email', title: 'Email' },
           ],
           ai_request: (request: any, respondWith: any) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-          uploadcare_public_key: '8abd3626f67e6204cb1c',
+          uploadcare_public_key: import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY,
         }}
       />
       {errors.content && (
