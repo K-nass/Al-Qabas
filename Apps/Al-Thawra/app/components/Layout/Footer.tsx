@@ -1,7 +1,27 @@
 import { Link } from "react-router";
 import { Send, Youtube, Twitter, Facebook, Instagram, Linkedin, Music, MessageCircle, ArrowUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { pagesService, type Page } from "~/services/pagesService";
 
 export function Footer() {
+  const [footerPages, setFooterPages] = useState<Page[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadFooterPages = async () => {
+      try {
+        const pages = await pagesService.getFooterPages("Arabic");
+        setFooterPages(pages);
+      } catch (error) {
+        console.error("Failed to load footer pages:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadFooterPages();
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -18,29 +38,29 @@ export function Footer() {
               الثورة
             </Link>
             <div className="flex items-center gap-4 flex-wrap mb-4">
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://t.me/althawra" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://t.me/althawra" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
                 <Send className="w-5 h-5" />
               </a>
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://youtube.com/@althawra" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://youtube.com/@althawra" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
                 <Youtube className="w-5 h-5" />
               </a>
 
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://twitter.com/althawra" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://twitter.com/althawra" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://facebook.com/althawra" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://facebook.com/althawra" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://instagram.com/althawra" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://instagram.com/althawra" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://linkedin.com/company/althawra" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://linkedin.com/company/althawra" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://tiktok.com/@althawra" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://tiktok.com/@althawra" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
                 <Music className="w-5 h-5" />
               </a>
-              <a className="text-gray-400 hover:text-[var(--color-primary)] transition-colors" href="https://wa.me/96512345678" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+              <a className="text-gray-400 hover:text-blue-400 transition-colors" href="https://wa.me/96512345678" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
                 <MessageCircle className="w-5 h-5" />
               </a>
             </div>
@@ -49,29 +69,27 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Left Section - Navigation Links */}
+          {/* Left Section - Dynamic Navigation Links */}
           <nav className="flex flex-wrap gap-x-6 gap-y-2 font-bold w-full md:w-auto">
-            <Link className="text-gray-300 hover:text-[var(--color-primary)] transition-colors" to="/about">
-              عن الثورة
-            </Link>
-            <Link className="text-gray-300 hover:text-[var(--color-primary)] transition-colors" to="/subscriptions">
-              الاشتراكات
-            </Link>
-            <Link className="text-gray-300 hover:text-[var(--color-primary)] transition-colors" to="/advertising">
-              الإعلانات
-            </Link>
-            <Link className="text-gray-300 hover:text-[var(--color-primary)] transition-colors" to="/contact">
-              اتصل بنا
-            </Link>
-            <Link className="text-gray-300 hover:text-[var(--color-primary)] transition-colors" to="/privacy">
-              سياسة الخصوصية
-            </Link>
-            <Link className="text-gray-300 hover:text-[var(--color-primary)] transition-colors" to="/terms">
-              شروط الاستخدام
-            </Link>
-            <Link className="text-gray-300 hover:text-[var(--color-primary)] transition-colors" to="/submit">
-              أرسل مقال
-            </Link>
+            {isLoading ? (
+              // Loading skeleton
+              <>
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="h-5 w-24 bg-gray-700 rounded animate-pulse"></div>
+                ))}
+              </>
+            ) : (
+              // Dynamic pages from API
+              footerPages.map((page) => (
+                <Link
+                  key={page.id}
+                  className="text-gray-300 hover:text-blue-400 transition-colors"
+                  to={`/pages/${page.slug}`}
+                >
+                  {page.title}
+                </Link>
+              ))
+            )}
           </nav>
         </div>
 

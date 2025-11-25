@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLoaderData, useSearchParams } from "react-router";
+import { useLoaderData, useSearchParams, Link } from "react-router";
 import type { Route } from "./+types/magazines";
 import axiosInstance from "~/lib/axios";
 import { FileText, Calendar, Download, ChevronLeft, ChevronRight } from "lucide-react";
@@ -128,12 +128,73 @@ export default function MagazinesPage() {
         </div>
       </ScrollAnimation>
 
-      {/* Results Info */}
-      {totalCount > 0 && (
-        <div className="mb-6 text-sm text-[var(--color-text-secondary)]">
-          عرض {itemsFrom} - {itemsTo} من أصل {totalCount} عدد
+      {/* Date Filter */}
+      <div className="mb-8 bg-[var(--color-white)] rounded-lg shadow-md p-6">
+        <h2 className="text-lg font-bold text-[var(--color-text-primary)] mb-4">
+          تصفية حسب التاريخ
+        </h2>
+        <div className="flex flex-col sm:flex-row gap-4 items-end">
+          <div className="flex-1">
+            <label htmlFor="from-date" className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
+              من تاريخ
+            </label>
+            <input
+              type="date"
+              id="from-date"
+              value={searchParams.get("from") || ""}
+              onChange={(e) => {
+                setSearchParams((prev) => {
+                  if (e.target.value) {
+                    prev.set("from", e.target.value);
+                  } else {
+                    prev.delete("from");
+                  }
+                  prev.set("page", "1"); // Reset to page 1
+                  return prev;
+                });
+              }}
+              className="w-full px-4 py-2 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] bg-[var(--color-white)] text-[var(--color-text-primary)]"
+            />
+          </div>
+          <div className="flex-1">
+            <label htmlFor="to-date" className="block text-sm font-medium text-[var(--color-text-secondary)] mb-2">
+              إلى تاريخ
+            </label>
+            <input
+              type="date"
+              id="to-date"
+              value={searchParams.get("to") || ""}
+              onChange={(e) => {
+                setSearchParams((prev) => {
+                  if (e.target.value) {
+                    prev.set("to", e.target.value);
+                  } else {
+                    prev.delete("to");
+                  }
+                  prev.set("page", "1"); // Reset to page 1
+                  return prev;
+                });
+              }}
+              className="w-full px-4 py-2 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] bg-[var(--color-white)] text-[var(--color-text-primary)]"
+            />
+          </div>
+          {(searchParams.get("from") || searchParams.get("to")) && (
+            <button
+              onClick={() => {
+                setSearchParams((prev) => {
+                  prev.delete("from");
+                  prev.delete("to");
+                  prev.set("page", "1");
+                  return prev;
+                });
+              }}
+              className="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors font-medium whitespace-nowrap"
+            >
+              مسح الفلتر
+            </button>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Magazines Grid */}
       {magazines.length > 0 ? (
@@ -158,16 +219,14 @@ export default function MagazinesPage() {
                   </div>
                 )}
                 {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <a
-                    href={magazine.pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-[var(--color-white)] text-[var(--color-primary)] rounded-lg hover:bg-[var(--color-secondary-light)] transition-colors"
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <Link
+                    to={`/magazines/date/${magazine.createdAt.split('T')[0]}`}
+                    className="flex flex-col items-center gap-2 px-6 py-3 bg-white/95 text-[var(--color-primary)] rounded-lg hover:bg-white transition-colors"
                   >
-                    <Download className="w-4 h-4" />
-                    <span className="font-medium">تحميل PDF</span>
-                  </a>
+                    <FileText className="w-8 h-8" />
+                    <span className="font-bold text-sm">تصفح العدد</span>
+                  </Link>
                 </div>
               </div>
 
@@ -195,56 +254,54 @@ export default function MagazinesPage() {
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-8">
-          <button
-            onClick={() => handlePageChange(pageNumber - 1)}
-            disabled={pageNumber === 1}
-            className="p-2 rounded-lg border border-[var(--color-divider)] hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            aria-label="الصفحة السابقة"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+      <div className="flex items-center justify-center gap-2 mt-8">
+        <button
+          onClick={() => handlePageChange(pageNumber - 1)}
+          disabled={pageNumber === 1}
+          className="p-2 rounded-lg border border-[var(--color-divider)] hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          aria-label="الصفحة السابقة"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
 
-          <div className="flex items-center gap-1">
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              let pageNum;
-              if (totalPages <= 5) {
-                pageNum = i + 1;
-              } else if (pageNumber <= 3) {
-                pageNum = i + 1;
-              } else if (pageNumber >= totalPages - 2) {
-                pageNum = totalPages - 4 + i;
-              } else {
-                pageNum = pageNumber - 2 + i;
-              }
+        <div className="flex items-center gap-1">
+          {Array.from({ length: Math.min(5, Math.max(1, totalPages)) }, (_, i) => {
+            let pageNum;
+            if (totalPages <= 5) {
+              pageNum = i + 1;
+            } else if (pageNumber <= 3) {
+              pageNum = i + 1;
+            } else if (pageNumber >= totalPages - 2) {
+              pageNum = totalPages - 4 + i;
+            } else {
+              pageNum = pageNumber - 2 + i;
+            }
 
-              return (
-                <button
-                  key={pageNum}
-                  onClick={() => handlePageChange(pageNum)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    pageNumber === pageNum
-                      ? "bg-[var(--color-primary)] text-white"
-                      : "border border-[var(--color-divider)] hover:bg-[var(--color-background-light)]"
-                  }`}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
-          </div>
-
-          <button
-            onClick={() => handlePageChange(pageNumber + 1)}
-            disabled={pageNumber === totalPages}
-            className="p-2 rounded-lg border border-[var(--color-divider)] hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            aria-label="الصفحة التالية"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
+            return (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  pageNumber === pageNum
+                    ? "bg-[var(--color-primary)] text-white"
+                    : "border border-[var(--color-divider)] hover:bg-[var(--color-background-light)]"
+                }`}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
         </div>
-      )}
+
+        <button
+          onClick={() => handlePageChange(pageNumber + 1)}
+          disabled={pageNumber === totalPages || totalPages === 0}
+          className="p-2 rounded-lg border border-[var(--color-divider)] hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          aria-label="الصفحة التالية"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 }

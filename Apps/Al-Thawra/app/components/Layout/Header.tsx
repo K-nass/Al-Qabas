@@ -49,6 +49,24 @@ export function Header({ categories = [] }: HeaderProps) {
     setCurrentUser(user);
   }, [location.pathname]);
 
+  // Close More menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const moreMenuRef = document.getElementById('more-menu-container');
+      if (moreMenuRef && !moreMenuRef.contains(event.target as Node)) {
+        setIsMoreMenuOpen(false);
+      }
+    };
+
+    if (isMoreMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMoreMenuOpen]);
+
   // Close profile dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -349,7 +367,7 @@ export function Header({ categories = [] }: HeaderProps) {
               to="/"
               className="px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] rounded transition-colors font-medium"
             >
-              الرئيسية
+              عدد اليوم
             </Link>
             {visibleCategories.map((category) => (
               <Link
@@ -363,12 +381,10 @@ export function Header({ categories = [] }: HeaderProps) {
 
             {/* More dropdown menu - only show if there are more categories */}
             {moreCategories.length > 0 && (
-              <div className="relative" ref={profileDropdownRef}>
+              <div className="relative" id="more-menu-container">
                 <button
                   onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
                   className="flex items-center gap-1 px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] rounded transition-colors font-medium"
-                  onMouseEnter={() => setIsMoreMenuOpen(true)}
-                  onMouseLeave={() => setIsMoreMenuOpen(false)}
                 >
                   المزيد
                   <ChevronDown className={`w-4 h-4 transition-transform ${isMoreMenuOpen ? 'rotate-180' : ''}`} />
@@ -379,8 +395,6 @@ export function Header({ categories = [] }: HeaderProps) {
                   <div
                     style={{ top: '100%', right: 0 }}
                     className="absolute top-full right-0 mt-1 w-56 bg-[var(--color-white)] rounded-lg shadow-lg border border-[var(--color-divider)] py-2 z-50"
-                    onMouseEnter={() => setIsMoreMenuOpen(true)}
-                    onMouseLeave={() => setIsMoreMenuOpen(false)}
                   >
                     {moreCategories.map((category) => (
                       <Link

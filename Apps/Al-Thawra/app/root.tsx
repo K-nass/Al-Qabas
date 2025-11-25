@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
   useLocation,
   useLoaderData,
+  useMatches,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -25,6 +26,12 @@ export const links: Route.LinksFunction = () => {
   // Get current URL for canonical - will be set per-route if needed
   // For now, using a simple implementation
   return [
+    // Favicon - using logo
+    { rel: "icon", type: "image/png", href: "/logo.png" },
+    { rel: "apple-touch-icon", href: "/logo.png" },
+    // react-pdf CSS
+    { rel: "stylesheet", href: "https://unpkg.com/react-pdf@9.1.1/dist/esm/Page/AnnotationLayer.css" },
+    { rel: "stylesheet", href: "https://unpkg.com/react-pdf@9.1.1/dist/esm/Page/TextLayer.css" },
     // Preconnect to external domains for faster resource loading
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
     {
@@ -69,33 +76,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const websiteSchema = generateWebSiteSchema();
   
   return (
-    <ThemeProvider>
-      <html lang="ar" dir="rtl">
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          
-          {/* Global JSON-LD Schemas */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-          />
-          
-          <Meta />
-          <Links />
-        </head>
-        <body>
+    <html lang="ar" dir="rtl">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        {/* Global JSON-LD Schemas */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <ThemeProvider>
           <ToastContainer />
           {children}
           <ScrollRestoration />
           <Scripts />
-        </body>
-      </html>
-    </ThemeProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
 
@@ -103,46 +110,40 @@ export default function App() {
   const location = useLocation();
   const { categories, trendingPosts } = useLoaderData<typeof loader>();
   
-  // Pages that should not show sidebar
-  const noSidebarPages = ['/forgot-password', '/reset-password', '/contact', '/tv'];
-  const showSidebar = !noSidebarPages.includes(location.pathname);
+  // Check if current route has disableLayout handle
+  const matches = useMatches();
+  const disableLayout = matches.some((match: any) => match.handle?.disableLayout);
 
-  // Pages that should not show header and footer (auth pages)
-  const noLayoutPages = ['/login', '/register'];
-  const showLayout = !noLayoutPages.includes(location.pathname);
+  // Routes that should not have sidebar
+  const noSidebarRoutes = ["/login", "/register", "/forgot-password", "/reset-password"];
+  const shouldShowSidebar = !noSidebarRoutes.includes(location.pathname);
 
-  // If it's an auth page, render without layout
-  if (!showLayout) {
-    return (
-      <>
-        <NavigationLoader />
-        <Outlet />
-      </>
-    );
-  }
-
-  // Normal pages with layout
   return (
     <>
       <NavigationLoader />
-      <PageLayout categories={categories}>
-      {showSidebar ? (
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* Main Content Area */}
-            <div className="flex-1 min-w-0">
-              <Outlet context={{ categories }} />
-            </div>
-            {/* Sidebar */}
-            <div className="lg:w-72 flex-shrink-0">
-              <Sidebar trendingPosts={trendingPosts} />
-            </div>
-          </div>
-        </div>
-      ) : (
+      {disableLayout ? (
+        // Full-width layout for PDF viewer (no header, sidebar, footer)
         <Outlet context={{ categories }} />
+      ) : (
+        <PageLayout categories={categories}>
+          {shouldShowSidebar ? (
+            <div className="container mx-auto px-4 py-8 max-w-7xl">
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* Main Content Area */}
+                <div className="flex-1 min-w-0">
+                  <Outlet context={{ categories }} />
+                </div>
+                {/* Sidebar */}
+                <div className="lg:w-72 flex-shrink-0">
+                  <Sidebar trendingPosts={trendingPosts} />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Outlet context={{ categories }} />
+          )}
+        </PageLayout>
       )}
-      </PageLayout>
     </>
   );
 }

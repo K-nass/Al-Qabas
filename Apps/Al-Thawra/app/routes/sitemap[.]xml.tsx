@@ -10,7 +10,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // Fetch all data for sitemap
     const [categories, featuredPosts] = await Promise.all([
       categoriesService.getMenuCategories("Arabic"),
-      postsService.getFeaturedPosts(100, "Article"), // Get more posts for sitemap
+      postsService.getFeaturedPosts(90, "Article"), // Get more posts for sitemap
     ]);
 
     // Build sitemap XML

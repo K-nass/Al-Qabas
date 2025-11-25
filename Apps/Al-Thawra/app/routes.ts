@@ -11,6 +11,10 @@ export default [
   route("category/:slug", "routes/category.$slug.tsx"),
   route("search", "routes/search.tsx"),
   route("magazines", "routes/magazines.tsx"),
+  route("magazines/date/:date", "routes/magazines.date.$date.tsx"),
+  route("magazines/issue/:issueNumber", "routes/magazines.issue.$issueNumber.tsx"),
+  route("api/pdf/date/:date", "routes/api.pdf.date.$date.tsx"),
+  route("api/pdf/issue/:issueNumber", "routes/api.pdf.issue.$issueNumber.tsx"),
   route("contact", "routes/contact.tsx"),
   route("login", "routes/login.tsx"),
   route("register", "routes/register.tsx"),
@@ -21,5 +25,6 @@ export default [
   route("cart", "routes/cart.tsx"),
   route("admin", "routes/admin.tsx"),
   route("podcast", "routes/podcast.tsx"),
-  route("tv", "routes/tv.tsx")
+  route("tv", "routes/tv.tsx"),
+  route("pages/:slug", "routes/pages.$slug.tsx")
 ] satisfies RouteConfig;
