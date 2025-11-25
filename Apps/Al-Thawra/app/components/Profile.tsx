@@ -77,8 +77,8 @@ export function Profile() {
 
   if (loaderData?.error && !profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50" dir="rtl">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-background-light)]" dir="rtl">
+        <div className="bg-[var(--color-white)] p-8 rounded-lg shadow-md max-w-md w-full">
           <div className="text-center">
             <div className="text-red-500 text-5xl mb-4">⚠️</div>
             <h2 className="text-xl font-bold text-gray-800 mb-2">خطأ في تحميل الملف الشخصي</h2>
@@ -91,7 +91,7 @@ export function Profile() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-background-light)]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-primary)] mx-auto"></div>
           <p className="mt-4 text-gray-600">جاري التحميل...</p>
@@ -117,7 +117,7 @@ export function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4" dir="rtl">
+    <div className="min-h-screen bg-[var(--color-background-light)] py-12 px-4" dir="rtl">
       <div className="max-w-4xl mx-auto">
         {/* Success Message */}
         {showSuccess && (
@@ -136,14 +136,14 @@ export function Profile() {
         )}
 
         {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-[var(--color-white)] rounded-2xl shadow-xl overflow-hidden">
           {/* Header Background */}
           <div className="h-32 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] relative">
             <div className="absolute top-4 left-4">
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-[var(--color-primary)] rounded-lg transition-colors shadow-md"
+                  className="flex items-center gap-2 px-4 py-2 bg-[var(--color-white)]/90 hover:bg-[var(--color-white)] text-[var(--color-primary)] rounded-lg transition-colors shadow-md"
                 >
                   <Edit className="w-4 h-4" />
                   <span className="font-medium">تعديل الملف</span>
@@ -163,6 +163,8 @@ export function Profile() {
                       src={avatarPreview || profile.avatarImageUrl!}
                       alt={profile.userName}
                       className={`w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover ${isUploading ? 'opacity-50' : ''}`}
+                      loading="lazy"
+                      decoding="async"
                     />
                     {isUploading && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full">
@@ -221,7 +223,7 @@ export function Profile() {
 
                 {/* About Me */}
                 {profile.aboutMe && (
-                  <div className="mb-8 p-6 bg-gray-50 rounded-lg">
+                  <div className="mb-8 p-6 bg-[var(--color-white)] rounded-lg border border-[var(--color-divider)]">
                     <h3 className="text-lg font-semibold text-gray-800 mb-3">نبذة عني</h3>
                     <p className="text-gray-700 leading-relaxed">{profile.aboutMe}</p>
                   </div>
@@ -232,9 +234,9 @@ export function Profile() {
                   <div className="mb-8">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">حسابات التواصل الاجتماعي</h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {profile.socialAccounts.facebook && (
+                      {(profile.socialAccounts.Facebook || profile.socialAccounts.facebook) && (
                         <a
-                          href={profile.socialAccounts.facebook}
+                          href={profile.socialAccounts.Facebook || profile.socialAccounts.facebook}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
@@ -243,9 +245,9 @@ export function Profile() {
                           <span className="text-sm font-medium text-blue-600">Facebook</span>
                         </a>
                       )}
-                      {profile.socialAccounts.twitter && (
+                      {(profile.socialAccounts.Twitter || profile.socialAccounts.twitter) && (
                         <a
-                          href={profile.socialAccounts.twitter}
+                          href={profile.socialAccounts.Twitter || profile.socialAccounts.twitter}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 p-3 bg-sky-50 hover:bg-sky-100 rounded-lg transition-colors"
@@ -254,9 +256,9 @@ export function Profile() {
                           <span className="text-sm font-medium text-sky-600">Twitter</span>
                         </a>
                       )}
-                      {profile.socialAccounts.instagram && (
+                      {(profile.socialAccounts.Instagram || profile.socialAccounts.instagram) && (
                         <a
-                          href={profile.socialAccounts.instagram}
+                          href={profile.socialAccounts.Instagram || profile.socialAccounts.instagram}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 p-3 bg-pink-50 hover:bg-pink-100 rounded-lg transition-colors"
@@ -265,9 +267,9 @@ export function Profile() {
                           <span className="text-sm font-medium text-pink-600">Instagram</span>
                         </a>
                       )}
-                      {profile.socialAccounts.linkedin && (
+                      {(profile.socialAccounts.LinkedIn || profile.socialAccounts.linkedin) && (
                         <a
-                          href={profile.socialAccounts.linkedin}
+                          href={profile.socialAccounts.LinkedIn || profile.socialAccounts.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
@@ -290,10 +292,10 @@ export function Profile() {
                 )}
 
                 {/* Logout Button */}
-                <div className="pt-6 border-t border-gray-200">
+                <div className="pt-6 border-t border-[var(--color-divider)]">
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-lg transition-colors font-medium"
                   >
                     <LogOut className="w-5 h-5" />
                     <span>تسجيل الخروج</span>
@@ -353,8 +355,8 @@ export function Profile() {
                       id="userName"
                       name="userName"
                       defaultValue={profile.userName}
-                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] ${
-                        errors.userName ? "border-red-500" : "border-gray-300"
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] ${
+                        errors.userName ? "border-red-500" : "border-[var(--color-divider)]"
                       }`}
                       disabled={isSubmitting}
                     />
@@ -374,7 +376,7 @@ export function Profile() {
                     name="aboutMe"
                     rows={4}
                     defaultValue={profile.aboutMe}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] resize-none"
+                    className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] resize-none"
                     placeholder="اكتب نبذة مختصرة عنك..."
                     disabled={isSubmitting}
                   />
@@ -392,8 +394,8 @@ export function Profile() {
                       type="url"
                       id="facebook"
                       name="facebook"
-                      defaultValue={profile.socialAccounts?.facebook || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      defaultValue={profile.socialAccounts?.Facebook || profile.socialAccounts?.facebook || ""}
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://facebook.com/username"
                       disabled={isSubmitting}
                     />
@@ -407,8 +409,8 @@ export function Profile() {
                       type="url"
                       id="twitter"
                       name="twitter"
-                      defaultValue={profile.socialAccounts?.twitter || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      defaultValue={profile.socialAccounts?.Twitter || profile.socialAccounts?.twitter || ""}
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://twitter.com/username"
                       disabled={isSubmitting}
                     />
@@ -422,8 +424,8 @@ export function Profile() {
                       type="url"
                       id="instagram"
                       name="instagram"
-                      defaultValue={profile.socialAccounts?.instagram || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      defaultValue={profile.socialAccounts?.Instagram || profile.socialAccounts?.instagram || ""}
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://instagram.com/username"
                       disabled={isSubmitting}
                     />
@@ -437,8 +439,8 @@ export function Profile() {
                       type="url"
                       id="linkedin"
                       name="linkedin"
-                      defaultValue={profile.socialAccounts?.linkedin || ""}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                      defaultValue={profile.socialAccounts?.LinkedIn || profile.socialAccounts?.linkedin || ""}
+                      className="w-full px-4 py-3 border border-[var(--color-divider)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       placeholder="https://linkedin.com/in/username"
                       disabled={isSubmitting}
                     />
@@ -446,7 +448,7 @@ export function Profile() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4 pt-6 border-t border-gray-200">
+                <div className="flex gap-4 pt-6 border-t border-[var(--color-divider)]">
                   <button
                     type="submit"
                     disabled={isSubmitting}
@@ -465,7 +467,7 @@ export function Profile() {
                     type="button"
                     onClick={() => setIsEditing(false)}
                     disabled={isSubmitting}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[var(--color-background-light)] hover:bg-[var(--color-card)] text-[var(--color-text-primary)] rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed border border-[var(--color-divider)]"
                   >
                     <X className="w-5 h-5" />
                     <span>إلغاء</span>

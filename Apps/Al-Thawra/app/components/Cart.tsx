@@ -8,7 +8,7 @@ export function Cart() {
         {/* Empty Cart Icon */}
         <div className="mb-8 flex justify-center">
           <div className="relative">
-            <div className="w-24 h-24 bg-white rounded-lg shadow-md flex items-center justify-center">
+            <div className="w-24 h-24 bg-[var(--color-white)] rounded-lg shadow-md flex items-center justify-center">
               <ShoppingCart className="w-12 h-12" style={{ color: "var(--color-primary)" }} />
             </div>
           </div>

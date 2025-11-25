@@ -21,9 +21,12 @@ import {
   LogOut,
   FileText,
   PenTool,
+  Moon,
+  Sun,
 } from "lucide-react";
 import type { Category } from "../../services/categoriesService";
 import authService from "../../services/authService";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface HeaderProps {
   categories?: Category[];
@@ -37,6 +40,7 @@ export function Header({ categories = [] }: HeaderProps) {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const location = useLocation();
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const { theme, toggleTheme } = useTheme();
   
   useEffect(() => {
     // Get current user from cookies
@@ -71,16 +75,16 @@ export function Header({ categories = [] }: HeaderProps) {
 
   return (
     <header
-      className="sticky top-0 z-50 bg-white shadow-md"
       dir="rtl"
       lang="ar"
+      className="sticky top-0 z-50 bg-gradient-to-r from-[var(--color-primary-dark)] to-[var(--color-primary)] shadow-md"
     >
       {/* Top Bar - Social & Info */}
-      <div className="bg-gray-100 border-b border-gray-300">
+      <div className="bg-[var(--color-white)] border-b border-[var(--color-divider)]">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center py-2 text-sm">
             {/* Right Side - Editor Info */}
-            <div className="flex items-center gap-6 text-gray-700">
+            <div className="flex items-center gap-6 text-[var(--color-text-primary)]">
               <span className="font-bold text-base">
                 رئيس مجلس الادارة: سام الغبارى{" "}
               </span>
@@ -91,7 +95,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 href="https://t.me/althawra"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-[var(--color-primary)] transition-colors"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 aria-label="Telegram"
               >
                 <Send className="w-4 h-4" />
@@ -100,7 +104,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 href="https://youtube.com/@althawra"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-[var(--color-primary)] transition-colors"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 aria-label="YouTube"
               >
                 <Youtube className="w-4 h-4" />
@@ -109,7 +113,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 href="https://twitter.com/althawra"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-[var(--color-primary)] transition-colors"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 aria-label="Twitter"
               >
                 <Twitter className="w-4 h-4" />
@@ -118,7 +122,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 href="https://facebook.com/althawra"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-[var(--color-primary)] transition-colors"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="w-4 h-4" />
@@ -127,7 +131,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 href="https://instagram.com/althawra"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 hover:text-[var(--color-primary)] transition-colors"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="w-4 h-4" />
@@ -138,7 +142,7 @@ export function Header({ categories = [] }: HeaderProps) {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="bg-[var(--color-primary)]">
+      <div className="border-t border-white/20">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center py-3">
             {/* Right Side - Navigation & Logo */}
@@ -156,10 +160,10 @@ export function Header({ categories = [] }: HeaderProps) {
               </Link>
 
               {/* Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-6 text-white">
+              <nav className="hidden lg:flex items-center gap-6">
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/"
-                      ? "border-white text-white font-bold"
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/"
+                      ? "border-white font-bold"
                       : "border-transparent hover:border-white/50"
                     }`}
                   to="/"
@@ -169,8 +173,8 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/magazines"
-                      ? "border-white text-white font-bold"
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/magazines"
+                      ? "border-white font-bold"
                       : "border-transparent hover:border-white/50"
                     }`}
                   to="/magazines"
@@ -180,8 +184,8 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${location.pathname === "/writers-opinions"
-                      ? "border-white text-white font-bold"
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/writers-opinions"
+                      ? "border-white font-bold"
                       : "border-transparent hover:border-white/50"
                     }`}
                   to="/writers-opinions"
@@ -191,9 +195,9 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${
                     location.pathname === "/tv" 
-                      ? "border-white text-white font-bold" 
+                      ? "border-white font-bold" 
                       : "border-transparent hover:border-white/50"
                   }`}
                   to="/tv"
@@ -203,9 +207,9 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
                 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${
                     location.pathname === "/podcast" 
-                      ? "border-white text-white font-bold" 
+                      ? "border-white font-bold" 
                       : "border-transparent hover:border-white/50"
                     }`}
                   to="/podcast"
@@ -215,9 +219,9 @@ export function Header({ categories = [] }: HeaderProps) {
                 </Link>
 
                 <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group ${
+                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${
                     location.pathname === "/profile" 
-                      ? "border-white text-white font-bold" 
+                      ? "border-white font-bold" 
                       : "border-transparent hover:border-white/50"
                   }`}
                   to="/profile"
@@ -230,6 +234,20 @@ export function Header({ categories = [] }: HeaderProps) {
 
             {/* Left Side - Actions */}
             <div className="flex items-center gap-2">
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 text-[var(--color-text-light)] hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300"
+                aria-label={theme === "light" ? "التبديل إلى الوضع الداكن" : "التبديل إلى الوضع الفاتح"}
+                title={theme === "light" ? "الوضع الداكن" : "الوضع الفاتح"}
+              >
+                {theme === "light" ? (
+                  <Moon className="w-5 h-5" />
+                ) : (
+                  <Sun className="w-5 h-5" />
+                )}
+              </button>
+
               <Link
                 to="/cart"
                 className="p-2 text-[var(--color-text-light)] hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300"
@@ -324,19 +342,19 @@ export function Header({ categories = [] }: HeaderProps) {
       </div>
 
       {/* Bottom Navigation Bar - Categories */}
-      <div className="bg-gray-100 border-b border-gray-300">
+      <div className="bg-[var(--color-white)] border-b border-[var(--color-divider)]">
         <div className="container mx-auto px-4">
           <nav className="hidden lg:flex items-center justify-start gap-1 py-2">
             <Link
-              className="px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-white rounded transition-colors font-medium"
               to="/"
+              className="px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] rounded transition-colors font-medium"
             >
-              عدد اليوم
+              الرئيسية
             </Link>
             {visibleCategories.map((category) => (
               <Link
                 key={category.id}
-                className="px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-white rounded transition-colors font-medium"
+                className="px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] rounded transition-colors font-medium"
                 to={`/category/${category.slug}`}
               >
                 {category.name}
@@ -345,10 +363,10 @@ export function Header({ categories = [] }: HeaderProps) {
 
             {/* More dropdown menu - only show if there are more categories */}
             {moreCategories.length > 0 && (
-              <div className="relative">
+              <div className="relative" ref={profileDropdownRef}>
                 <button
-                  className="flex items-center gap-1 px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-white rounded transition-colors font-medium"
                   onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+                  className="flex items-center gap-1 px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] rounded transition-colors font-medium"
                   onMouseEnter={() => setIsMoreMenuOpen(true)}
                   onMouseLeave={() => setIsMoreMenuOpen(false)}
                 >
@@ -359,14 +377,15 @@ export function Header({ categories = [] }: HeaderProps) {
                 {/* Dropdown */}
                 {isMoreMenuOpen && (
                   <div
-                    className="absolute top-full right-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                    style={{ top: '100%', right: 0 }}
+                    className="absolute top-full right-0 mt-1 w-56 bg-[var(--color-white)] rounded-lg shadow-lg border border-[var(--color-divider)] py-2 z-50"
                     onMouseEnter={() => setIsMoreMenuOpen(true)}
                     onMouseLeave={() => setIsMoreMenuOpen(false)}
                   >
                     {moreCategories.map((category) => (
                       <Link
                         key={category.id}
-                        className="block px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-gray-50 transition-colors font-medium"
+                        className="block px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] transition-colors font-medium"
                         to={`/category/${category.slug}`}
                         onClick={() => setIsMoreMenuOpen(false)}
                       >
@@ -383,7 +402,7 @@ export function Header({ categories = [] }: HeaderProps) {
 
       {/* Search Bar */}
       {isSearchOpen && (
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-[var(--color-white)] border-b border-[var(--color-divider)]">
           <div className="container mx-auto px-4 py-4">
             <form
               onSubmit={(e) => {

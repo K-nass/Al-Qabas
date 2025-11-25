@@ -55,7 +55,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden relative">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--color-background-light)] overflow-hidden relative">
       {/* Animated Background Pattern */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Geometric shapes */}
@@ -73,7 +73,7 @@ export default function RegisterPage() {
       </div>
 
       <ScrollAnimation animation="scale" duration={0.5} once={true}>
-        <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 max-h-[calc(100vh-4rem)] overflow-y-auto relative z-10 border border-white/20">
+        <div className="max-w-md w-full bg-[var(--color-white)]/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 max-h-[calc(100vh-4rem)] overflow-y-auto relative z-10 border border-[var(--color-divider)]/20">
         {/* Back to Home Link */}
         <Link 
           to="/" 
@@ -119,7 +119,7 @@ export default function RegisterPage() {
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className={`w-full px-4 py-3 pl-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all ${
-                  errors.username ? "border-red-500" : "border-gray-300"
+                  errors.username ? "border-red-500" : "border-[var(--color-divider)]"
                 }`}
                 placeholder="أدخل اسم المستخدم"
                 dir="rtl"
@@ -145,7 +145,7 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className={`w-full px-4 py-3 pl-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all ${
-                  errors.email ? "border-red-500" : "border-gray-300"
+                  errors.email ? "border-red-500" : "border-[var(--color-divider)]"
                 }`}
                 placeholder="example@email.com"
                 dir="ltr"
@@ -171,7 +171,7 @@ export default function RegisterPage() {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className={`w-full px-4 py-3 pl-12 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all ${
-                  errors.password ? "border-red-500" : "border-gray-300"
+                  errors.password ? "border-red-500" : "border-[var(--color-divider)]"
                 }`}
                 placeholder="••••••••"
                 dir="ltr"
@@ -204,7 +204,7 @@ export default function RegisterPage() {
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 className={`w-full px-4 py-3 pl-12 pr-12 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all ${
-                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                  errors.confirmPassword ? "border-red-500" : "border-[var(--color-divider)]"
                 }`}
                 placeholder="••••••••"
                 dir="ltr"
@@ -239,7 +239,7 @@ export default function RegisterPage() {
           <div className="text-center mt-6">
           <Link
             to="/login"
-            className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition-colors text-sm"
+            className="text-[var(--color-text-primary)] hover:text-white transition-colors text-sm"
           >
             لديك حساب بالفعل؟ <span className="font-medium">تسجيل الدخول</span>
           </Link>

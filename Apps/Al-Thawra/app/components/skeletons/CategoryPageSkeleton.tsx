@@ -4,7 +4,7 @@ export function CategoryPageSkeleton() {
   return (
     <div className="space-y-6">
       {/* Category header skeleton */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 animate-pulse">
+      <div className="bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg p-4 animate-pulse">
         <div className="flex items-center gap-6 flex-wrap">
           <div className="h-8 w-32 bg-gray-200 rounded"></div>
           <span className="text-gray-300">|</span>

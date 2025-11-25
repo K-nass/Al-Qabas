@@ -1,5 +1,7 @@
 import type { Route } from "./+types/category.$slug";
 import { useLoaderData, useSearchParams } from "react-router";
+import { ScrollAnimation } from "../components/ScrollAnimation";
+import { generateMetaTags, generateCollectionPageSchema } from "~/utils/seo";
 import { PostsGrid } from "../components/PostsGrid";
 import { CategoryPageSkeleton } from "../components/skeletons";
 import { EmptyState } from "../components/EmptyState";
@@ -11,6 +13,9 @@ import { motion } from "framer-motion";
 // Loader function for server-side data fetching
 export async function loader({ params, request }: Route.LoaderArgs) {
   const slug = params.slug;
+  if (!slug) {
+    throw new Response("Category slug required", { status: 404 });
+  }
   const url = new URL(request.url);
   const subcategorySlug = url.searchParams.get("sub");
   const page = parseInt(url.searchParams.get("page") || "1", 10);
@@ -55,8 +60,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "Category Not Found - الثورة" },
-      { name: "description", content: "The requested category could not be found." },
+      { title: "قسم غير موجود | الثورة" },
+      { name: "robots", content: "noindex" },
     ];
   }
 
@@ -66,17 +71,26 @@ export function meta({ data }: Route.MetaArgs) {
     : null;
   
   const title = subcategory 
-    ? `${subcategory.name} - ${category.name} - الثورة`
-    : `${category.name} - الثورة`;
+    ? `${subcategory.name} - ${category.name}`
+    : category.name;
   
-  const description = category.description || `تصفح أحدث الأخبار والمقالات في قسم ${category.name}`;
+  const description = subcategory?.description || category.description || 
+    `تصفح أحدث الأخبار والمقالات في قسم ${title}. تحديثات يومية وتحليلات معمقة من الثورة`;
 
   return [
-    { title },
-    { name: "description", content: description },
-    { property: "og:title", content: title },
-    { property: "og:description", content: description },
-    { property: "og:type", content: "website" },
+    ...generateMetaTags({
+      title,
+      description,
+      url: `/category/${category.slug}${selectedSubcategory ? `?sub=${selectedSubcategory}` : ''}`,
+      type: "website",
+    }),
+    {
+      "script:ld+json": generateCollectionPageSchema({
+        name: title,
+        slug: category.slug,
+        description,
+      }),
+    },
   ];
 }
 
@@ -121,7 +135,7 @@ export default function CategoryPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg p-4">
         <div className="flex items-center gap-6 flex-wrap">
           {/* Category Title */}
           <h1 className="text-2xl font-bold text-[var(--color-primary)]">
@@ -138,7 +152,7 @@ export default function CategoryPage() {
                   className={`px-3 py-1 text-sm transition-all font-medium border rounded-md ${
                     selectedSubcategory === null
                       ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
-                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-blue-50 border-gray-200'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] border-[var(--color-divider)]'
                   }`}
                 >
                   الكل
@@ -150,7 +164,7 @@ export default function CategoryPage() {
                     className={`px-3 py-1 text-sm transition-all font-medium border rounded-md ${
                       selectedSubcategory === subcategory.slug
                         ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
-                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-blue-50 border-gray-200'
+                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] border-[var(--color-divider)]'
                     }`}
                   >
                     {subcategory.name}
@@ -183,7 +197,7 @@ export default function CategoryPage() {
               <button 
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={!hasPrevPage}
-                className="px-6 py-2 bg-white border border-gray-300 text-[var(--color-text-primary)] rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-[var(--color-white)] border border-[var(--color-divider)] text-[var(--color-text-primary)] rounded-lg hover:bg-[var(--color-background-light)] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 السابق
               </button>

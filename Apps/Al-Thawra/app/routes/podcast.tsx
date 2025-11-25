@@ -3,6 +3,7 @@ import { PostsGrid } from "../components/PostsGrid";
 import { Slider } from "../components/Slider";
 import type { PaginatedPostsResponse, Post } from "../services/postsService";
 import axiosInstance from "../lib/axios";
+import { generateMetaTags } from "~/utils/seo";
 
 // Loader function for SSR
 export async function loader({ request }: { request: Request }) {
@@ -25,6 +26,15 @@ export async function loader({ request }: { request: Request }) {
     } catch (error) {
         throw new Response("Failed to load podcasts", { status: 500 });
     }
+}
+
+export function meta() {
+  return generateMetaTags({
+    title: "البودكاست - الثورة",
+    description: "استمع إلى أحدث الحوارات والنقاشات الشيقة. بودكاست الثورة يقدم محتوى صوتي متنوع يغطي مختلف القضايا",
+    url: "/podcast",
+    type: "website",
+  });
 }
 
 export default function PodcastPage() {
@@ -50,7 +60,7 @@ export default function PodcastPage() {
             )}
 
             {/* Podcast Header */}
-            <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <div className="bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg p-4">
                 <h1 className="text-2xl font-bold text-[var(--color-primary)]">
                     البودكاست
                 </h1>
@@ -73,7 +83,7 @@ export default function PodcastPage() {
                         <button
                             onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                             disabled={currentPage === 1}
-                            className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                            className="px-6 py-2 bg-[var(--color-background-light)] text-[var(--color-text-primary)] rounded-lg hover:bg-[var(--color-card)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                         >
                             السابق
                         </button>

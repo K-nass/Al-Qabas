@@ -21,15 +21,19 @@ export function PostCard({ post, buildLink }: PostCardProps) {
     : `/posts/categories/${post.categorySlug}/articles/${post.slug}`;
 
   return (
-    <article className="group relative bg-[var(--color-white)] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <article className="group relative bg-[var(--color-white)] border border-[var(--color-divider)] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       {/* Image */}
       <Link to={linkHref} className="block relative aspect-16/10 overflow-hidden">
         {post.image ? (
-          <img
-            src={post.image}
-            alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          <div className="relative aspect-video rounded-lg overflow-hidden mb-3 bg-[var(--color-secondary-light)]">
+            <img
+              src={post.image}
+              alt={post.imageDescription || post.title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         ) : (
           <div className="w-full h-full bg-[var(--color-divider)] flex items-center justify-center">
             <span className="text-[var(--color-text-secondary)] text-sm">لا توجد صورة</span>
@@ -94,7 +98,7 @@ export function PostCard({ post, buildLink }: PostCardProps) {
         {post.authorName && (
           <Link
             to={`/author/${post.authorName}`}
-            className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 group/author hover:bg-gray-50 -mx-4 px-4 py-2 transition-colors"
+            className="flex items-center gap-2 mt-3 pt-3 border-t border-[var(--color-divider)] group/author hover:bg-[var(--color-background-light)] -mx-4 px-4 py-2 transition-colors"
           >
             <img 
               src={post.authorImage} 
