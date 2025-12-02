@@ -103,7 +103,7 @@ export function Header({ categories = [] }: HeaderProps) {
           <div className="flex justify-between items-center py-2 text-sm">
             {/* Right Side - Editor Info */}
             <div className="flex items-center">
-              <span className="font-bold font-thuluth text-lg">
+              <span className="font-bold font-thuluth text-md">
                 رٍئيس مجٍلُِس الُِادِارٍة: سام عٍبَدِ الُِلُِه الُِغبَارٍى
               </span>
             </div>
