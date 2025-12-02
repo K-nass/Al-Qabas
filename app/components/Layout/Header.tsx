@@ -95,65 +95,154 @@ export function Header({ categories = [] }: HeaderProps) {
     <header
       dir="rtl"
       lang="ar"
-      className="sticky top-0 z-50 bg-gradient-to-r from-[var(--color-primary-dark)] to-[var(--color-primary)] shadow-md"
+      className=" bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-primary-dark )]"
     >
       {/* Top Bar - Social & Info */}
-      <div className="bg-[var(--color-white)] border-b border-[var(--color-divider)]">
+      <div>
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center py-2 text-sm">
             {/* Right Side - Editor Info */}
             <div className="flex items-center">
               <span className="font-bold font-thuluth text-lg">
-                رئيس مجلس الادارة: سام عبد الله الغبارى
+                رٍئيس مجٍلُِس الُِادِارٍة: سام عٍبَدِ الُِلُِه الُِغبَارٍى
               </span>
             </div>
-            {/* Left Side - Social Icons */}
-            <div className="flex items-center gap-3">
-              <a
-                href="https://t.me/althawra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
-                aria-label="Telegram"
-              >
-                <Send className="w-4 h-4" />
-              </a>
-              <a
-                href="https://youtube.com/@althawra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-4 h-4" />
-              </a>
-              <a
-                href="https://twitter.com/althawra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a
-                href="https://facebook.com/althawra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a
-                href="https://instagram.com/althawra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-4 h-4" />
-              </a>
+
+            <div className="flex gap-3">
+              <div className="flex gap-2">
+                <Link
+                  to="/cart"
+                  className="p-2 text-[var(--color-text-light)] hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300"
+                  aria-label="السلة"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                </Link>
+                <button
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="p-2 text-[var(--color-text-light)] hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300"
+                  aria-label="بحث"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+                <Link
+                  to="/contact"
+                  className="hidden md:flex items-center gap-2 px-4 py-2 text-[var(--color-primary)] bg-white hover:bg-white/80 hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300 font-medium"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>اتصل بنا</span>
+                </Link>
+                {/* Profile Dropdown or Login Button */}
+                {currentUser ? (
+                  <div className="relative hidden md:block" ref={profileDropdownRef}>
+                    <button
+                      onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                      className="flex items-center gap-2 px-3 py-2 text-[var(--color-primary)] bg-[var(--color-white)] hover:bg-[var(--color-secondary-light)] rounded-lg transition-colors duration-300 font-medium"
+                    >
+                      {/* Profile Picture or Icon */}
+                      <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                      <span>{currentUser.userName || currentUser.username}</span>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {/* Dropdown Menu */}
+                    {isProfileMenuOpen && (
+                      <div
+                        className="absolute top-full right-0 mt-1 w-48 bg-[var(--color-white)] rounded-lg shadow-lg border border-[var(--color-divider)] py-2 z-50"
+                      >
+                        <Link
+                          to="/profile"
+                          className="flex items-center gap-2 px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] transition-colors font-medium"
+                          onClick={() => setIsProfileMenuOpen(false)}
+                        >
+                          <User className="w-4 h-4" />
+                          <span>صفحتي</span>
+                        </Link>
+
+                        <button
+                          onClick={() => {
+                            authService.logout();
+                            setCurrentUser(null);
+                            setIsProfileMenuOpen(false);
+                            window.location.href = '/';
+                          }}
+                          className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:text-red-700 hover:bg-gray-50 transition-colors font-medium text-right"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>تسجيل الخروج</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="hidden md:flex items-center gap-2 px-4 py-2 text-[var(--color-primary)] bg-white hover:bg-white/80 hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300 font-medium"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>تسجيل الدخول</span>
+                  </Link>
+                )}
+                {/* <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="lg:hidden p-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors"
+                  aria-label="القائمة"
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="w-5 h-5" />
+                  ) : (
+                    <Menu className="w-5 h-5" />
+                  )}
+                </button> */}
+              </div>
+              {/* Left Side - Social Icons */}
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://t.me/althawra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+                  aria-label="Telegram"
+                >
+                  <Send className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://youtube.com/@althawra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://twitter.com/althawra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+                  aria-label="Twitter"
+                >
+                  <Twitter className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://facebook.com/althawra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://instagram.com/althawra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -162,9 +251,9 @@ export function Header({ categories = [] }: HeaderProps) {
       {/* Main Navigation Bar */}
       <div className="border-t border-white/20">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center py-3">
-            {/* Right Side - Navigation & Logo */}
-            <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-center py-3 gap-4">
+            {/* Top Row - Logo and Menu Toggle */}
+            <div className="flex justify-between items-center w-full md:w-auto">
               {/* Logo */}
               <Link
                 to="/"
@@ -177,169 +266,7 @@ export function Header({ categories = [] }: HeaderProps) {
                 />
               </Link>
 
-              {/* Navigation Links */}
-              <nav className="hidden lg:flex items-center gap-6">
-                <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/"
-                    ? "border-white font-bold"
-                    : "border-transparent hover:border-white/50"
-                    }`}
-                  to="/"
-                >
-                  <Newspaper className="w-4 h-4" />
-                  <span>الصحيفة</span>
-                </Link>
-
-                <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/magazines"
-                    ? "border-white font-bold"
-                    : "border-transparent hover:border-white/50"
-                    }`}
-                  to="/magazines"
-                >
-                  <FileText className="w-4 h-4" />
-                  <span>أرشيف الثورة</span>
-                </Link>
-
-                <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/writers-opinions"
-                    ? "border-white font-bold"
-                    : "border-transparent hover:border-white/50"
-                    }`}
-                  to="/writers-opinions"
-                >
-                  <PenTool className="w-4 h-4" />
-                  <span>كتاب وآراء</span>
-                </Link>
-
-                <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/tv"
-                      ? "border-white font-bold"
-                      : "border-transparent hover:border-white/50"
-                    }`}
-                  to="/tv"
-                >
-                  <Tv className="w-4 h-4" />
-                  <span>التلفزيون</span>
-                </Link>
-
-                <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/podcast"
-                      ? "border-white font-bold"
-                      : "border-transparent hover:border-white/50"
-                    }`}
-                  to="/podcast"
-                >
-                  <Podcast className="w-4 h-4" />
-                  <span>بودكاست</span>
-                </Link>
-
-                <Link
-                  className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/profile"
-                      ? "border-white font-bold"
-                      : "border-transparent hover:border-white/50"
-                    }`}
-                  to="/profile"
-                >
-                  <User className="w-4 h-4" />
-                  <span>صفحتي</span>
-                </Link>
-              </nav>
-            </div>
-
-            {/* Left Side - Actions */}
-            <div className="flex items-center gap-2">
-              {/* Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="p-2 text-[var(--color-text-light)] hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300"
-                aria-label={theme === "light" ? "التبديل إلى الوضع الداكن" : "التبديل إلى الوضع الفاتح"}
-                title={theme === "light" ? "الوضع الداكن" : "الوضع الفاتح"}
-              >
-                {theme === "light" ? (
-                  <Moon className="w-5 h-5" />
-                ) : (
-                  <Sun className="w-5 h-5" />
-                )}
-              </button>
-
-              <Link
-                to="/cart"
-                className="p-2 text-[var(--color-text-light)] hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300"
-                aria-label="السلة"
-              >
-                <ShoppingCart className="w-5 h-5" />
-              </Link>
-
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-[var(--color-text-light)] hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300"
-                aria-label="بحث"
-              >
-                <Search className="w-5 h-5" />
-              </button>
-
-              <Link
-                to="/contact"
-                className="hidden md:flex items-center gap-2 px-4 py-2 text-[var(--color-primary)] bg-white hover:bg-white/80 hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300 font-medium"
-              >
-                <Mail className="w-4 h-4" />
-                <span>اتصل بنا</span>
-              </Link>
-
-              {/* Profile Dropdown or Login Button */}
-              {currentUser ? (
-                <div className="relative hidden md:block" ref={profileDropdownRef}>
-                  <button
-                    onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 text-[var(--color-primary)] bg-[var(--color-white)] hover:bg-[var(--color-secondary-light)] rounded-lg transition-colors duration-300 font-medium"
-                  >
-                    {/* Profile Picture or Icon */}
-                    <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
-                    </div>
-                    <span>{currentUser.userName || currentUser.username}</span>
-                    <ChevronDown className={`w-4 h-4 transition-transform ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  {isProfileMenuOpen && (
-                    <div
-                      className="absolute top-full right-0 mt-1 w-48 bg-[var(--color-white)] rounded-lg shadow-lg border border-[var(--color-divider)] py-2 z-50"
-                    >
-                      <Link
-                        to="/profile"
-                        className="flex items-center gap-2 px-4 py-2 text-[var(--color-text-primary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-background-light)] transition-colors font-medium"
-                        onClick={() => setIsProfileMenuOpen(false)}
-                      >
-                        <User className="w-4 h-4" />
-                        <span>صفحتي</span>
-                      </Link>
-                      <button
-                        onClick={() => {
-                          authService.logout();
-                          setCurrentUser(null);
-                          setIsProfileMenuOpen(false);
-                          window.location.href = '/';
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:text-red-700 hover:bg-gray-50 transition-colors font-medium text-right"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>تسجيل الخروج</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="hidden md:flex items-center gap-2 px-4 py-2 text-[var(--color-primary)] bg-white hover:bg-white/80 hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300 font-medium"
-                >
-                  <User className="w-4 h-4" />
-                  <span>تسجيل الدخول</span>
-                </Link>
-              )}
-
+              {/* Mobile Menu Toggle - visible on sm/md */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden p-2 text-white hover:bg-white hover:bg-opacity-10 rounded-lg transition-colors"
@@ -352,12 +279,102 @@ export function Header({ categories = [] }: HeaderProps) {
                 )}
               </button>
             </div>
+
+            {/* Navigation Links - Desktop */}
+            <nav className="hidden lg:flex items-center gap-6">
+              <Link
+                className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/"
+                  ? "border-white font-bold"
+                  : "border-transparent hover:border-white/50"
+                  }`}
+                to="/"
+              >
+                <Newspaper className="w-4 h-4" />
+                <span>الصحيفة</span>
+              </Link>
+
+              <Link
+                className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/magazines"
+                  ? "border-white font-bold"
+                  : "border-transparent hover:border-white/50"
+                  }`}
+                to="/magazines"
+              >
+                <FileText className="w-4 h-4" />
+                <span>أرشيف الثورة</span>
+              </Link>
+
+              <Link
+                className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/writers-opinions"
+                  ? "border-white font-bold"
+                  : "border-transparent hover:border-white/50"
+                  }`}
+                to="/writers-opinions"
+              >
+                <PenTool className="w-4 h-4" />
+                <span>كتاب وآراء</span>
+              </Link>
+
+              <Link
+                className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/tv"
+                  ? "border-white font-bold"
+                  : "border-transparent hover:border-white/50"
+                  }`}
+                to="/tv"
+              >
+                <Tv className="w-4 h-4" />
+                <span>التلفزيون</span>
+              </Link>
+
+              <Link
+                className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/podcast"
+                  ? "border-white font-bold"
+                  : "border-transparent hover:border-white/50"
+                  }`}
+                to="/podcast"
+              >
+                <Podcast className="w-4 h-4" />
+                <span>بودكاست</span>
+              </Link>
+
+              <Link
+                className={`flex items-center gap-2 px-2 py-3 border-b-2 transition-all group text-white ${location.pathname === "/profile"
+                  ? "border-white font-bold"
+                  : "border-transparent hover:border-white/50"
+                  }`}
+                to="/profile"
+              >
+                <User className="w-4 h-4" />
+                <span>صفحتي</span>
+              </Link>
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 text-white hover:bg-[var(--color-white)] hover:text-[var(--color-primary)] rounded-lg transition-colors duration-300 cursor-pointer"
+                aria-label={theme === "light" ? "التبديل إلى الوضع الداكن" : "التبديل إلى الوضع الفاتح"}
+                title={theme === "light" ? "الوضع الداكن" : "الوضع الفاتح"}
+              >
+                {theme === "light" ? (
+                  <Moon className="w-5 h-5" />
+                ) : (
+                  <Sun className="w-5 h-5" />
+                )}
+              </button>
+            </nav>
+
+            {/* President Image - Desktop */}
+            <div className="hidden lg:flex items-center gap-6 radius-2xl">
+              <div>
+                <img className="rounded-2xl" src="/Rashad_al-Alimi.jpg" alt="president Rashad al-Alimi" width={200} height={200} />
+                <p className="text-white text-center pt-5">رَشاد مُحَمَّد العَلِيمِي</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Bottom Navigation Bar - Categories */}
-      <div className="bg-[var(--color-white)] border-b border-[var(--color-divider)]">
+      <div className="">
         <div className="container mx-auto px-4">
           <nav className="hidden lg:flex items-center justify-start gap-1 py-2">
             <Link
@@ -456,7 +473,7 @@ export function Header({ categories = [] }: HeaderProps) {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-[var(--color-primary-dark)]">
-          <nav className="container mx-auto px-4 py-4 flex flex-col gap-2 text-white">
+          <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
             <Link
               className="px-4 py-2 hover:bg-white hover:bg-opacity-10 hover:text-[var(--color-primary)] rounded transition-colors"
               to="/"
@@ -506,6 +523,25 @@ export function Header({ categories = [] }: HeaderProps) {
             >
               اتصل بنا
             </Link>
+            <button
+              onClick={() => {
+                toggleTheme();
+                setIsMobileMenuOpen(false);
+              }}
+              className="px-4 py-2 text-right hover:bg-white hover:bg-opacity-10 hover:text-[var(--color-primary)] rounded transition-colors flex items-center gap-2"
+            >
+              {theme === "light" ? (
+                <>
+                  <Moon className="w-5 h-5" />
+                  <span>الوضع الداكن</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="w-5 h-5" />
+                  <span>الوضع الفاتح</span>
+                </>
+              )}
+            </button>
           </nav>
         </div>
       )}
